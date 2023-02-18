@@ -6,36 +6,23 @@
 #
 # What is the 10 001st prime number?
 
-
-def primeSieve(n):
-    sieve = [True] * n * int(n ** (0.5) + 1)
-    sieve[0] = sieve[1] = False
-    primeList = []
-    primesFound = 0
-    sieveCounter = 2
-    while sieveCounter < len(sieve) and primesFound < n:
-        if sieve[sieveCounter]:
-            primesFound = primesFound + 1
-            primeList.append(sieveCounter)
-            sieveActionCounter = sieveCounter*2
-            while sieveActionCounter < len(sieve):
-                sieve[sieveActionCounter] = False
-                sieveActionCounter += sieveCounter
-        sieveCounter += 1
-    for sieveCounter in range(sieveCounter, len(sieve)):
-        sieve[sieveCounter] = False
-
-    print(str(primesFound) + ' primes found!')
-    return sieve
+from utilities.primes import prime_sieve
 
 
-primeOrdinalWeWant = 10001
-primes = primeSieve(primeOrdinalWeWant)
-primesOrdinal = 1
-for i in range(2, len(primes)):
-    if primes[i]:
-        if primesOrdinal < 10 or primesOrdinal > primeOrdinalWeWant - 100:
-            print('#' + str(primesOrdinal) + ' = ' + str(i))
-        primesOrdinal += 1
+def main():
+    prime_ordinal_we_want = 10001
+    primes = prime_sieve(prime_ordinal_we_want)
+    primes_ordinal = 1
+    for i in range(2, len(primes)):
+        if primes[i]:
+            if primes_ordinal < 10 or primes_ordinal > prime_ordinal_we_want - 100:
+                print('#' + str(primes_ordinal) + ' = ' + str(i))
+                if prime_ordinal_we_want == primes_ordinal:
+                    answer = i
+            primes_ordinal += 1
+    print(f"Answer to Project Euler 007 is {answer}")
 
+
+if __name__ == "__main__":
+    main()
 
