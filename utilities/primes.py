@@ -1,4 +1,5 @@
 # Primes utilities
+import math
 
 
 def prime_sieve(n):
@@ -67,3 +68,10 @@ def prime_factors(n):
             prime_factor_list[prime_list_iter] += 1
         prime_list_iter += 1
     return [prime_list[:len(prime_factor_list)], prime_factor_list]
+
+
+def divisor_counter_fast(n):
+    prime_factor_list = prime_factors(n)[1]
+    for k in range(len(prime_factor_list)):
+        prime_factor_list[k] += 1
+    return math.prod(prime_factor_list)
