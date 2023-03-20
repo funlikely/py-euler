@@ -21,7 +21,7 @@ def get_coin_sums(target, denominations):
     if target < top:
         return []
     else:
-        return 0
+        return [x.append(get_coin_sums(target - x, denominations[1:])) for x in range(1..) if x * denominations[0] < target]
 
 
 
