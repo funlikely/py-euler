@@ -16,19 +16,36 @@ How many different ways can £2 be made using any number of coins?
 import math
 
 
+def flatten(list_of_lists):
+    return [item for sublist in list_of_lists for item in sublist if type(sublist) is list]
+
+
 def get_coin_sums(target, denominations):
+    """
+        15 [5, 1]
+        [0, 15], [1, 10], [2, 5], [3, 0]
+        [[x] + get_coin_sums(target - x * top, denominations[1:]
+    """
     top = denominations[0]
     if target < top:
         return []
+    elif len(denominations) == 1:
+        return [int(target / top)]
     else:
-        return [x.append(get_coin_sums(target - x, denominations[1:])) for x in range(1..) if x * denominations[0] < target]
-
+        a_coin_sum = [[x] + get_coin_sums(target - x * top, denominations[1:]) for x in range(0, target) if
+                   x * top < target]
+        if type(a_coin_sum[0]) is list:
+            return a_coin_sum
+        else:
+            return [a_coin_sum[:1] + y for y in a_coin_sum[1:]]
 
 
 def get_num_coin_sum():
     denominations = [200, 100, 50, 20, 10, 5, 2, 1]
-
-    ways_to_200 = get_coin_sums(200, denominations)
+    denominations = [5, 2, 1]
+    target = 200
+    target = 6
+    ways_to_200 = get_coin_sums(target, denominations)
 
     return len(ways_to_200)
 
