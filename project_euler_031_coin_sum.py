@@ -20,7 +20,7 @@ def flatten(list_of_lists):
     return [item for sublist in list_of_lists for item in sublist if type(sublist) is list]
 
 
-def propagate(x, ys):
+def map_cons(x, ys):
     if type(ys[0]) is list:
         return [[x] + y for y in ys]
     else:
@@ -39,8 +39,11 @@ def get_coin_sums(target, denominations):
     elif len(denominations) == 1:
         return [int(target / top)]
     else:
-        a_coin_sum = [propagate(x, get_coin_sums(target - x * top, denominations[1:])) for x in range(0, target) if
-                   x * top < target]
+        a_coin_sum = [map_cons(x, get_coin_sums(target - x * top, denominations[1:]))
+                      for x
+                      in range(0, int(target / top) + 1)
+                      if x * top < target]
+        print(f"top = {top}, target = {target}, a_coin_sum = {a_coin_sum}")
         return a_coin_sum
         # if type(a_coin_sum[0]) is list:
         # else:
