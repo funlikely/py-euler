@@ -20,6 +20,13 @@ def flatten(list_of_lists):
     return [item for sublist in list_of_lists for item in sublist if type(sublist) is list]
 
 
+def propagate(x, ys):
+    if type(ys[0]) is list:
+        return [[x] + y for y in ys]
+    else:
+        return [x] + ys
+
+
 def get_coin_sums(target, denominations):
     """
         15 [5, 1]
@@ -28,23 +35,23 @@ def get_coin_sums(target, denominations):
     """
     top = denominations[0]
     if target < top:
-        return []
+        return [0]
     elif len(denominations) == 1:
         return [int(target / top)]
     else:
-        a_coin_sum = [[x] + get_coin_sums(target - x * top, denominations[1:]) for x in range(0, target) if
+        a_coin_sum = [propagate(x, get_coin_sums(target - x * top, denominations[1:])) for x in range(0, target) if
                    x * top < target]
-        if type(a_coin_sum[0]) is list:
-            return a_coin_sum
-        else:
-            return [a_coin_sum[:1] + y for y in a_coin_sum[1:]]
+        return a_coin_sum
+        # if type(a_coin_sum[0]) is list:
+        # else:
+        #     return a_coin_sum  # [a_coin_sum[:1] + y for y in a_coin_sum[1:]]
 
 
 def get_num_coin_sum():
     denominations = [200, 100, 50, 20, 10, 5, 2, 1]
-    denominations = [5, 2, 1]
+    denominations = [10, 5, 2, 1]
     target = 200
-    target = 6
+    target = 16
     ways_to_200 = get_coin_sums(target, denominations)
 
     return len(ways_to_200)
