@@ -22,9 +22,11 @@ def flatten(list_of_lists):
 
 def map_cons(x, ys):
     if type(ys[0]) is list:
-        return [[x] + y for y in ys]
+        result = [[x] + y for y in ys]
     else:
-        return [x] + ys
+        result = [x] + ys
+    print(f"map_cons({x},{ys}) = {result}")
+    return result
 
 
 def get_coin_sums(target, denominations):
