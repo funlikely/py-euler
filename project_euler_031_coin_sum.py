@@ -22,10 +22,17 @@ def flatten(list_of_lists):
 
 def map_cons(x, ys):
     if type(ys[0]) is list:
+        while type(ys[0][0]) is list:
+            ys = test_flatten(ys)
         result = [[x] + y for y in ys]
     else:
         result = [x] + ys
     print(f"map_cons({x},{ys}) = {result}")
+    return result
+
+
+def test_flatten(ys):
+    result = [item for sublist in ys for item in sublist]
     return result
 
 
