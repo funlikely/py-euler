@@ -92,3 +92,8 @@ Truncatable primes
 of note
 * Contains functional programming list-comprehension, lambda, fold.
 
+## Project Euler 038
+
+Pandigital multiples
+
+
