@@ -89,4 +89,6 @@ Double-base palindromes
 
 Truncatable primes
 
+of note
+* Contains functional programming list-comprehension, lambda, fold.
 
