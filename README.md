@@ -12,4 +12,8 @@ Quadratic Primes
 ## Project Euler 028
 
 Number Spiral Diagonals
- 
+
+## Project Euler 032
+
+Pandigital Products
+
