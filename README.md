@@ -17,3 +17,7 @@ Number Spiral Diagonals
 
 Pandigital Products
 
+## Project Euler 033
+
+Digit cancelling fractions
+
