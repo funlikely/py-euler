@@ -19,8 +19,6 @@ import fractions as f
 
 
 def get_digit_cancelling_fractions():
-    fractions = []
-
     fractions_1 = [[10*a+b, 10*b+c]
                    for a in range(1, 10)
                    for b in range(1, 10)
@@ -36,7 +34,7 @@ def get_digit_cancelling_fractions():
 
 def main():
     answer = get_digit_cancelling_fractions()
-    fractions = [f.Fraction(a,b) for [a, b] in answer]
+    fractions = [f.Fraction(a, b) for [a, b] in answer]
     print(f"The Answer to Project Euler 033 is {math.prod(fractions).denominator}")
 
     # The Answer to Project Euler 033 is 100
