@@ -29,4 +29,7 @@ Digit factorials
 
 Circular primes
 
+## Project Euler 036
+
+Double-base palindromes
 
