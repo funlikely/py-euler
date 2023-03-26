@@ -25,6 +25,11 @@ def prime_sieve(n):
     return sieve
 
 
+def primes_up_to(n):
+    primes = prime_sieve_up_to(n)
+    return [x for x in range(len(primes)) if primes[x]]
+
+
 def prime_sieve_up_to(n):
     """Return a list of booleans representing the primes up to n-1"""
     sieve = [True] * n
