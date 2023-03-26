@@ -21,3 +21,8 @@ Pandigital Products
 
 Digit cancelling fractions
 
+## Project Euler 034
+
+Digit factorials
+
+
