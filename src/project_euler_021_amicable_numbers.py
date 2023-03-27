@@ -14,7 +14,6 @@
 """
 
 from utilities.divisors import get_divisors
-from utilities.primes import prime_factors
 
 
 def get_amicable_numbers(debug):
