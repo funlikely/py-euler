@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from utilities.divisors import divisor_counter, get_divisors
+from .context import divisors  # utilities.divisors import divisor_counter, get_divisors
 
 
 class Test(TestCase):
