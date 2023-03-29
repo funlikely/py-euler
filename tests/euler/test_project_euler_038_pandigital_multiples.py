@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from project_euler_038_pandigital_multiples import PandigitalNumbers
+from project_euler_038_pandigital_multiples import *
 
 
 class TestPandigitalNumbers(TestCase):

@@ -3,7 +3,7 @@ from unittest import TestCase
 import utilities.primes as p
 
 
-class Test(TestCase):
+class TestPrimes(TestCase):
     def test_prime_sieve(self):
         actual_prime_sieve = p.prime_sieve(3)
         self.assertEqual(actual_prime_sieve, [False, False, True, True, False, True])
