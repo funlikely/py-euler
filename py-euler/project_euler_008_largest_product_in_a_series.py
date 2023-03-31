@@ -53,37 +53,46 @@ sequenceOfDigits += "05886116467109405077541002256983155200055935729725"
 sequenceOfDigits += "71636269561882670428252483600823257530420752963450"
 
 
-def getProduct(sequence, start, length):
+def get_product(sequence, start, length):
     product = 1
     for j in range(0, length):
-        product *= int(sequence[start+j])
+        product *= int(sequence[start + j])
     return product
 
-def getStringDescribingProduct(sequence, start, length):
+
+def get_string_describing_product(sequence, start, length):
     result = ''
     for j in range(0, length):
-        result += sequence[start+j] + '*'
+        result += sequence[start + j] + '*'
     return result[:-1]
 
-maxIndex = 1
-maxProduct = 0
-lenOfProduct = 13 #constant
-lenOfSequenceOfDigits = len(sequenceOfDigits)
 
-print('the digits list has ' + str(lenOfSequenceOfDigits)+ ' digits in it.')
+def get_greatest_product():
+    len_of_product = 13  # constant
+    len_of_sequence_of_digits = len(sequenceOfDigits)
 
-productOfDigits = [0] * (len(sequenceOfDigits) - (lenOfProduct-1))
-stringOfDigits = [''] * (len(sequenceOfDigits) - (lenOfProduct-1))
-currentMax = 0
+    print('the digits list has ' + str(len_of_sequence_of_digits) + ' digits in it.')
 
-for i in range(0, len(sequenceOfDigits) - (lenOfProduct-1)):
-    productOfDigits[i] = getProduct(sequenceOfDigits, i, lenOfProduct)
-    stringOfDigits[i] = getStringDescribingProduct(sequenceOfDigits, i, lenOfProduct)
-    if productOfDigits[i] > currentMax:
-        print("your current maximum is the " + str(i) + "th product, which is  is " + str(productOfDigits[i]) + " = " + str(stringOfDigits[i]))
-        currentMax = productOfDigits[i]
+    product_of_digits = [0] * (len(sequenceOfDigits) - (len_of_product - 1))
+    string_of_digits = [''] * (len(sequenceOfDigits) - (len_of_product - 1))
+    current_max = 0
 
-print("Let the people know the answer is " + str(currentMax))
+    for i in range(0, len(sequenceOfDigits) - (len_of_product - 1)):
+        product_of_digits[i] = get_product(sequenceOfDigits, i, len_of_product)
+        string_of_digits[i] = get_string_describing_product(sequenceOfDigits, i, len_of_product)
+        if product_of_digits[i] > current_max:
+            print("your current maximum is the " + str(i) + "th product, which is  is " + str(
+                product_of_digits[i]) + " = " + str(string_of_digits[i]))
+            current_max = product_of_digits[i]
+    return current_max
 
 
+def main():
+    answer = get_greatest_product()
+    print(f"The Answer to Project Euler 008 is {answer}")
 
+    # The Answer to Project Euler 008 is 23514624000
+
+
+if __name__ == "__main__":
+    main()

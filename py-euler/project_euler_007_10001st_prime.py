@@ -1,15 +1,17 @@
-# 10001st prime
-#
-# Problem 7
-#
-# By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
-#
-# What is the 10 001st prime number?
+"""
+    10001st prime
+
+    Problem 7
+
+    By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
+
+    What is the 10 001st prime number?
+"""
 
 from utilities.primes import prime_sieve
 
 
-def main():
+def get10001prime():
     prime_ordinal_we_want = 10001
     primes = prime_sieve(prime_ordinal_we_want)
     primes_ordinal = 1
@@ -20,9 +22,15 @@ def main():
                 if prime_ordinal_we_want == primes_ordinal:
                     answer = i
             primes_ordinal += 1
+    return answer
+
+
+def main():
+    answer = get10001prime()
     print(f"Answer to Project Euler 007 is {answer}")
+
+    # Answer to Project Euler 007 is 104743
 
 
 if __name__ == "__main__":
     main()
-

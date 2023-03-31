@@ -27,7 +27,8 @@ def get_fifth_power_sums():
                         for d in range(10)
                         for e in range(10)
                         for f in range(10)
-                        if (100000 * a + 10000 * b + 1000 * c + 100 * d + 10 * e + f == powers[a] + powers[b] + powers[c] + powers[d] + powers[e] + powers[f])
+                        if (100000 * a + 10000 * b + 1000 * c + 100 * d + 10 * e + f == powers[a] + powers[b] + powers[
+            c] + powers[d] + powers[e] + powers[f])
                         and 100000 * a + 10000 * b + 1000 * c + 100 * d + 10 * e + f > 1]
     return fifth_power_sums
 
@@ -37,6 +38,7 @@ def main():
     print(f"The Answer to Project Euler 030 is {sum(fifth_power_sums)}")
 
     # The Answer to Project Euler 030 is 443839
+
 
 if __name__ == "__main__":
     main()
