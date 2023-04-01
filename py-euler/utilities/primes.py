@@ -2,6 +2,11 @@
 import math
 
 
+
+def old_get_prime_sieve_up_to(n):
+    return prime_sieve_up_to(n)
+
+
 def prime_sieve(n):
     """Return a list of booleans representing the first n primes."""
     sieve = [True] * n * int(n ** 0.5 + 1)
@@ -80,3 +85,42 @@ def divisor_counter_fast(n):
     for k in range(len(prime_factor_list)):
         prime_factor_list[k] += 1
     return math.prod(prime_factor_list)
+
+
+class PrimeProcessor:
+
+    def __init__(self, limit=2):
+        self.prime_sieve = [False]
+        self.limit = limit
+        self.prime_sieve = self.get_prime_sieve_up_to(limit)
+
+    def get_prime_sieve_up_to(self, n):
+        """Return a list of booleans representing the first n primes."""
+        if sum([1 for x in self.prime_sieve if x]) >= n:
+            f = lambda acc, x: acc + 1 if x else acc
+            accumulator = 0
+            acc_list = [accumulator := f(accumulator, self.prime_sieve[x]) for x in range(len(self.prime_sieve))]
+            return self.prime_sieve[0: acc_list.index(n)]
+        else:
+            self.prime_sieve = old_get_prime_sieve_up_to(n)
+            return self.prime_sieve
+
+
+def main():
+    tryout = PrimeProcessor(12)
+    print(tryout.prime_sieve)
+    tryout.get_prime_sieve_up_to(6)
+    print(tryout.prime_sieve)
+    tryout.get_prime_sieve_up_to(22)
+    print(tryout.prime_sieve)
+
+    tryout2 = PrimeProcessor()
+    print(tryout2.prime_sieve)
+    tryout2.get_prime_sieve_up_to(6)
+    print(tryout2.prime_sieve)
+    tryout2.get_prime_sieve_up_to(22)
+    print(tryout2.prime_sieve)
+
+
+if __name__ == "__main__":
+    main()
