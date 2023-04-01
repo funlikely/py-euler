@@ -16,8 +16,9 @@ import utilities.primes as pr
 
 
 max_prime = 800000
-prime_list = pr.primes_up_to(max_prime)
-prime_sieve_list = pr.prime_sieve_up_to(max_prime)
+pp = pr.PrimeProcessor(max_prime)
+prime_list = pp.primes_up_to(max_prime)  # pr.primes_up_to(max_prime)
+prime_sieve_list = pp.prime_sieve
 
 
 def get_truncatable_primes():
