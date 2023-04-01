@@ -3,8 +3,10 @@
 # Problem 13
 #
 # Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
+from utilities.bignum import *
 
-digitsList = [
+
+digits_list = [
     "37107287533902102798797998220837590246510135740250",
     "46376937677490009712648124896970078050417018260538",
     "74324986199524741059474233309513058123726617309629",
@@ -107,26 +109,38 @@ digitsList = [
     "53503534226472524250874054075591789781264330331690"]
 
 
+
 def add_two_string_ints(a, b):
     carry = 0
     total = []
     for i in range(min(len(a), len(b))):
-        digitSum = int(a[len(a) - i - 1]) + int(b[len(b) - i - 1]) + carry
-        if digitSum > 9:
+        digit_sum = int(a[len(a) - i - 1]) + int(b[len(b) - i - 1]) + carry
+        if digit_sum > 9:
             carry = 1
-            digitSum -= 10
+            digit_sum -= 10
         else:
             carry = 0
-        total.append(str(digitSum))
+        total.append(str(digit_sum))
     total.reverse()
     return ''.join(total)
 
 
-for i in range(len(digitsList)):
-    digitsList[i] = '0000' + digitsList[i]
+def get_grand_total():
+    for i in range(len(digits_list)):
+        digits_list[i] = '0000' + digits_list[i]
 
-grandTotal = digitsList[0]
-for i in range(1, len(digitsList)):
-    grandTotal = add_two_string_ints(grandTotal, digitsList[i])
+    grand_total = BigNum(digits_list[0])
+    for i in range(1, len(digits_list)):
+        grand_total = grand_total.add(BigNum(digits_list[i]))  # add_two_string_ints(grand_total, digits_list[i])
+    return grand_total
 
-print("Grand Total = " + grandTotal)
+
+def main():
+    grand_total = get_grand_total()
+    print(f"The Answer to Project Euler 013 is {grand_total.value.lstrip('0')[:10]}")
+
+    # The Answer to Project Euler 013 is 5537376230
+
+
+if __name__ == "__main__":
+    main()
