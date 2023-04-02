@@ -19,28 +19,13 @@ def read_input_file():
 digits_list = read_input_file()
 
 
-def add_two_string_ints(a, b):
-    carry = 0
-    total = []
-    for i in range(min(len(a), len(b))):
-        digit_sum = int(a[len(a) - i - 1]) + int(b[len(b) - i - 1]) + carry
-        if digit_sum > 9:
-            carry = 1
-            digit_sum -= 10
-        else:
-            carry = 0
-        total.append(str(digit_sum))
-    total.reverse()
-    return ''.join(total)
-
-
 def get_grand_total():
     for i in range(len(digits_list)):
         digits_list[i] = '0000' + digits_list[i]
 
     grand_total = BigNum(digits_list[0])
     for i in range(1, len(digits_list)):
-        grand_total = grand_total.add(BigNum(digits_list[i]))  # add_two_string_ints(grand_total, digits_list[i])
+        grand_total = grand_total.add(BigNum(digits_list[i]))
     return grand_total
 
 
