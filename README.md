@@ -96,4 +96,6 @@ of note
 
 Pandigital multiples
 
+## Project Euler 052
 
+Permuted multiples
