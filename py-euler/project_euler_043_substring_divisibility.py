@@ -21,44 +21,109 @@
 import math
 
 
-def generate_permutation_pattern(a, n):
+def generate_permutation_pattern(a, remainder):
     result = []
-    remainder = n
     for i in range(a - 1, 0, -1):
         result.append(int(remainder / math.factorial(i)))
         remainder %= math.factorial(i)
     return result
 
 
-# generate the nth lexicographical permutation of string or list l
-def generate_permutation(l, n):
+def generate_permutation(xs, n):
+    """
+        Generate the nth lexicographical permutation of string or list.
+    :param xs:
+    :param n:
+    :return:
+    """
     result = []
-    a = len(l)
-    l = sorted(l)
-    pattern = generate_permutation_pattern(a, n)
-    for i in range(a - 1):
-        selected = l[pattern[i]]
+    xs = sorted(xs)
+    pattern = generate_permutation_list(len(xs))[n]  # generate_permutation_pattern(len(xs), n)
+    for i in range(len(xs) - 1):
+        selected = xs[pattern[i]]
         result.append(selected)
-        l.remove(selected)
-    result += l
+        xs.remove(selected)
+    result += xs
     return result
 
 
+def generate_permutation_list(xs):
+    xs = sorted(xs)
+    permutation_list = []
+    for j in range(math.factorial(len(xs))):
+        remainder = j
+        permutation = []
+        for i in range(len(xs) - 1, 0, -1):
+            permutation.append(int(remainder / math.factorial(i)))
+            remainder %= math.factorial(i)
+
+        result = []
+        working_list = xs
+        for i in range(len(xs) - 1):
+            selected = working_list[permutation[i]]
+            result.append(selected)
+            working_list.remove(selected)
+
+        permutation_list.append(result)
+    return permutation_list
+
+
+def generate_permutation_patterns2(n):
+    """
+        Generate a list of permutation patterns of size n!
+
+        Want to be able to do the following,
+
+        > perm_list
+        [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]
+        > s
+        'asd'
+        > [''.join([s[i] for i in a]) for a in pie]
+        ['asd', 'ads', 'sad', 'sda', 'das', 'dsa']
+    :param n:
+    :return:
+    """
+    patterns = []
+    for i in range(n):
+        patterns = patterns + [i] * math.factorial(n - 1)
+    for i in range(1, n):
+        for j in range(len(patterns)):
+            patterns[j].append(get_n_not_yet_in_pattern(patterns[j], n))
+
+
+def get_n_not_yet_in_pattern(pattern, n):
+    for i in range(n):
+        if i not in pattern:
+            return i
+    return -1
+
+
 def is_interestingly_divisible(perm):
+    if int(str(perm)[-3:]) % 17 != 0:
+        return False
     divisors = [2, 3, 5, 7, 11, 13, 17]
     f = lambda acc, m, n: acc and m % n == 0
     accumulator = True
-    [accumulator := f(accumulator, perm, n) for n in divisors]
+    [accumulator := f(accumulator, int(str(perm)[i + 1:i + 4]), divisors[i]) for i in range(7)]
     return accumulator
 
 
-def get_substring_divisible_pandigitals():
+def get_substring_divisible_pandigitals_using_permutations():
     interestingly_divisible_list = []
-    seed_string = "0123456789"
-    start_permutation = math.factorial(9)
+    seed_string = "123456789"
     count = 0
-    for i in range(math.factorial(9), math.factorial(10)):
-        perm = int(''.join(generate_permutation(seed_string, i)))
+    for i in range(math.factorial(9)):
+        perm_string = ''.join(generate_permutation(seed_string, i))
+        perm = int(perm_string[:5] + '0' + perm_string[5:])
+        if count < 10 or count % 10000 == 0:
+            print(f"permutation #{i}: {perm}")
+        if is_interestingly_divisible(perm):
+            interestingly_divisible_list.append(perm)
+        count += 1
+    seed_string = "123406789"
+    for i in range(math.factorial(9)):
+        perm_string = ''.join(generate_permutation(seed_string, i))
+        perm = int(perm_string[:5] + '5' + perm_string[5:])
         if count < 10 or count % 10000 == 0:
             print(f"permutation #{i}: {perm}")
         if is_interestingly_divisible(perm):
@@ -68,11 +133,11 @@ def get_substring_divisible_pandigitals():
 
 
 def main():
-    pandigitals = get_substring_divisible_pandigitals()
+    pandigitals = get_substring_divisible_pandigitals_using_permutations()
     print(f"the pandigitals: {pandigitals}")
     print(f"The Answer to Project Euler 043 is {sum(pandigitals)}")
 
-    # The Answer to Project Euler 043
+    # The Answer to Project Euler 043 is 16695334890
 
 
 if __name__ == "__main__":
