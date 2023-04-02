@@ -68,6 +68,14 @@ def generate_permutation_list(xs):
     return permutation_list
 
 
+def get_next_level_of_permutations(a, n):
+    return [a + [i] for i in range(n) if i not in a]
+
+
+def flatten(xs):
+    return [item for sublist in xs for item in sublist]
+
+
 def generate_permutation_patterns2(n):
     """
         Generate a list of permutation patterns of size n!
@@ -83,12 +91,17 @@ def generate_permutation_patterns2(n):
     :param n:
     :return:
     """
-    patterns = []
-    for i in range(n):
-        patterns = patterns + [i] * math.factorial(n - 1)
-    for i in range(1, n):
-        for j in range(len(patterns)):
-            patterns[j].append(get_n_not_yet_in_pattern(patterns[j], n))
+    patterns = [[i] for i in range(n)]
+    for i in range(n-1):
+        # [0, 1, 2] --> [[0, 1], [0, 2], [1, 0], [1, 2], [2, 0], [2, 1]]
+        new_patterns = [get_next_level_of_permutations(a, n) for a in patterns]
+        patterns = flatten(new_patterns)
+    #
+    #     patterns = patterns + [i] * math.factorial(n - 1)
+    # for i in range(1, n):
+    #     for j in range(len(patterns)):
+    #         patterns[j].append(get_n_not_yet_in_pattern(patterns[j], n))
+    return patterns
 
 
 def get_n_not_yet_in_pattern(pattern, n):
@@ -133,6 +146,9 @@ def get_substring_divisible_pandigitals_using_permutations():
 
 
 def main():
+
+    patterns = generate_permutation_patterns2(3)
+
     pandigitals = get_substring_divisible_pandigitals_using_permutations()
     print(f"the pandigitals: {pandigitals}")
     print(f"The Answer to Project Euler 043 is {sum(pandigitals)}")
