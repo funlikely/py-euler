@@ -19,53 +19,16 @@
     Find the sum of all 0 to 9 pandigital numbers with this property.
 """
 import math
+import time
 
 
-def generate_permutation_pattern(a, remainder):
-    result = []
-    for i in range(a - 1, 0, -1):
-        result.append(int(remainder / math.factorial(i)))
-        remainder %= math.factorial(i)
-    return result
-
-
-def generate_permutation(xs, n):
+def get_permutation(xs, pattern):
     """
-        Generate the nth lexicographical permutation of string or list.
-    :param xs:
-    :param n:
-    :return:
+        Generate the nth permutation of a list 'xs', given the permutation pattern.
     """
-    result = []
     xs = sorted(xs)
-    pattern = generate_permutation_list(len(xs))[n]  # generate_permutation_pattern(len(xs), n)
-    for i in range(len(xs) - 1):
-        selected = xs[pattern[i]]
-        result.append(selected)
-        xs.remove(selected)
-    result += xs
+    result = [xs[pattern[i]] for i in range(len(pattern))]
     return result
-
-
-def generate_permutation_list(xs):
-    xs = sorted(xs)
-    permutation_list = []
-    for j in range(math.factorial(len(xs))):
-        remainder = j
-        permutation = []
-        for i in range(len(xs) - 1, 0, -1):
-            permutation.append(int(remainder / math.factorial(i)))
-            remainder %= math.factorial(i)
-
-        result = []
-        working_list = xs
-        for i in range(len(xs) - 1):
-            selected = working_list[permutation[i]]
-            result.append(selected)
-            working_list.remove(selected)
-
-        permutation_list.append(result)
-    return permutation_list
 
 
 def get_next_level_of_permutations(a, n):
@@ -76,39 +39,13 @@ def flatten(xs):
     return [item for sublist in xs for item in sublist]
 
 
-def generate_permutation_patterns2(n):
-    """
-        Generate a list of permutation patterns of size n!
-
-        Want to be able to do the following,
-
-        > perm_list
-        [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]
-        > s
-        'asd'
-        > [''.join([s[i] for i in a]) for a in pie]
-        ['asd', 'ads', 'sad', 'sda', 'das', 'dsa']
-    :param n:
-    :return:
-    """
+def generate_permutation_pattern_list(n):
+    """ Generate a list of permutation patterns of size n! """
     patterns = [[i] for i in range(n)]
     for i in range(n-1):
-        # [0, 1, 2] --> [[0, 1], [0, 2], [1, 0], [1, 2], [2, 0], [2, 1]]
         new_patterns = [get_next_level_of_permutations(a, n) for a in patterns]
         patterns = flatten(new_patterns)
-    #
-    #     patterns = patterns + [i] * math.factorial(n - 1)
-    # for i in range(1, n):
-    #     for j in range(len(patterns)):
-    #         patterns[j].append(get_n_not_yet_in_pattern(patterns[j], n))
     return patterns
-
-
-def get_n_not_yet_in_pattern(pattern, n):
-    for i in range(n):
-        if i not in pattern:
-            return i
-    return -1
 
 
 def is_interestingly_divisible(perm):
@@ -123,36 +60,33 @@ def is_interestingly_divisible(perm):
 
 def get_substring_divisible_pandigitals_using_permutations():
     interestingly_divisible_list = []
-    seed_string = "123456789"
     count = 0
-    for i in range(math.factorial(9)):
-        perm_string = ''.join(generate_permutation(seed_string, i))
-        perm = int(perm_string[:5] + '0' + perm_string[5:])
-        if count < 10 or count % 10000 == 0:
-            print(f"permutation #{i}: {perm}")
-        if is_interestingly_divisible(perm):
-            interestingly_divisible_list.append(perm)
-        count += 1
-    seed_string = "123406789"
-    for i in range(math.factorial(9)):
-        perm_string = ''.join(generate_permutation(seed_string, i))
-        perm = int(perm_string[:5] + '5' + perm_string[5:])
-        if count < 10 or count % 10000 == 0:
-            print(f"permutation #{i}: {perm}")
-        if is_interestingly_divisible(perm):
-            interestingly_divisible_list.append(perm)
-        count += 1
+    permutation_pattern_list = generate_permutation_pattern_list(9)
+
+    # We know the fifth digit needs to be '0' or '5', so we don't need all 10! permutations.
+    # Only 2 * 9! permutations.
+    for seed_string, extra_char in [("123456789", '0'), ("123406789", '5')]:
+        for i in range(math.factorial(9)):
+            perm_string = ''.join(get_permutation(seed_string, permutation_pattern_list[i]))
+            perm = int(perm_string[:5] + extra_char + perm_string[5:])
+            if count < 4 or count % 100000 == 0:
+                print(f"attempt #{count}: {perm}")
+            if is_interestingly_divisible(perm):
+                interestingly_divisible_list.append(perm)
+            count += 1
+
     return interestingly_divisible_list
 
 
 def main():
-
-    patterns = generate_permutation_patterns2(3)
-
+    start_time = time.time()
     pandigitals = get_substring_divisible_pandigitals_using_permutations()
+    end_time = time.time()
+    print(f"time: {end_time - start_time}")
     print(f"the pandigitals: {pandigitals}")
     print(f"The Answer to Project Euler 043 is {sum(pandigitals)}")
 
+    # the pandigitals: [1406357289, 1430952867, 1460357289, 4106357289, 4130952867, 4160357289]
     # The Answer to Project Euler 043 is 16695334890
 
 
