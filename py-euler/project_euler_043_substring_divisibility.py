@@ -44,25 +44,32 @@ def generate_permutation(l, n):
     return result
 
 
-print(generate_permutation('9876543210', 5))
-print(generate_permutation('65432', 5))
-
-
-def get_lexicographic_permutation(param):
-    for i in range(999990, 1000010):
-        print(''.join(generate_permutation('9876543210', i)))
-
-    print('The millionth permutation is ' + ''.join(generate_permutation('9876543210', 999999)))
-    return ''.join(generate_permutation('9876543210', param - 1
-                                        ))
+def is_interestingly_divisible(perm):
+    divisors = [2, 3, 5, 7, 11, 13, 17]
+    f = lambda acc, m, n: acc and m % n == 0
+    accumulator = True
+    [accumulator := f(accumulator, perm, n) for n in divisors]
+    return accumulator
 
 
 def get_substring_divisible_pandigitals():
-    return [1236548790]
+    interestingly_divisible_list = []
+    seed_string = "0123456789"
+    start_permutation = math.factorial(9)
+    count = 0
+    for i in range(math.factorial(9), math.factorial(10)):
+        perm = int(''.join(generate_permutation(seed_string, i)))
+        if count < 10 or count % 10000 == 0:
+            print(f"permutation #{i}: {perm}")
+        if is_interestingly_divisible(perm):
+            interestingly_divisible_list.append(perm)
+        count += 1
+    return interestingly_divisible_list
 
 
 def main():
     pandigitals = get_substring_divisible_pandigitals()
+    print(f"the pandigitals: {pandigitals}")
     print(f"The Answer to Project Euler 043 is {sum(pandigitals)}")
 
     # The Answer to Project Euler 043
