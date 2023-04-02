@@ -25,34 +25,6 @@ def prime_sieve(n):
     return sieve
 
 
-def primes_up_to(n):
-    primes = prime_sieve_up_to(n)
-    return [x for x in range(len(primes)) if primes[x]]
-
-
-def prime_sieve_up_to(n):
-    """Return a list of booleans representing the primes up to n-1"""
-    sieve = [True] * n
-    sieve[0] = sieve[1] = False
-    prime_list = []
-    primes_found = 0
-    sieve_counter = 2
-    while sieve_counter < len(sieve):
-        if sieve[sieve_counter]:
-            primes_found = primes_found + 1
-            prime_list.append(sieve_counter)
-            sieve_action_counter = sieve_counter*2
-            while sieve_action_counter < len(sieve):
-                sieve[sieve_action_counter] = False
-                sieve_action_counter += sieve_counter
-        sieve_counter += 1
-    for sieve_counter in range(sieve_counter, len(sieve)):
-        sieve[sieve_counter] = False
-
-    # print(str(primes_found) + ' primes found!')
-    return sieve
-
-
 def get_primes(n):
     prime_list = []
     sieve = prime_sieve(n)
@@ -80,3 +52,49 @@ def divisor_counter_fast(n):
     for k in range(len(prime_factor_list)):
         prime_factor_list[k] += 1
     return math.prod(prime_factor_list)
+
+
+class PrimeProcessor:
+
+    def __init__(self, limit=2):
+        self.prime_sieve = [False]
+        self.limit = limit
+        self.prime_sieve = self.get_prime_sieve_up_to(limit)
+
+    def get_prime_sieve_up_to(self, n):
+        """Return a list of booleans representing the first n primes."""
+        if sum([1 for x in self.prime_sieve if x]) >= n:
+            f = lambda acc, x: acc + 1 if x else acc
+            accumulator = 0
+            acc_list = [accumulator := f(accumulator, self.prime_sieve[x]) for x in range(len(self.prime_sieve))]
+            return self.prime_sieve[0: acc_list.index(n)]
+        else:
+            self.generate_prime_sieve_up_to(n)
+            self.limit = n
+            return self.prime_sieve
+
+    def generate_prime_sieve_up_to(self, n):
+        """Return a list of booleans representing the primes up to n-1"""
+        sieve = [True] * n
+        sieve[0] = sieve[1] = False
+        prime_list = []
+        primes_found = 0
+        sieve_counter = 2
+        while sieve_counter < len(sieve):
+            if sieve[sieve_counter]:
+                primes_found = primes_found + 1
+                prime_list.append(sieve_counter)
+                sieve_action_counter = sieve_counter*2
+                while sieve_action_counter < len(sieve):
+                    sieve[sieve_action_counter] = False
+                    sieve_action_counter += sieve_counter
+            sieve_counter += 1
+        for sieve_counter in range(sieve_counter, len(sieve)):
+            sieve[sieve_counter] = False
+
+        self.prime_sieve = sieve
+
+    def primes_up_to(self, n):
+        self.get_prime_sieve_up_to(n)
+        return [x for x in range(len(self.prime_sieve)) if self.prime_sieve[x]]
+

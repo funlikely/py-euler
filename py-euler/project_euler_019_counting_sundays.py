@@ -1,16 +1,21 @@
-# You are given the following information, but you may prefer to do some research for yourself.
-#
-#     1 Jan 1900 was a Monday.
-#     Thirty days has September,
-#     April, June and November.
-#     All the rest have thirty-one,
-#     Saving February alone,
-#     Which has twenty-eight, rain or shine.
-#     And on leap years, twenty-nine.
-#     A leap year occurs on any year evenly divisible by 4, but not on a century unless it is divisible by 400.
-#
-# How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
+"""
+    Counting Sundays
 
+    Problem 19
+
+    You are given the following information, but you may prefer to do some research for yourself.
+
+        1 Jan 1900 was a Monday.
+        Thirty days has September,
+        April, June and November.
+        All the rest have thirty-one,
+        Saving February alone,
+        Which has twenty-eight, rain or shine.
+        And on leap years, twenty-nine.
+        A leap year occurs on any year evenly divisible by 4, but not on a century unless it is divisible by 400.
+
+    How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
+"""
 calendar_month_day_count = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 calendar_month_day_count_leap_year = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
@@ -36,7 +41,7 @@ def year(d):
 
 
 def date_increment(d):
-    if not total_month_calendar.__contains__(d[0]):
+    if not d[0] in total_month_calendar:
         print('cannot increment date ' + str(d))
         return -1
     # can do more validation here if you want
@@ -53,27 +58,38 @@ def date_increment(d):
     return d
 
 
-def day_of_week(day):
+def get_day_of_week(day):
     days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     return days[day % 7]
 
 
-# we will iterate from the initial given date up to the final date of concern, from
-# 1/1/1900 to 12/31/2000
+def get_sunday_count():
+    # we will iterate from the initial given date up to the final date of concern, from
+    # 1/1/1900 to 12/31/2000
 
-date = [1900, 1, 1]
+    date = [1900, 1, 1]
 
-sunday_count = 0
-day_of_week = 1     # Sun-Sat is 0-6, so 1 = Monday
+    sunday_count = 0
+    day_of_week = 1  # Sun-Sat is 0-6, so 1 = Monday
 
-while year(date) < 2001:
-    date = date_increment(date)
-    day_of_week = (day_of_week + 1) % 7
-    if day_of_week % 7 == 0 and 2001 > date[0] > 1900 and date[2] == 1:
-        sunday_count += 1
-    if day_of_week % 7 == 0:
-        print('Date = {0}, Day of week = {1}, SundayCount = {2}'.format(str(date), day_of_week, str(sunday_count)))
+    while year(date) < 2001:
+        date = date_increment(date)
+        day_of_week = (day_of_week + 1) % 7
+        if day_of_week % 7 == 0 and 2001 > date[0] > 1900 and date[2] == 1:
+            sunday_count += 1
+        if day_of_week % 7 == 0:
+            print('Date = {0}, Day of week = {1}, SundayCount = {2}'.format(str(date), day_of_week, str(sunday_count)))
 
-print()
-print('the number of sundays = {0}'.format(str(sunday_count)))
+    print()
+    return sunday_count
 
+
+def main():
+    answer = get_sunday_count()
+    print(f"The Answer to Project Euler 019 is {answer}")
+
+    # The Answer to Project Euler 019 is 171
+
+
+if __name__ == "__main__":
+    main()

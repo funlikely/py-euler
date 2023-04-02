@@ -1,51 +1,20 @@
-# Non-abundant sums
-#
-# Problem 23
-#
-# A perfect number is a number for which the sum of its proper divisors is exactly equal to the number. For example, the sum of the proper divisors of 28 would be 1 + 2 + 4 + 7 + 14 = 28, which means that 28 is a perfect number.
-#
-# A number n is called deficient if the sum of its proper divisors is less than n and it is called abundant if this sum exceeds n.
-#
-# As 12 is the smallest abundant number, 1 + 2 + 3 + 4 + 6 = 16, the smallest number that can be written as the sum of two abundant numbers is 24. By mathematical analysis, it can be shown that all integers greater than 28123 can be written as the sum of two abundant numbers. However, this upper limit cannot be reduced any further by analysis even though it is known that the greatest number that cannot be expressed as the sum of two abundant numbers is less than this limit.
-#
-# Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
+"""
+    Non-abundant sums
 
+    Problem 23
 
+    A perfect number is a number for which the sum of its proper divisors is exactly equal to the number. For example, the sum of the proper divisors of 28 would be 1 + 2 + 4 + 7 + 14 = 28, which means that 28 is a perfect number.
+
+    A number n is called deficient if the sum of its proper divisors is less than n and it is called abundant if this sum exceeds n.
+
+    As 12 is the smallest abundant number, 1 + 2 + 3 + 4 + 6 = 16, the smallest number that can be written as the sum of two abundant numbers is 24. By mathematical analysis, it can be shown that all integers greater than 28123 can be written as the sum of two abundant numbers. However, this upper limit cannot be reduced any further by analysis even though it is known that the greatest number that cannot be expressed as the sum of two abundant numbers is less than this limit.
+
+    Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
+"""
 import math
+import utilities.primes as pr
 
-
-def prime_sieve(n):
-    sieve = [True] * n * int(n ** (0.5) + 1)
-    sieve[0] = sieve[1] = False
-    prime_list = []
-    primes_found = 0
-    sieve_counter = 2
-    while sieve_counter < len(sieve) and primes_found < n:
-        if sieve[sieve_counter]:
-            primes_found = primes_found + 1
-            prime_list.append(sieve_counter)
-            sieve_action_counter = sieve_counter * 2
-            while sieve_action_counter < len(sieve):
-                sieve[sieve_action_counter] = False
-                sieve_action_counter += sieve_counter
-        sieve_counter += 1
-    for sieve_counter in range(sieve_counter, len(sieve)):
-        sieve[sieve_counter] = False
-
-    # print(str(primes_found) + ' primes found!')
-    return sieve
-
-
-def get_primes(n):
-    primeList = []
-    sieve = prime_sieve(n)
-    for i in range(2, len(sieve)):
-        if sieve[i]:
-            primeList.append(i)
-    return primeList
-
-
-prime_list = get_primes(int(5000))
+prime_list = pr.get_primes(int(5000))
 
 
 def prime_factors(n):
@@ -75,36 +44,48 @@ def get_divisors(n):
     return divisor_list[:(len(divisor_list) - 1)]
 
 
-our_max = 28124
-divisor_sum_lookup = [0] * our_max
+def get_non_abundant_sums():
+    our_max = 28124
+    divisor_sum_lookup = [0] * our_max
 
-for i in range(1, our_max):
-    if i < len(divisor_sum_lookup) and divisor_sum_lookup[i] != 0:
-        divisor_sum = divisor_sum_lookup[i]
-    else:
-        divisor_sum = sum(get_divisors(i))
-        divisor_sum_lookup[i] = divisor_sum
-    if i % 2000 == 0:
-        print("divisor sum lookup calculation {0} out of {1}".format(str(i), str(our_max)))
+    for i in range(1, our_max):
+        if i < len(divisor_sum_lookup) and divisor_sum_lookup[i] != 0:
+            divisor_sum = divisor_sum_lookup[i]
+        else:
+            divisor_sum = sum(get_divisors(i))
+            divisor_sum_lookup[i] = divisor_sum
+        if i % 2000 == 0:
+            print("divisor sum lookup calculation {0} out of {1}".format(str(i), str(our_max)))
 
-# print("Here are a bunch of abundant numbers and their abundant divisor sums")
-# print([[i, divisor_sum_lookup[i]] for i in range(1, our_max) if divisor_sum_lookup[i] > i])
+    # print("Here are a bunch of abundant numbers and their abundant divisor sums")
+    # print([[i, divisor_sum_lookup[i]] for i in range(1, our_max) if divisor_sum_lookup[i] > i])
+
+    abundant_numbers = [i for i in range(1, our_max) if divisor_sum_lookup[i] > i]
+
+    sum_possible_list = [False] * 28124
+    for i in range(len(abundant_numbers)):
+        for j in range(len(abundant_numbers)):
+            if i <= j and abundant_numbers[i] + abundant_numbers[j] < our_max:
+                sum_possible_list[abundant_numbers[i] + abundant_numbers[j]] = True
+        if i % 1000 == 0:
+            print("{0} out of {1} calculation of non abundant sums".format(str(i), str(our_max)))
+
+    non_abundant_sums = [i for i in range(len(sum_possible_list)) if not sum_possible_list[i]]
+    print("non abundant sums")
+    print(non_abundant_sums)
+
+    print("the sum of all the positive integers which cannot be written as the sum of two abundant numbers is ")
+    print(sum(non_abundant_sums))
+
+    return non_abundant_sums
 
 
-abundant_numbers = [i for i in range(1, our_max) if divisor_sum_lookup[i] > i]
+def main():
+    non_abundant_sums = get_non_abundant_sums()
+    print(f"The Answer to Project Euler 023 is {sum(non_abundant_sums)}")
 
-sum_possible_list = [False] * 28124
-for i in range(len(abundant_numbers)):
-    for j in range(len(abundant_numbers)):
-        if i <= j and abundant_numbers[i] + abundant_numbers[j] < our_max:
-            sum_possible_list[abundant_numbers[i] + abundant_numbers[j]] = True
-    if i % 1000 == 0:
-        print("{0} out of {1} calculation of non abundant sums".format(str(i), str(our_max)))
+    # The Answer to Project Euler 023 is 4179871
 
-non_abundant_sums = [i for i in range(len(sum_possible_list)) if not sum_possible_list[i]]
-print("non abundant sums")
-print(non_abundant_sums)
 
-print("the sum of all the positive integers which cannot be written as the sum of two abundant numbers is ")
-print(sum(non_abundant_sums))
-
+if __name__ == "__main__":
+    main()

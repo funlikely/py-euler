@@ -6,7 +6,7 @@ from utilities.primes import prime_factors
 
 def divisor_counter(a):
     if a < 0:
-        return
+        return 0
     if a == 0 or a == 1:
         return 1
     count = 1

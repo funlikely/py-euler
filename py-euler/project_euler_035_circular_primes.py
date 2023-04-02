@@ -12,7 +12,7 @@
 """
 import math
 
-from utilities.primes import prime_sieve_up_to
+from utilities.primes import *
 
 
 def rotate(a):
@@ -30,14 +30,15 @@ def contains_even_digit(n):
 
 def get_circular_primes():
     circ_primes = [2]
-    prime_sieve = prime_sieve_up_to(1000000)
-    for a0 in range(3, 1000000, 2):
+    limit = 1000000
+    pp = PrimeProcessor(limit)
+    for a0 in range(3, limit, 2):
         if contains_even_digit(a0):
             continue
         a = a0
         is_circ_prime = True
         for b in range(0, int(math.log(a0, 10)) + 1):
-            if not prime_sieve[a]:
+            if not pp.prime_sieve[a]:
                 is_circ_prime = False
             a = rotate(a)
         if is_circ_prime:
