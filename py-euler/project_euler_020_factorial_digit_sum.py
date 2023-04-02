@@ -1,9 +1,15 @@
-# n! means n × (n − 1) × ... × 3 × 2 × 1
-#
-# For example, 10! = 10 × 9 × ... × 3 × 2 × 1 = 3628800,
-# and the sum of the digits in the number 10! is 3 + 6 + 2 + 8 + 8 + 0 + 0 = 27.
-#
-# Find the sum of the digits in the number 100!
+"""
+    Factorial digit sum
+
+    Problem 20
+
+    n! means n × (n − 1) × ... × 3 × 2 × 1
+
+    For example, 10! = 10 × 9 × ... × 3 × 2 × 1 = 3628800,
+    and the sum of the digits in the number 10! is 3 + 6 + 2 + 8 + 8 + 0 + 0 = 27.
+
+    Find the sum of the digits in the number 100!
+"""
 
 import math
 
@@ -50,22 +56,34 @@ def multiply_two_string_ints(s, t):
     for i in range(1, len(sub_product_list) - 1):
         result = add_two_string_ints(result, sub_product_list[i])
 
-    #return [result, sub_product_list, product_list]
     return result.lstrip('0')
 
 
-print(multiply_two_string_ints('123', '12'))
-print(multiply_two_string_ints('99', '99'))
-print(multiply_two_string_ints('99999999999', '99999999999'))
-print(multiply_two_string_ints('999999999999999', '999999999999999'))
+def get_factorial_digit_sum():
+    print(multiply_two_string_ints('123', '12'))
+    print(multiply_two_string_ints('99', '99'))
+    print(multiply_two_string_ints('99999999999', '99999999999'))
+    print(multiply_two_string_ints('999999999999999', '999999999999999'))
 
-factorial = "1"
-for i in range(1, 100):
-    factorial = multiply_two_string_ints(factorial, str(i))
+    factorial = "1"
+    for i in range(1, 100):
+        factorial = multiply_two_string_ints(factorial, str(i))
 
-print(factorial)
+    print(factorial)
 
-factorial_digits_total = 0
-for i in range(len(factorial)):
-    factorial_digits_total += int(factorial[i])
-print("the sum of digits in 100! is " + str(factorial_digits_total))
+    factorial_digits_total = 0
+    for i in range(len(factorial)):
+        factorial_digits_total += int(factorial[i])
+    print("the sum of digits in 100! is " + str(factorial_digits_total))
+    return factorial_digits_total
+
+
+def main():
+    answer = get_factorial_digit_sum()
+    print(f"The Answer to Project Euler 020 is {answer}")
+
+    # The Answer to Project Euler 020 is 648
+
+
+if __name__ == "__main__":
+    main()
