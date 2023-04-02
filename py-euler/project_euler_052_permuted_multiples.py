@@ -45,7 +45,7 @@ def main():
     answer = get_smallest_permuted_multiple(False)
     print(f"The Answer to Project Euler 052 is {answer}")
 
-    # The Answer to Project Euler 052 is
+    # The Answer to Project Euler 052 is 142857
 
 
 if __name__ == "__main__":
