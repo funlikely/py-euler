@@ -11,6 +11,12 @@
 
     Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D = |Pk − Pj| is minimised; what is the value of D?
 """
+import math
+
+
+def is_pentagonal(p):
+    p_root = (((1/2)+math.sqrt(1/4 + 6*p))/3)
+    return p_root == int(p_root)
 
 
 def generate_pent_list(size):
@@ -20,13 +26,13 @@ def generate_pent_list(size):
 def get_minimal_pentagonal_difference():
     pent_count = 50000
     pent_list = generate_pent_list(pent_count)
-    pent_bool_list = [False] * (pent_list[-1] + 1)
-    for pent in pent_list:
-        pent_bool_list[pent] = True
+    # pent_bool_list = [False] * (pent_list[-1] + 1)
+    # for pent in pent_list:
+    #     pent_bool_list[pent] = True
 
     print(f"some pent numbers: {pent_list[:20]}")
 
-    p_diff = 29997  # 119000 tested up to
+    p_diff = 1  # 119000 tested up to
     is_pair_found = False
     index_pair = (0, 0)
     print()
@@ -40,7 +46,10 @@ def get_minimal_pentagonal_difference():
             j = pent_list[test_index]
             k = j + p_diff
 
-            if pent_bool_list[k] and pent_bool_list[j + k] and pent_bool_list[k - j]:
+            # NOTE : commented out pent_bool_list code to see if is_pentagonal() would work better
+
+            if is_pentagonal(k) and is_pentagonal(j+k) and is_pentagonal(k-j):
+            # if pent_bool_list[k] and pent_bool_list[j + k] and pent_bool_list[k - j]:
                 index_pair = (test_index, custom_index(pent_list, lambda x: x == k))
                 is_pair_found = True
 
