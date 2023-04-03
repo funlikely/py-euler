@@ -18,15 +18,20 @@ def generate_pent_list(size):
 
 
 def get_minimal_pentagonal_difference():
-    pent_list = generate_pent_list(10000)
+    pent_count = 50000
+    pent_list = generate_pent_list(pent_count)
+    pent_bool_list = [False] * (pent_list[-1] + 1)
+    for pent in pent_list:
+        pent_bool_list[pent] = True
+
     print(f"some pent numbers: {pent_list[:20]}")
 
-    p_diff = 3000
+    p_diff = 29997  # 119000 tested up to
     is_pair_found = False
     index_pair = (0, 0)
     print()
 
-    while not is_pair_found and p_diff < 3000:
+    while not is_pair_found and p_diff < 166000:
         if p_diff % 10 == 0:
             print(f"checking min diff: {p_diff}")
         max_index_to_test = int(p_diff/3)
@@ -35,7 +40,7 @@ def get_minimal_pentagonal_difference():
             j = pent_list[test_index]
             k = j + p_diff
 
-            if k in pent_list and (j + k) in pent_list and (k - j) in pent_list:
+            if pent_bool_list[k] and pent_bool_list[j + k] and pent_bool_list[k - j]:
                 index_pair = (test_index, custom_index(pent_list, lambda x: x == k))
                 is_pair_found = True
 
