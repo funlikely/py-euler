@@ -12,38 +12,38 @@
 
     Find the next triangle number that is also pentagonal and hexagonal.
 """
+import math
+
 from project_euler_012_highly_divisible_triangular_number import triangle
+from project_euler_044_pentagon_numbers import is_pentagonal
 
 
-def is_pentagonal(tri_guess):
-    pass
-
-
-def is_hexagonal(tri_guess):
-    pass
-
+def is_hexagonal(h):
+    h_root = ((1 + math.sqrt(1 + 8 * h)) / 4)
+    return h_root == int(h_root)
 
 
 def get_next_special_triangle():
     tri_index = 286
-    tri_guess = triangle(tri_index)
     answer_found = False
-    while not answer_found and tri_index < 10000:
+    while not answer_found and tri_index < 1000000:
+        if tri_index % 10000 == 0:
+            print(f"checking tri#: {tri_index}")
+        tri_guess = triangle(tri_index)
         if is_pentagonal(tri_guess) and is_hexagonal(tri_guess):
             answer_found = True
             break
         tri_index += 1
 
     print(f"triangle number #{tri_index}")
-    return triangle(tri_index)
+    return int(triangle(tri_index))
 
 
 def main():
-
     answer = get_next_special_triangle()
     print(f"The Answer to Project Euler 045 is {answer}")
 
-    # The Answer to Project Euler 045 is
+    # The Answer to Project Euler 045 is 1533776805
 
 
 if __name__ == "__main__":
