@@ -23,6 +23,14 @@ def get_goldbach_counterexample():
     pp = PrimeProcessor()
     prime_list = pp.primes_up_to(5000)
     square_list = [i*i for i in range(5000)]
+
+    test_num = 9
+    while test_num < prime_list[-1:][0]:
+        if test_num % 101 == 0:
+            print(f"testing {test_num}")
+
+        test_num += 2
+
     return 0
 
 
