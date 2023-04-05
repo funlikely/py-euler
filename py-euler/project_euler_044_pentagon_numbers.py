@@ -34,10 +34,10 @@ def get_minimal_pentagonal_difference_more_efficient():
     # j = 39043876676, k = 39045367191, j + k = 78089243867, k - j = 1490515
     # j = 41665750005, k = 41667246507, j + k = 83332996512, k - j = 1496502
 
-    pent_count = 500000  # tested with pent_count = 500000
+    pent_count = 5000000  # tested with pent_count = 500000
     pent_list = generate_pent_list(pent_count)
 
-    p_diff_index = 1
+    p_diff_index = 1000  # done up to p_diff_index of 1000
     is_pair_found = False
     index_pair = (0, 0)
     counter = 0
@@ -46,14 +46,14 @@ def get_minimal_pentagonal_difference_more_efficient():
         p_diff = pent_list[p_diff_index]
         if p_diff_index % 100 == 0:
             print(f"checking min diff: {p_diff}")
-        max_index_to_test = len(pent_list)
+        max_index_to_test = int(p_diff/3)
         test_index = 1
         while test_index < max_index_to_test:
             j = pent_list[test_index]
             k = j + p_diff
 
             if counter % 1000000 == 0:
-                print(f"testing j = {j}, k = {k}, j + k = {j + k}, k - j = {k - j}")
+                print(f"testing j = {j}, k = {k}, j + k = {j + k}, k - j = {k - j}, p_diff = {p_diff}, p({p_diff_index}) = {pentify(p_diff_index)}")
 
             # NOTE : commented out pent_bool_list code to see if is_pentagonal() would work better
 
@@ -120,7 +120,11 @@ def main():
     print(f"index pair {index_pair}")
     print(f"The Answer to Project Euler 044 is {answer}")
 
-    # The Answer to Project Euler 044 
+    # testing j = 3002767989501, k = 3002773466427, j + k = 6005541455928, k - j = 5476926, p_diff = 5476926, p(1911) = 5476926
+    # testing j = 520778856325, k = 520784338985, j + k = 1041563195310, k - j = 5482660, p_diff = 5482660, p(1912) = 5482660
+    # testing j = 3788453356325, k = 3788458838985, j + k = 7576912195310, k - j = 5482660, p_diff = 5482660, p(1912) = 5482660
+    # index pair (1020, 2167)
+    # The Answer to Project Euler 044 is 5482660
 
 
 if __name__ == "__main__":
