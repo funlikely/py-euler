@@ -19,8 +19,55 @@ def is_pentagonal(p):
     return p_root == int(p_root)
 
 
+def pentify(n):
+    return int(n * (3 * n - 1) / 2)
+
+
 def generate_pent_list(size):
-    return [int(i * (3 * i - 1) / 2) for i in range(size)]
+    return [pentify(i) for i in range(size)]
+
+
+
+def get_minimal_pentagonal_difference_more_efficient():
+    # j = 28869366176, k = 28870844753, j + k = 57740210929, k - j = 1478577
+    # j = 34665956715, k = 34667441255, j + k = 69333397970, k - j = 1484540
+    # j = 39043876676, k = 39045367191, j + k = 78089243867, k - j = 1490515
+    # j = 41665750005, k = 41667246507, j + k = 83332996512, k - j = 1496502
+
+    pent_count = 5000000  # tested with pent_count = 500000
+    pent_list = generate_pent_list(pent_count)
+
+    p_diff_index = 1000  # done up to p_diff_index of 1000
+    is_pair_found = False
+    index_pair = (0, 0)
+    counter = 0
+
+    while not is_pair_found and p_diff_index < pent_count:
+        p_diff = pent_list[p_diff_index]
+        if p_diff_index % 100 == 0:
+            print(f"checking min diff: {p_diff}")
+        max_index_to_test = int(p_diff/3)
+        test_index = 1
+        while test_index < max_index_to_test:
+            j = pent_list[test_index]
+            k = j + p_diff
+
+            if counter % 1000000 == 0:
+                print(f"testing j = {j}, k = {k}, j + k = {j + k}, k - j = {k - j}, p_diff = {p_diff}, p({p_diff_index}) = {pentify(p_diff_index)}")
+
+            # NOTE : commented out pent_bool_list code to see if is_pentagonal() would work better
+
+            if is_pentagonal(k) and is_pentagonal(j+k) and is_pentagonal(k-j):
+            # if pent_bool_list[k] and pent_bool_list[j + k] and pent_bool_list[k - j]:
+                index_pair = (test_index, custom_index(pent_list, lambda x: x == k))
+                is_pair_found = True
+
+            test_index += 1
+            counter += 1
+
+        p_diff_index += 1
+
+    return index_pair, k-j
 
 
 def get_minimal_pentagonal_difference():
@@ -35,7 +82,7 @@ def get_minimal_pentagonal_difference():
     p_diff = 1  # 119000 tested up to
     is_pair_found = False
     index_pair = (0, 0)
-    print()
+    counter = 0
 
     while not is_pair_found and p_diff < 166000:
         if p_diff % 10 == 0:
@@ -46,6 +93,9 @@ def get_minimal_pentagonal_difference():
             j = pent_list[test_index]
             k = j + p_diff
 
+            if counter % 10000 == 0:
+                print(f"testing j = {j}, k = {k}, j + k = {j + k}, k - j = {k - j}")
+
             # NOTE : commented out pent_bool_list code to see if is_pentagonal() would work better
 
             if is_pentagonal(k) and is_pentagonal(j+k) and is_pentagonal(k-j):
@@ -54,6 +104,7 @@ def get_minimal_pentagonal_difference():
                 is_pair_found = True
 
             test_index += 1
+            counter += 1
 
         p_diff += 1
 
@@ -65,11 +116,15 @@ def custom_index(ls, f):
 
 
 def main():
-    index_pair, answer = get_minimal_pentagonal_difference()
+    index_pair, answer = get_minimal_pentagonal_difference_more_efficient()
     print(f"index pair {index_pair}")
     print(f"The Answer to Project Euler 044 is {answer}")
 
-    # The Answer to Project Euler 044 
+    # testing j = 3002767989501, k = 3002773466427, j + k = 6005541455928, k - j = 5476926, p_diff = 5476926, p(1911) = 5476926
+    # testing j = 520778856325, k = 520784338985, j + k = 1041563195310, k - j = 5482660, p_diff = 5482660, p(1912) = 5482660
+    # testing j = 3788453356325, k = 3788458838985, j + k = 7576912195310, k - j = 5482660, p_diff = 5482660, p(1912) = 5482660
+    # index pair (1020, 2167)
+    # The Answer to Project Euler 044 is 5482660
 
 
 if __name__ == "__main__":
