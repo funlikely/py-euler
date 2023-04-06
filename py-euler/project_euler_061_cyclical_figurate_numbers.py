@@ -56,19 +56,55 @@ def is_candidate2(word):
     return True
 
 
+def can_join_strings(s):
+    if len(s) == 2:
+        char_pairs = [num[i:i + 2] for num in s for i, a in enumerate(num) if i % 2 == 0 and i < (len(num) - 1)]
+        if char_pairs[0] == char_pairs[3] and char_pairs[1] == char_pairs[2]:
+            return True
+    if len(s) == 3:
+        char_pairs = [num[i:i + 2] for num in s for i, a in enumerate(num) if i % 2 == 0 and i < (len(num) - 1)]
+        if char_pairs[0] == char_pairs[5] and char_pairs[4] == char_pairs[3] and char_pairs[2] == char_pairs[1]:
+            return True
+        elif char_pairs[0] == char_pairs[3] and char_pairs[2] == char_pairs[5] and char_pairs[1] == char_pairs[4]:
+            return True
+    return False
+
+
 def is_fittable_in_6cycle(nums):
     if len(nums) > 6:
         return False
-    if len(nums) < 3:
+    if len(nums) < 4:
         return True
-    s = [[str(num)[:2], str(num)[2:]] for num in nums]  # s: split nums
-    # if len(nums) == 3:
-    #     if s[0][0] in [s[1][1], s[2][1]] or s[1][0] in [s[0][1],s[2][1]] or s[2][0] in [s[0][1], [s[1][1]]]:
-    #         return True
-    #     if s[0][1] in [s[1][0], s[2][0]] or s[1][1] in [s[0][0],s[2][0]] or s[2][1] in [s[0][0], [s[1][0]]]:
-    #         return True
+
     if len(nums) == 4:
         """for four nums, there has to either be an (AAAA, BBBBCCCCDDDD) or an (AAAABBBB, CCCCDDDD)"""
+        for a in range(4):
+            if can_join_strings([str(num) for i, num in enumerate(nums) if i != a]):
+                return True
+        for a in range(4):
+            for b in range(4):
+                if a == b:
+                    continue
+                if can_join_strings([str(num) for i, num in enumerate(nums) if a == i or b == i])\
+                        and can_join_strings([str(num) for i, num in enumerate(nums) if a != i and b != i]):
+                    return True
+        return False
+    if len(nums) == 5:
+        """TODO"""
+        """for five nums, there has to be a chain of five AAAABBBBCCCCDDDDEEEE for some permutation of a,b,c,d,e"""
+        for i in range(5):
+            for j in [x for x in range(5) if x != i]:
+                for k in [x for x in range(5) if x != i and x != j]:
+                    for m in [x for x in range(5) if x != i and x != j and x != k]:
+                        n = 10 - i - j - k - m
+                        s = [str(nums[i]), str(nums[j]), str(nums[k]), str(nums[m]), str(nums[n])]
+                        char_pairs = [num[i:i + 2] for num in s for i, a in enumerate(num) if
+                                      i % 2 == 0 and i < (len(num) - 1)]
+                        if char_pairs[1] == char_pairs[2] and char_pairs[3] == char_pairs[4]\
+                                and char_pairs[5] == char_pairs[6] and char_pairs[7] == char_pairs[8]\
+                                and char_pairs[9] == char_pairs[0]:
+                            return True
+
         return True
     return False
 
@@ -108,14 +144,16 @@ def get_special_sum():
                 # print(f"hex number: {c}")
                 c12 = str(c)[:2]
                 c34 = str(c)[2:]
-                if not is_fittable_in_6cycle([a, b, c]):
-                    continue
                 for d in pent:
+                    if not is_fittable_in_6cycle([a, b, c, d]):
+                        continue
                     d12 = str(d)[:2]
                     d34 = str(d)[2:]
                     if (d12 != c34 and d12 != b34 and d12 != a34) and (d34 != c12 and d34 != b12 and d34 != a12):
                         continue
                     for e in square:
+                        if not is_fittable_in_6cycle([a, b, c, d, e]):
+                            continue
                         e12 = str(e)[:2]
                         e34 = str(e)[2:]
                         if (e12 != c34 and e12 != d34 and e12 != b34 and e12 != a34) and (
@@ -137,6 +175,8 @@ def main():
     answer = get_special_sum()
     print(f"The Answer to Project Euler 061 is {answer}")
 
+    # WIP candidates ... [[1045, 2512, 1225, 4510, 1225, 1225], [1045, 2512, 1225, 4510, 5625, 2556]]
+    # there are disjoint cycles, though. these aren't solutions.  The (1045, 4510) cycle is in both.
     # The Answer to Project Euler 061 is
 
 
