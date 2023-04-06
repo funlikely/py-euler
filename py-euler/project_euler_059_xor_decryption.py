@@ -30,6 +30,8 @@ def get_xor_decryption_information():
     file = open('data/project_euler_069.txt')
     data = file.readline().split(',')
     print(data)
+    print(len(data))
+    histograph = []
     return 0
 
 
