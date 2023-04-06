@@ -81,16 +81,35 @@ def get_special_sum():
     count = 0
     print(f"combinations: {product}")
     for a in tri:
+        print(f"tri number: {a}")
+        a12 = str(a)[:2]
+        a34 = str(a)[2:]
         for b in square:
+            print(f"square number: {b}")
+            b12 = str(b)[:2]
+            b34 = str(b)[2:]
             for c in pent:
+                # print(f"pent number: {c}")
+                c12 = str(c)[:2]
+                c34 = str(c)[2:]
                 for d in hex:
+                    d12 = str(d)[:2]
+                    d34 = str(d)[2:]
+                    if (d12 != c34 and d12 != b34 and d12 != a34) and (d34 != c12 and d34 != b12 and d34 != a12):
+                        continue
                     for e in hept:
+                        e12 = str(e)[:2]
+                        e34 = str(e)[2:]
+                        if (e12 != c34 and e12 != d34 and e12 != b34 and e12 != a34) and (e34 != d12 and e34 != c12 and e34 != b12 and e34 != a12):
+                            continue
                         for f in oct:
-                            if is_candidate(str(a) + str(b) + str(c) + str(d) + str(e) + str(f)):
-                                count += 1
+                            f12 = str(f)[:2]
+                            f34 = str(f)[2:]
+                            count += 1
+                            if count % 100000 == 0:
+                                print(f"count = {count}, candidates = {candidates}")
+                            if is_candidate2(str(a) + str(b) + str(c) + str(d) + str(e) + str(f)):
                                 candidates.append([a, b, c, d, e, f])
-                                if count % 10000:
-                                    print(f"count = {count}, candidates = {candidates}")
     print(candidates)
     return 0
 
