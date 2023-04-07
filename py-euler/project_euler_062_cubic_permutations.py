@@ -11,12 +11,12 @@
 import math
 
 
-def find_smallest_special_cube():
+def find_smallest_special_cube(specialness):
     mag = 2
-    max_mag = 8
+    max_mag = 30
     # cubes = [n**3 for n in range(10**max_mag)]
     while mag < max_mag:
-        sub_cubes = [i**3 for i in range(int(math.pow(10**mag, 1/3)), int(math.pow(10**(mag+1), 1/3)+1))]
+        sub_cubes = [i**3 for i in range(int(math.pow(10**mag, 1/3)+1), int(math.pow(10**(mag+1), 1/3)+1))]
         print(f"checking from {sub_cubes[0]} to {sub_cubes[-1:][0]}")
         pizza = {}
         for sub_cube in sub_cubes:
@@ -25,9 +25,9 @@ def find_smallest_special_cube():
                 pizza[sub_cube_string] = 1
             else:
                 pizza[sub_cube_string] += 1
-        found_results = [val for i, val in enumerate(pizza.values()) if val > 2]
+        found_results = [val for i, val in enumerate(pizza.values()) if val >= specialness]
         if len(found_results) > 0:
-            found_cubes = [sub_cube for sub_cube in sub_cubes if pizza[''.join(sorted(str(sub_cube)))] > 2]
+            found_cubes = [sub_cube for sub_cube in sub_cubes if pizza[''.join(sorted(str(sub_cube)))] >= specialness]
             print(f"found cubes: {found_cubes}")
             return min(sorted(found_cubes))
         mag += 1
@@ -36,11 +36,10 @@ def find_smallest_special_cube():
 
 
 def main():
-    answer = find_smallest_special_cube()
+    answer = find_smallest_special_cube(5)
     print(f"The Answer to Project Euler 062 is {answer}")
 
-    # WROOOOONG
-    # The Answer to Project Euler 062 is 41063625
+    # The Answer to Project Euler 062 is 127035954683
 
 
 if __name__ == "__main__":
