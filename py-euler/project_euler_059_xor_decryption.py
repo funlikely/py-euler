@@ -31,7 +31,12 @@ def get_xor_decryption_information():
     data = file.readline().split(',')
     print(data)
     print(len(data))
-    histograph = []
+    d = [[int(c) for i, c in enumerate(data) if i % 3 == t] for t in range(3)]
+    print(d[0])
+    print(d[1])
+    print(d[2])
+    histograph = {c: d[0].count(c) for i, c in enumerate(d[0])}
+    print(histograph)
     return 0
 
 
