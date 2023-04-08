@@ -35,8 +35,10 @@ def get_xor_decryption_information():
     print(d[0])
     print(d[1])
     print(d[2])
-    histograph = {c: d[0].count(c) for i, c in enumerate(d[0])}
-    print(histograph)
+    histographs = [ {c: d[j].count(c) for i, c in enumerate(d[j])} for j in range(3)]
+    print(histographs[0])
+    print(histographs[1])
+    print(histographs[2])
     return 0
 
 
