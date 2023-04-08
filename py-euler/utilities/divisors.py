@@ -1,7 +1,7 @@
 # Divisors utilities
 import math
 
-from utilities.primes import prime_factors
+from utilities.primes import PrimeProcessor
 
 
 def divisor_counter(a):
@@ -17,7 +17,8 @@ def divisor_counter(a):
 
 
 def get_divisors(n):
-    prime_factor_list = prime_factors(n)
+    pp = PrimeProcessor(n)
+    prime_factor_list = pp.prime_factors(n)
     divisor_list = [1]
     for i in range(len(prime_factor_list[1])):
         new_divisor_list = []

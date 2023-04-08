@@ -5,16 +5,16 @@
 from utilities.primes import *
 
 
-def get_pd(value):
-    return prime_factors(value)[1]
-
-
 class PrimeDecomposition:
 
     def __init__(self, value):
         self.value = value
-        self.pd = get_pd(value)
+        self.pd = self.get_pd(value)
+        self.pp = PrimeProcessor()
 
     def powerify(self, power):
         """raises a PrimeDecomposition to a power"""
         return [power * x for x in self.pd]
+
+    def get_pd(self, value):
+        return self.pp.prime_factors(value)[1]

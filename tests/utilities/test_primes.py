@@ -17,6 +17,10 @@ class TestPrimes(TestCase):
         actual = p.prime_factors(15288)
         self.assertEqual(actual, [[2, 3, 5, 7, 11, 13], [3, 1, 0, 2, 0, 1]])
 
+    def test_prime_factors(self):
+        actual = p.prime_factors(5086121)
+        self.assertTrue(5086121 in actual[0])  # 5086121 is prime
+
     def test_divisor_counter_fast(self):
         actual = p.divisor_counter_fast(15288)
         self.assertEqual(actual, 48)

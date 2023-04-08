@@ -23,17 +23,18 @@
     What is the value of the first triangle number to have over five hundred divisors?
 """
 
-from utilities.primes import divisor_counter_fast
+from utilities.primes import PrimeProcessor
 
 
 def triangle(z):
-    return z * (z + 1) / 2
+    return int(z * (z + 1) / 2)
 
 
 def get_target_triangle_number(debug):
     max_divisor_count = 2
+    pp = PrimeProcessor(500)
     for i in range(12000, 20000):
-        current_divisor_count = divisor_counter_fast(triangle(i))
+        current_divisor_count = pp.divisor_counter_fast(triangle(i))
         if current_divisor_count > 500:
             return int(triangle(i))
         if i % 250 == 0 and debug:
