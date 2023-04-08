@@ -28,7 +28,7 @@ from typing import List
 
 
 def decrypt(data: List[int], key: str) -> List[int]:
-    int_key = [ord(key[i]) - 97 for i in range(3)]
+    int_key = [ord(key[i]) for i in range(3)]
     decrypt_data = [c ^ int_key[i % 3] for i, c in enumerate(data)]
     return decrypt_data
 
@@ -52,28 +52,30 @@ def get_xor_decryption_information():
     for a, b, c in [(chr(a + 97), chr(b + 97), chr(c + 97)) for a in range(26) for b in range(26) for c in range(26)]:
         key = a + b + c
         decrypt_data = decrypt(data, key)
-        decrypt_char = [chr(c) for c in decrypt_data]
+        decrypt_str = ''.join([chr(c) for c in decrypt_data])
 
         def f(acc, x):
-            return acc + 1 if 97 <= x <= 122 or 65 <= x <= 90 else acc
+            return acc + 1 if 97 <= x <= 122 or 65 <= x <= 90 or x == 32 or 48 <= x <= 57 else acc
 
         accumulator = 0
         [accumulator := f(accumulator, x) for x in decrypt_data]
 
-        if decrypt_char.count('e') > 10 or decrypt_char.count('a') > 10:
-            print(f"key = {key}, decrypted characters = {decrypt_char}")
-
-        if count % 4000 == 0:
-            print(f"key = {key}, decrypted characters = {decrypt_char}")
+        if accumulator > 1300:
+            print(f"counter = {count}, key = {key}, decrypted characters = {decrypt_str}")
+            break
         count += 1
-    return 0
+
+    # used the output to determine that the key is 'exp'.
+    # this problem requires some inspection
+
+    return sum([ord(i) for i in decrypt_str])
 
 
 def main():
     answer = get_xor_decryption_information()
     print(f"The Answer to Project Euler 059 is {answer}")
 
-    # The Answer to Project Euler 059 is 
+    # The Answer to Project Euler 059 is 129604
 
 
 if __name__ == "__main__":
