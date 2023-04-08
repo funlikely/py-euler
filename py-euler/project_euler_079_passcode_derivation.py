@@ -13,10 +13,22 @@
     possible secret passcode of unknown length.
 
 """
+from typing import List
 
 
-def get_shortest_passcode():
-    return 0
+def get_data_from_file() -> List[str]:
+    file = open('data/project_euler_079.txt')
+    return [x.strip('\n') for x in file.readlines()]
+
+
+def get_shortest_passcode() -> str:
+    data = get_data_from_file()
+
+    print(f"data: {data}")
+
+    char_set = set([c for substring in data for c in substring])
+    print(f"charset: {char_set}")
+    return ''
 
 
 def main():
