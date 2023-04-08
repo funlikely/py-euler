@@ -54,6 +54,7 @@ def get_xor_decryption_information():
         decrypt_data = decrypt(data, key)
         decrypt_str = ''.join([chr(c) for c in decrypt_data])
 
+        # using a fold to find the number of decrypted characters that are in the range of A-Z, a-z, 0-9, and spaces
         def f(acc, x):
             return acc + 1 if 97 <= x <= 122 or 65 <= x <= 90 or x == 32 or 48 <= x <= 57 else acc
 
