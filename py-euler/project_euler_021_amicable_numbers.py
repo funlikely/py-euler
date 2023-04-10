@@ -12,7 +12,6 @@
 
     Evaluate the sum of all the amicable numbers under 10000.
 """
-
 from utilities.divisors import get_divisors
 
 
@@ -45,7 +44,7 @@ def main():
     debug = True
     sum_of_amicable_numbers = get_amicable_numbers(debug)
 
-    print(f"The Answer to Project Euler 021 is {str(sum_of_amicable_numbers)}")
+    print(f"The Answer to Project Euler 021 is {sum_of_amicable_numbers}")
 
     # The Answer to Project Euler 021 is 31626
 

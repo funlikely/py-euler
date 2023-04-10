@@ -1,5 +1,6 @@
 # Primes utilities
 import math
+from typing import List
 
 
 def prime_sieve(n):
@@ -85,7 +86,7 @@ class PrimeProcessor:
             self.generate_prime_sieve_and_list_up_to(n)
             return [p for p in self.prime_list if p <= n]
 
-    def prime_factors(self, n):
+    def prime_factors(self, n: int) -> dict:
         prime_list = self.get_primes_up_to(n)
         prime_list_iter = 0
         prime_factor_list = []
@@ -110,3 +111,15 @@ class PrimeProcessor:
 
         return math.prod(prime_factor_dict.values())
 
+    def get_divisors(self, n: int) -> List:
+        prime_factor_list = self.prime_factors(n)
+        divisor_list = [1]
+        for p in prime_factor_list:
+            new_divisor_list = []
+            for j in range(prime_factor_list[p] + 1):
+                for k in range(len(divisor_list)):
+                    new_divisor_list.append(int(math.pow(p, j)) * divisor_list[k])
+            divisor_list += new_divisor_list
+        divisor_list = list(dict.fromkeys(divisor_list))
+        divisor_list.sort()
+        return divisor_list[:(len(divisor_list) - 1)]
