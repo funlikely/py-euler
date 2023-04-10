@@ -16,7 +16,7 @@ from utilities.primes import PrimeProcessor
 import utilities.divisors as div
 
 pp = PrimeProcessor(1000000)
-primes = pp.primes_up_to(1000000)
+primes = pp.get_primes_up_to(1000000)
 
 
 def get_prime_divisors(n):

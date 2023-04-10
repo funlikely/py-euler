@@ -32,13 +32,12 @@ def triangle(z):
 
 def get_target_triangle_number(debug):
     max_divisor_count = 2
-    pp = PrimeProcessor(500)
-    for i in range(12000, 20000):
+    pp = PrimeProcessor(5000)
+    # prime_list = pp.prime_list
+    for i in range(12000, 12376):
         current_divisor_count = pp.divisor_counter_fast(triangle(i))
         if current_divisor_count > 500:
             return int(triangle(i))
-        if i % 250 == 0 and debug:
-            print(f'Trying out triangle({i}) by the way, and it has {current_divisor_count} divisors.')
         if current_divisor_count > max_divisor_count:
             max_divisor_count = current_divisor_count
             if debug:

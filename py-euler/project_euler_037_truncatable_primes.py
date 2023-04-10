@@ -17,7 +17,7 @@ import utilities.primes as pr
 
 max_prime = 800000
 pp = pr.PrimeProcessor(max_prime)
-prime_list = pp.primes_up_to(max_prime)  # pr.primes_up_to(max_prime)
+prime_list = pp.get_primes_up_to(max_prime)  # pr.primes_up_to(max_prime)
 prime_sieve_list = pp.prime_sieve
 
 

@@ -18,7 +18,7 @@ import utilities.primes as pr
 max_try = 10 ** 6
 pp = pr.PrimeProcessor(max_try)
 sieve = pp.prime_sieve
-primes = pp.primes_up_to(max_try)
+primes = pp.get_primes_up_to(max_try)
 
 
 def custom_index(ls, f):

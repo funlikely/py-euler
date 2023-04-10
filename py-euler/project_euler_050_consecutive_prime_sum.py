@@ -18,7 +18,7 @@ from utilities.primes import PrimeProcessor
 
 def get_consecutive_prime_sum():
     pp = PrimeProcessor(100000)
-    primes = pp.primes_up_to(1000000)
+    primes = pp.get_primes_up_to(1000000)
     solution_i = 0
     solution_length = 0
     solution = 0

@@ -41,21 +41,23 @@ class PrimeProcessor:
         self.prime_list = []
         self.limit = limit
         self.prime_sieve = self.get_prime_sieve_up_to(limit)
+        self.prime_list = self.get_primes_up_to(limit)
 
     def get_prime_sieve_up_to(self, n):
-        """Return a list of booleans representing the primes up to n."""
+        """Return a list of booleans representing the primes up to n, inclusive."""
         if self.prime_sieve.count(True) >= n:
             f = lambda acc, x: acc + 1 if x else acc
             accumulator = 0
             acc_list = [accumulator := f(accumulator, self.prime_sieve[x]) for x in range(len(self.prime_sieve))]
             return self.prime_sieve[0: acc_list.index(n)]
         else:
-            self.generate_prime_sieve_up_to(n)
+            self.generate_prime_sieve_and_list_up_to(n)
             self.limit = n
             return self.prime_sieve
 
-    def generate_prime_sieve_up_to(self, n):
-        """Return a list of booleans representing the primes up to n, inclusive"""
+    def generate_prime_sieve_and_list_up_to(self, n):
+        """Return a list of booleans representing the primes up to n, inclusive."""
+        """Also sets self.prime_list based on prime_sieve"""
         sieve = [True] * (n+1)
         sieve[0] = sieve[1] = False
         current_prime_list = []
@@ -75,13 +77,16 @@ class PrimeProcessor:
         self.prime_list = current_prime_list
         self.prime_sieve = sieve
 
-    def primes_up_to(self, n):
-        """primes up to n, inclusive"""
-        self.get_prime_sieve_up_to(n)
-        return [x for x in range(len(self.prime_sieve)) if self.prime_sieve[x]]
+    def get_primes_up_to(self, n):
+        """Primes up to n, inclusive."""
+        if len(self.prime_list) > 0 and self.prime_list[-1:][0] >= n:
+            return [p for p in self.prime_list if p <= n]
+        else:
+            self.generate_prime_sieve_and_list_up_to(n)
+            return [p for p in self.prime_list if p <= n]
 
     def prime_factors(self, n):
-        prime_list = self.primes_up_to(n)
+        prime_list = self.get_primes_up_to(n)
         prime_list_iter = 0
         prime_factor_list = []
         prime_factor_dict = {}
@@ -99,8 +104,9 @@ class PrimeProcessor:
         return prime_factor_dict # [prime_list[:len(prime_factor_list)], prime_factor_list]
 
     def divisor_counter_fast(self, n):
-        prime_factor_list = self.prime_factors(n)[1]
-        for k in range(len(prime_factor_list)):
-            prime_factor_list[k] += 1
-        return math.prod(prime_factor_list)
+        prime_factor_dict = self.prime_factors(n)
+        for k in prime_factor_dict:
+            prime_factor_dict[k] += 1
+
+        return math.prod(prime_factor_dict.values())
 
