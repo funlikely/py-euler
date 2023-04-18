@@ -21,12 +21,40 @@
 """
 import math
 
+debug = True
+
 
 def least_number_for_which_the_proportion_of_bouncy_numbers_is(perc: float) -> int:
     return 0
 
 
+def is_bouncy(k: int) -> bool:
+    if k < 100:
+        return False
+    up = 0
+    down = 0
+    k_str = str(k)
+    for i in range(len(k_str) - 1):
+        if k_str[i+1] > k_str[i]:
+            up += 1
+        elif k_str[i+1] < k_str[i]:
+            down += 1
+    return (up != 0) and (down != 0)
+
+
+def debug_and_investigation():
+    lim = 10**3
+
+    bounce_tracker = [False] * lim
+    for i in range(lim):
+        bounce_tracker[i] = is_bouncy(i)
+    for i in range(99, 999, 45):
+        print(f"{i} bouncy: {bounce_tracker[i]}")
+
+
 def main():
+    if debug:
+        debug_and_investigation()
     answer = least_number_for_which_the_proportion_of_bouncy_numbers_is(0.99)
     print(f"The Answer to Project Euler 112 is {answer}")
 
