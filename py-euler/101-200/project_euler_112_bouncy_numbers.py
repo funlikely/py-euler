@@ -21,10 +21,22 @@
 """
 import math
 
-debug = True
+debug = False
 
 
 def least_number_for_which_the_proportion_of_bouncy_numbers_is(perc: float) -> int:
+    lim = 3*10**6
+    b_count = 0
+    for i in range(1, lim):
+        if is_bouncy(i):
+            b_count += 1
+        propo = b_count / i
+        if i % 400000 == 0 and debug:
+            print(f"i: {i}, proportion: {round(propo, 5)}")
+        if propo == 0.99:
+            if debug:
+                print(f"i: {i}, proportion: {propo}")
+            return i
     return 0
 
 
@@ -37,8 +49,12 @@ def is_bouncy(k: int) -> bool:
     for i in range(len(k_str) - 1):
         if k_str[i+1] > k_str[i]:
             up += 1
+            if down > 0:
+                return True
         elif k_str[i+1] < k_str[i]:
             down += 1
+            if up > 0:
+                return True
     return (up != 0) and (down != 0)
 
 
