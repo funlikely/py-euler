@@ -54,6 +54,11 @@ def triangle_contains_origin(triangle: tuple) -> bool:
         y1 = triangle[combo[0]][1]
         x2 = triangle[combo[1]][0]
         y2 = triangle[combo[1]][1]
+        if x2 - x1 == 0:
+            """in this house we obey the laws of not dividing by zero!"""
+            print(f"we have a vertical side on triangle {triangle}")
+            # todo: and this needs to be handled. look for if the vertical side is at x=0, and etc.
+            continue
         y = -x1*(y2-y1)/(x2-x1) + y1
         if y == 0:
             return True
@@ -75,7 +80,7 @@ def count_of_triangles_containing_origin(triangles: List[tuple]) -> int:
 def load_triangles() -> List[tuple]:
     file = open("data/project_euler_102.txt")
     triangle_datum_list = file.readlines()
-    triangle_points = [datum.split(',') for datum in triangle_datum_list]
+    triangle_points = [list(map(int,datum.split(','))) for datum in triangle_datum_list]
     triangles = [((r[0], r[1]), (r[2], r[3]), (r[4], r[5])) for r in triangle_points]
     return triangles
 
