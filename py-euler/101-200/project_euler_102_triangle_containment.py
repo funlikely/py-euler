@@ -29,11 +29,49 @@ def debug_and_investigation():
     pass
 
 
-def count_of_triangles_containing_origin(triangles: List) -> int:
-    return 0
+def triangle_contains_origin(triangle: tuple) -> bool:
+    """
+        check to see if 2 of the 3 line segments comprising the triangle go above or below the origin,
+        and the other line segment goes below or above in opposition
 
 
-def load_triangles() -> List:
+        point slope form, given points (x1, y1) and (x2, y2):
+
+            S(x-x1) = (y-y1) where S = (y2-y1)/(x2-x1)
+
+        then look at x=0 and solve for y:
+
+            y = -x1*(y2-y1)/(x2-x1) + y1
+
+        Check if (y>0) are not all the same, for the three line segments of the triangle
+    """
+    above_count = 0
+    below_count = 0
+    combos = [[0, 1], [1, 2], [2, 0]]
+    for combo in combos:
+        x1 = triangle[combo[0]][0]
+        y1 = triangle[combo[0]][1]
+        x2 = triangle[combo[1]][0]
+        y2 = triangle[combo[1]][1]
+        y = -x1*(y2-y1)/(x2-x1) + y1
+        if y == 0:
+            return True
+        elif y > 0:
+            above_count += 1
+        else:
+            below_count += 1
+    return above_count > 0 and below_count > 0
+
+
+def count_of_triangles_containing_origin(triangles: List[tuple]) -> int:
+    count = 0
+    for triangle in triangles:
+        if triangle_contains_origin(triangle):
+            count += 1
+    return count
+
+
+def load_triangles() -> List[tuple]:
     file = open("data/project_euler_102.txt")
     return []
 
