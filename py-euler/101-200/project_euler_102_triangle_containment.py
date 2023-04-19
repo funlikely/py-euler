@@ -20,6 +20,7 @@
     NOTE: The first two examples in the file represent the triangles in the example given above.
 """
 import math
+from ast import literal_eval
 from typing import List
 
 debug = True
@@ -73,7 +74,10 @@ def count_of_triangles_containing_origin(triangles: List[tuple]) -> int:
 
 def load_triangles() -> List[tuple]:
     file = open("data/project_euler_102.txt")
-    return []
+    triangle_datum_list = file.readlines()
+    triangle_points = [datum.split(',') for datum in triangle_datum_list]
+    triangles = [((r[0], r[1]), (r[2], r[3]), (r[4], r[5])) for r in triangle_points]
+    return triangles
 
 
 def main():
