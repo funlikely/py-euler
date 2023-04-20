@@ -93,9 +93,9 @@ def main():
         debug_and_investigation()
     triangles = load_triangles()
     answer = count_of_triangles_containing_origin(triangles)
-    print(f"The Answer to Project Euler 112 is {answer}")
+    print(f"The Answer to Project Euler 102 is {answer}")
 
-    # The Answer to Project Euler 112 is 228
+    # The Answer to Project Euler 102 is 228
 
 
 if __name__ == "__main__":
