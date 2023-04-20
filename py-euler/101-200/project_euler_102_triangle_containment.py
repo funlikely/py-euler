@@ -62,6 +62,9 @@ def triangle_contains_origin(triangle: tuple) -> bool:
         y = -x1*(y2-y1)/(x2-x1) + y1
         if y == 0:
             return True
+        elif x1 < 0 and x2 < 0 or x1 > 0 and x2 > 0:
+            """if a segment is to the left or right of the origin then it's not to the top or bottom of it"""
+            continue
         elif y > 0:
             above_count += 1
         else:
@@ -92,7 +95,7 @@ def main():
     answer = count_of_triangles_containing_origin(triangles)
     print(f"The Answer to Project Euler 112 is {answer}")
 
-    # The Answer to Project Euler 112 is
+    # The Answer to Project Euler 112 is 228
 
 
 if __name__ == "__main__":
