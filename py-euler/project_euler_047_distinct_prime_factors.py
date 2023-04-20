@@ -27,7 +27,16 @@ def get_special_distinct_primes_answer() -> int:
     return 0
 
 
+debug = True
+
+
+def investigate_and_debug():
+    pass
+
+
 def main():
+    if debug:
+        investigate_and_debug()
     answer = get_special_distinct_primes_answer()
     print(f"The Answer to Project Euler 047 is {answer}")
 
