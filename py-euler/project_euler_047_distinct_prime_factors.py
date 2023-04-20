@@ -18,9 +18,8 @@
     numbers?
 """
 import math
-
-from project_euler_012_highly_divisible_triangular_number import triangle
-from project_euler_044_pentagon_numbers import is_pentagonal
+import utilities.primes as pr
+import utilities.divisors as div
 
 
 def get_special_distinct_primes_answer() -> int:
@@ -31,7 +30,11 @@ debug = True
 
 
 def investigate_and_debug():
-    pass
+    lim = 10**6
+    pp = pr.PrimeProcessor(5000)
+    prime_divisor_count_list = [0] * lim
+    for i in range(2, lim):
+        prime_divisor_count_list[i] = 1
 
 
 def main():
