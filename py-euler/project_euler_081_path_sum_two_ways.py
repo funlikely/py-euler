@@ -10,8 +10,22 @@
 """
 import time
 
+debug_and_test = True
+
+
+def read_matrix():
+    file = open('data/project_euler_081.txt')
+    matrix = []
+    for line in file.readlines():
+        matrix.append([int(a.strip('\n')) for a in line.split(',')])
+    if debug_and_test:
+        for i in range(3):
+            print(matrix[i][0:3])
+    return matrix
+
 
 def get_minimal_path_sum():
+    data = read_matrix()
     return 0
 
 
@@ -19,7 +33,7 @@ def main():
     start = time.time()
     answer = get_minimal_path_sum()
     end = time.time()
-    print(f"time taken: {end-start}")
+    print(f"time taken: {end - start}")
     print(f"The Answer to Project Euler 081 is {answer}")
 
     # The Answer to Project Euler 081
