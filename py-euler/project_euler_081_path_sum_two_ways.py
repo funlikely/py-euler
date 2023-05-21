@@ -9,6 +9,7 @@
     containing an 80 by 80 matrix.
 """
 import time
+from typing import List
 
 debug_and_test = True
 
@@ -30,14 +31,15 @@ def read_matrix():
     return matrix
 
 
-def get_minimal_path_sum():
-    data = read_dummy_matrix()
+def get_minimal_path_sum(data: List[List: int]):
+
     return 0
 
 
 def main():
     start = time.time()
-    answer = get_minimal_path_sum()
+    data = read_dummy_matrix()
+    answer = get_minimal_path_sum(data)
     end = time.time()
     print(f"time taken: {end - start}")
     print(f"The Answer to Project Euler 081 is {answer}")
