@@ -13,6 +13,12 @@ import time
 debug_and_test = True
 
 
+def read_dummy_matrix():
+    matrix = [[131, 673, 234, 103, 18], [201, 96, 342, 965, 150], [630, 803, 746, 422, 111], [537, 699, 497, 121, 956],
+              [805, 732, 524, 37, 331]]
+    return matrix
+
+
 def read_matrix():
     file = open('data/project_euler_081.txt')
     matrix = []
@@ -25,7 +31,7 @@ def read_matrix():
 
 
 def get_minimal_path_sum():
-    data = read_matrix()
+    data = read_dummy_matrix()
     return 0
 
 
