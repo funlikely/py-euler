@@ -31,7 +31,12 @@ def read_matrix():
     return matrix
 
 
-def get_minimal_path_sum(data: List[List: int]):
+def get_minimal_path_sum(data: List[List: int], x: int, y: int, dp_data: List[List: int]) -> int:
+    if x == 0 and y != 0:
+        if dp_data[y-1][0] != -1:
+            return dp_data[y-1][0] + data[y][0]
+        else:
+            return 0
 
     return 0
 
@@ -39,7 +44,10 @@ def get_minimal_path_sum(data: List[List: int]):
 def main():
     start = time.time()
     data = read_dummy_matrix()
-    answer = get_minimal_path_sum(data)
+    width = len(data[0])
+    height = len(data)
+    dp_data = [[-1] * width] * height
+    answer = get_minimal_path_sum(data, width - 1, height - 1, dp_data)
     end = time.time()
     print(f"time taken: {end - start}")
     print(f"The Answer to Project Euler 081 is {answer}")
