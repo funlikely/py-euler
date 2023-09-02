@@ -17,26 +17,19 @@
     Find S(10**4, 10**16), modulo 1234567891.
 """
 import math
+from itertools import product
+
+import numpy as numpy
+
 import utilities.primes as p
 
 debug = True
 
+# n = 5
+# m = 3
 n = 10
 m = 100
-prime_list = p.get_primes(int(10000))  # that should be enough for now
-
-
-def get_answer(perc: float) -> int:
-
-
-    return 0
-
-
-def is_bouncy(k: int) -> bool:
-
-    return True
-
-
+prime_list = p.get_primes(int(n))  # that should be enough for now
 
 
 def prime_factor_list_of(n):
@@ -56,10 +49,29 @@ def debug_and_investigation(n: int, m: int):
     print(f"Factors of 2, ..., {n} are: {factors}")
 
 
+def factor_shuffle(factors):
+    new_combo = sorted([f[0] for f in factors])
+    new_factors = [f[1:] for f in factors if len(f) > 1]
+    new_factors.append(new_combo)
+    return new_factors
+
+
+def get_answer(n: int, m: int):
+    factors = [prime_factor_list_of(i) for i in range(2, n + 1)]
+
+    for i in range(m):
+        print(f"factors {i}: {factors}")
+        factors = factor_shuffle(factors)
+
+    answer = sum([numpy.prod(f) for f in factors])
+
+    return answer % 1234567891
+
+
 def main():
     if debug:
         debug_and_investigation(n, m)
-    answer = get_answer(0.99)
+    answer = get_answer(n, m)
     print(f"The Answer to Project Euler 823 is {answer}")
 
     # The Answer to Project Euler 823 is
