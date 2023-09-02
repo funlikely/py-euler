@@ -17,8 +17,13 @@
     Find S(10**4, 10**16), modulo 1234567891.
 """
 import math
+import utilities.primes as p
 
-debug = False
+debug = True
+
+n = 10
+m = 100
+prime_list = p.get_primes(int(10000))  # that should be enough for now
 
 
 def get_answer(perc: float) -> int:
@@ -32,19 +37,28 @@ def is_bouncy(k: int) -> bool:
     return True
 
 
-def debug_and_investigation():
-    lim = 10**3
 
-    bounce_tracker = [False] * lim
-    for i in range(lim):
-        bounce_tracker[i] = is_bouncy(i)
-    for i in range(99, 999, 45):
-        print(f"{i} bouncy: {bounce_tracker[i]}")
+
+def prime_factor_list_of(n):
+    prime_factor_list = []
+    for current_prime in prime_list:
+        if n == 0:
+            break
+        while n % current_prime == 0:
+            n /= current_prime
+            prime_factor_list.append(current_prime)
+    return prime_factor_list
+
+
+def debug_and_investigation(n: int, m: int):
+    factors = [prime_factor_list_of(i) for i in range(2, n + 1)]
+
+    print(f"Factors of 2, ..., {n} are: {factors}")
 
 
 def main():
     if debug:
-        debug_and_investigation()
+        debug_and_investigation(n, m)
     answer = get_answer(0.99)
     print(f"The Answer to Project Euler 823 is {answer}")
 
