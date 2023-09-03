@@ -25,14 +25,8 @@ import utilities.primes as p
 
 debug = True
 
-# n = 5
-# m = 3
-n = 10
-m = 100
-prime_list = p.get_primes(int(n))  # that should be enough for now
 
-
-def prime_factor_list_of(n):
+def prime_factor_list_of(n: int, prime_list: list):
     prime_factor_list = []
     for current_prime in prime_list:
         if n == 0:
@@ -43,8 +37,8 @@ def prime_factor_list_of(n):
     return prime_factor_list
 
 
-def debug_and_investigation(n: int, m: int):
-    factors = [prime_factor_list_of(i) for i in range(2, n + 1)]
+def debug_and_investigation(n: int, m: int, prime_list: list):
+    factors = [prime_factor_list_of(i, prime_list) for i in range(2, n + 1)]
 
     print(f"Factors of 2, ..., {n} are: {factors}")
 
@@ -56,8 +50,8 @@ def factor_shuffle(factors):
     return new_factors
 
 
-def get_answer(n: int, m: int):
-    factors = [prime_factor_list_of(i) for i in range(2, n + 1)]
+def get_answer(n: int, m: int, prime_list: list):
+    factors = [prime_factor_list_of(i, prime_list) for i in range(2, n + 1)]
 
     for i in range(m):
         print(f"factors {i}: {factors}")
@@ -68,10 +62,25 @@ def get_answer(n: int, m: int):
     return answer % 1234567891
 
 
+def initialize_prime_list(n):
+    return p.get_primes(int(n))
+
+
 def main():
+    n, m = 10, 100
+
+    prime_list = initialize_prime_list(n)
+
     if debug:
-        debug_and_investigation(n, m)
-    answer = get_answer(n, m)
+        debug_and_investigation(n, m, prime_list)
+
+    answer = get_answer(n, m, prime_list)
+    print(f"S({n}, {m} = {answer}")
+
+    n, m = 5, 3
+    answer = get_answer(n, m, prime_list)
+    print(f"S({n}, {m}) = {answer}")
+
     print(f"The Answer to Project Euler 823 is {answer}")
 
     # The Answer to Project Euler 823 is
