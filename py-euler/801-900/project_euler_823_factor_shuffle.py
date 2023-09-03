@@ -75,7 +75,7 @@ def main():
         debug_and_investigation(n, m, prime_list)
 
     answer = get_answer(n, m, prime_list)
-    print(f"S({n}, {m} = {answer}")
+    print(f"S({n}, {m}) = {answer}")
 
     n, m = 5, 3
     answer = get_answer(n, m, prime_list)
