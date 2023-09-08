@@ -52,12 +52,33 @@ def factor_shuffle(factors):
 
 def get_answer(n: int, m: int, prime_list: list):
     factors = [prime_factor_list_of(i, prime_list) for i in range(2, n + 1)]
+    factors_dict = {}
+    period = -1
+    period_start_index = -1
+    period_found = False
+    key = ""
+    period_initial_factors = ""
 
     for i in range(m):
         print(f"factors {i}: {factors}")
         factors = factor_shuffle(factors)
+        key = str(factors)
+        if key in factors_dict and not period_found:
+            period = i + 1 - factors_dict[key]
+            period_start_index = factors_dict[key]
+            period_found = True
+            period_initial_factors = key
+        factors_dict[key] = i + 1
+        if period_found and i - (period + period_start_index) > 10:
+            print(f"break at index {i}")
+            break
 
-    answer = sum([numpy.prod(f) for f in factors])
+    if period_found:
+        print(f"Cycle period = {period}, period start index = {period_start_index}")
+        print(f"Cycle starts with factors {period_initial_factors}")
+        answer = -100
+    else:
+        answer = sum([numpy.prod(f) for f in factors])
 
     return answer % 1234567891
 
