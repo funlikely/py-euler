@@ -104,11 +104,11 @@ def get_answer(n: int, m: int, prime_list: list):
     else:
         answer = get_mod_sum_of_factors(factors, prime_to_mod_by)
 
-    return answer
+    return answer % prime_to_mod_by
 
 
 def get_mod_sum_of_factors(answer_factors, prime_to_mod_by):
-    return sum([product_mod(f, prime_to_mod_by) for f in answer_factors])
+    return sum([product_mod(f, prime_to_mod_by) for f in answer_factors]) % prime_to_mod_by
 
 
 def product_mod(f, prime_to_mod_by):
