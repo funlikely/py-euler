@@ -16,6 +16,7 @@
 
     Find S(10**4, 10**16), modulo 1234567891.
 """
+import ast
 import math
 from itertools import product
 
@@ -50,6 +51,16 @@ def factor_shuffle(factors):
     return new_factors
 
 
+def format_factors(factors, size):
+    # let's make some factor strings shorter
+    s = str(factors)
+    half_size = int(size/2)
+    if len(s) > size:
+        return s[:half_size] + '...' + s[-half_size:]
+    else:
+        return s
+
+
 def get_answer(n: int, m: int, prime_list: list):
     factors = [prime_factor_list_of(i, prime_list) for i in range(2, n + 1)]
     factors_dict = {}
@@ -60,7 +71,8 @@ def get_answer(n: int, m: int, prime_list: list):
     period_initial_factors = ""
 
     for i in range(m):
-        print(f"factors {i}: {factors}")
+        if i % 50000 == 0:
+            print(f"factors {i}: {format_factors(factors, 150)}")
         factors = factor_shuffle(factors)
         key = str(factors)
         if key in factors_dict and not period_found:
@@ -69,14 +81,20 @@ def get_answer(n: int, m: int, prime_list: list):
             period_found = True
             period_initial_factors = key
         factors_dict[key] = i + 1
-        if period_found and i - (period + period_start_index) > 10:
+        if period_found:
             print(f"break at index {i}")
             break
 
     if period_found:
         print(f"Cycle period = {period}, period start index = {period_start_index}")
         print(f"Cycle starts with factors {period_initial_factors}")
-        answer = -100
+        # answer for S(n,m) is the same as S(n, k) if k and m are the same mod p, where p is the period and
+        #   if k > period_start_index
+        k = (m - period_start_index) % period + period_start_index
+        print(f"Calculating S(n,m) using the observed repetition, S({n}, {m}) == S({n}, {k})")
+        answer_factors = ast.literal_eval(list(factors_dict.keys())[list(factors_dict.values()).index(k)])
+        print(f"Answer factors: {answer_factors}")
+        return sum([numpy.prod(f) for f in answer_factors])
     else:
         answer = sum([numpy.prod(f) for f in factors])
 
@@ -99,6 +117,14 @@ def main():
     print(f"S({n}, {m}) = {answer}")
 
     n, m = 5, 3
+    answer = get_answer(n, m, prime_list)
+    print(f"S({n}, {m}) = {answer}")
+
+
+    # n, m = 78, 10**10
+    # n, m = 88, 10**10
+    n, m = 155, 10**10
+    prime_list = initialize_prime_list(n)
     answer = get_answer(n, m, prime_list)
     print(f"S({n}, {m}) = {answer}")
 
