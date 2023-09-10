@@ -39,6 +39,10 @@ def prime_factor_list_of(n: int, prime_list: list):
 
 
 def debug_and_investigation(n: int, m: int, prime_list: list):
+    # temp_prime_list = initialize_prime_list(35156)
+    # print(f"Prime factors of 1234567891: {prime_factor_list_of(1234567891, temp_prime_list)}")
+    # print(f"Prime factors of 1234567890: {prime_factor_list_of(1234567890, temp_prime_list)}")
+    # print(f"Prime factors of 1234567800: {prime_factor_list_of(1234567800, temp_prime_list)}")
     factors = [prime_factor_list_of(i, prime_list) for i in range(2, n + 1)]
 
     print(f"Factors of 2, ..., {n} are: {factors}")
@@ -85,6 +89,8 @@ def get_answer(n: int, m: int, prime_list: list):
             print(f"break at index {i}")
             break
 
+    prime_to_mod_by = 1234567891
+
     if period_found:
         print(f"Cycle period = {period}, period start index = {period_start_index}")
         print(f"Cycle starts with factors {period_initial_factors}")
@@ -94,11 +100,22 @@ def get_answer(n: int, m: int, prime_list: list):
         print(f"Calculating S(n,m) using the observed repetition, S({n}, {m}) == S({n}, {k})")
         answer_factors = ast.literal_eval(list(factors_dict.keys())[list(factors_dict.values()).index(k)])
         print(f"Answer factors: {answer_factors}")
-        return sum([numpy.prod(f) for f in answer_factors])
+        answer = get_mod_sum_of_factors(answer_factors, prime_to_mod_by)
     else:
-        answer = sum([numpy.prod(f) for f in factors])
+        answer = get_mod_sum_of_factors(factors, prime_to_mod_by)
 
-    return answer % 1234567891
+    return answer
+
+
+def get_mod_sum_of_factors(answer_factors, prime_to_mod_by):
+    return sum([product_mod(f, prime_to_mod_by) for f in answer_factors])
+
+
+def product_mod(f, prime_to_mod_by):
+    product_accumulator = 1
+    for i in f:
+        product_accumulator = product_accumulator * i % prime_to_mod_by
+    return product_accumulator
 
 
 def initialize_prime_list(n):
@@ -121,9 +138,9 @@ def main():
     print(f"S({n}, {m}) = {answer}")
 
 
-    # n, m = 78, 10**10
+    n, m = 78, 10**10
     # n, m = 88, 10**10
-    n, m = 155, 10**10
+    # n, m = 155, 10**10
     prime_list = initialize_prime_list(n)
     answer = get_answer(n, m, prime_list)
     print(f"S({n}, {m}) = {answer}")
