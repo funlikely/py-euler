@@ -140,6 +140,7 @@ def main():
     n, m = 78, 10**10
     # n, m = 88, 10**10
     # n, m = 155, 10**10
+    #n, m = 400, 10**10
     prime_list = initialize_prime_list(n)
     answer = get_answer(n, m, prime_list)
     print(f"S({n}, {m}) = {answer}")
