@@ -37,14 +37,15 @@ import math
 from ast import literal_eval
 from typing import List, Set
 
-debug = True
+debug = False
 
 
 def is_set_special(test_set: Set) -> bool:
     is_special = True
     test_list = list(test_set)
     if len(test_list) > 9:
-        print(f"Go back to school, I'm not doing more than 3^9 comparisons for you")
+        if debug:
+            print(f"Go back to school, I'm not doing more than 3^9 comparisons for you")
         return False
     for i in range(3**len(test_list)):
         list_a, list_b, partitioner, place = [], [], i, 0
@@ -57,10 +58,12 @@ def is_set_special(test_set: Set) -> bool:
             partitioner = int(partitioner/3)
         if len(list_a) > 0 and len(list_b) > 0:
             if sum(list_a) == sum(list_b):
-                print(f"Set {test_set} is not special because sum({set(list_a)}) = sum({set(list_b)})")
+                if debug:
+                    print(f"Set {test_set} is not special because sum({set(list_a)}) = sum({set(list_b)})")
                 return False
             if len(list_a) > len(list_b) and sum(list_b) > sum(list_a):
-                print(f"Set {test_set} is not special because sum({set(list_b)}) > sum({set(list_a)})")
+                if debug:
+                    print(f"Set {test_set} is not special because sum({set(list_b)}) > sum({set(list_a)})")
                 return False
 
     return is_special
@@ -87,8 +90,35 @@ def debug_and_investigation():
         print(f"set: {test_set}, is special: {is_special}")
 
 
+def increment_test_list(test_list: List, max_element: int) -> List:
+    if sum(test_list) < max_element:
+        return test_list[:-1] + [test_list[-1:][0] + 1]
+    else:
+        partial_increment_list = increment_test_list(test_list[:-1], max_element)
+        return partial_increment_list + [partial_increment_list[-1:][0] + 1]
+    return test_list
+
+
 def get_answer():
-    return {20, 23, 25, 27, 28, 29, 30}
+    non_optimal_special_set = {22, 33, 39, 42, 44, 45, 46}
+    non_optimal_sum = sum(non_optimal_special_set)
+
+    optimal_candidate = list(non_optimal_special_set)
+
+    print(f"non optimal sum = {non_optimal_sum}")
+
+    counter = 1
+    test_list = [i for i in range(14, 21)]
+    while test_list[0] < 25:
+        if counter % 10000 == 0:
+            print(f"test {counter}, set {test_list}")
+        if is_set_special(set(test_list)) and sum(test_list) < sum(optimal_candidate):
+            optimal_candidate = test_list
+            print(f"found optimal candidate {optimal_candidate}, sum = {sum(optimal_candidate)}")
+        test_list = increment_test_list(test_list, sum(optimal_candidate))
+        counter += 1
+
+    return set(optimal_candidate)
 
 
 def main():
