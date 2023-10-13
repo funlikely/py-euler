@@ -18,7 +18,6 @@
 """
 import ast
 import math
-from itertools import product
 
 import numpy as numpy
 
