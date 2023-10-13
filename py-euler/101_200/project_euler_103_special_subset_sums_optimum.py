@@ -43,14 +43,20 @@ debug = True
 def is_set_special(test_set: Set) -> bool:
     is_special = True
     test_list = list(test_set)
-    for i in range(int(len(test_list)/2) + 1):
+    for i in range(int(len(test_list) / 2) + 1):
         is_special = True
     return is_special
 
 
 def debug_and_investigation():
-    test_set = {20, 23, 25, 27, 28, 29, 30}
-    is_special = is_set_special(test_set)
+    sets_to_test = [{1}, {1, 2}, {2, 3, 4}, {3, 5, 6, 7}, {6, 9, 11, 12, 13}, {20, 23, 25, 27, 28, 29, 30},
+                    {11, 18, 19, 20, 22, 25},
+                    {11, 17, 20, 22, 23, 24},
+                    {22, 33, 39, 42, 44, 45, 46}]
+
+    for test_set in sets_to_test:
+        is_special = is_set_special(test_set)
+        print(f"set: {test_set}, is special: {is_special}")
 
 
 def get_answer():
