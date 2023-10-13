@@ -43,18 +43,39 @@ debug = True
 def is_set_special(test_set: Set) -> bool:
     is_special = True
     test_list = list(test_set)
-    for i in range(int(len(test_list) / 2) + 1):
-        is_special = True
+    if len(test_list) > 9:
+        print(f"Go back to school, I'm not doing 3^9 comparisons for you")
+        return False
+    for i in range(3**len(test_list)):
+        list_a, list_b, partitioner, place = [], [], i, 0
+        while partitioner > 0:
+            if partitioner % 3 == 1:
+                list_a += [test_list[place]]
+            elif partitioner % 3 == 2:
+                list_b += [test_list[place]]
+            place += 1
+            partitioner = int(partitioner/3)
+        if len(list_a) > 0 and len(list_b) > 0:
+            if sum(list_a) == sum(list_b):
+                return False
+            if len(list_a) > len(list_b) and sum(list_b) > sum(list_a):
+                return False
+
     return is_special
 
 
 def debug_and_investigation():
-    sets_to_test = [{1}, {1, 2}, {2, 3, 4}, {3, 5, 6, 7}, {6, 9, 11, 12, 13}, {20, 23, 25, 27, 28, 29, 30},
+    special_sets = [{1}, {1, 2}, {2, 3, 4}, {3, 5, 6, 7}, {6, 9, 11, 12, 13},
                     {11, 18, 19, 20, 22, 25},
                     {11, 17, 20, 22, 23, 24},
                     {22, 33, 39, 42, 44, 45, 46}]
+    non_special_sets = [{2, 4, 5, 7}, {20, 23, 25, 27, 28, 29, 30},
+                        {22, 33, 35, 42, 44, 45, 46}]
 
-    for test_set in sets_to_test:
+    for test_set in special_sets:
+        is_special = is_set_special(test_set)
+        print(f"set: {test_set}, is special: {is_special}")
+    for test_set in non_special_sets:
         is_special = is_set_special(test_set)
         print(f"set: {test_set}, is special: {is_special}")
 
