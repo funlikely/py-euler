@@ -19,6 +19,7 @@ from utilities.bignum import *
 
 start_fresh = False
 
+
 # consider using
 # sys.set_int_max_str_digits(90000)
 # sys.set_int_max_str_digits(4300) # default
@@ -78,6 +79,14 @@ def debug_and_investigation():
     pass
 
 
+def get_first_n_fib_values(n):
+    fib_values = [0] * (n + 1)
+    fib_values[1] = fib_values[2] = 1
+    for i in range(3, n + 1):
+        fib_values[i] = fib_values[i - 1] + fib_values[i - 2]
+    return fib_values
+
+
 def get_answer_using_fib_skip_algorithm() -> (int, int):
     """
         This uses the knowledge that if we know F(a-1) and F(a) and wish to know F(b-1) and F(b) where b > a
@@ -93,21 +102,33 @@ def get_answer_using_fib_skip_algorithm() -> (int, int):
     """
     sys.set_int_max_str_digits(90000)
 
+    max_gap, pan_digital_enders = get_pan_digital_enders()
+
+    fib_lookup = get_first_n_fib_values(max_gap + 2)
+
+    if debug:
+        print(f"Fibonacci indices for which the ends are 1-9 pandigital = {pan_digital_enders}")
+        print(f"First 12 Fibonacci values: {fib_lookup[1:13]}")
+
+    return 1, 1
+
+
+def get_pan_digital_enders():
     a, b, c = 1, 1, 1
     pan_digital_enders = []
     counter = 3
-    while counter < 10**6:
-        c = a + b % 10**9
+    max_gap = 0
+    while counter < 10 ** 6:
+        c = a + b % 10 ** 9
         b = a
         a = c
         if counter > 500 and set(str(a)[-9:]) == set('123456789'):
             pan_digital_enders += [counter]
+            gap = counter - pan_digital_enders[-2:][0]
+            if gap > max_gap:
+                max_gap = gap
         counter += 1
-
-    if debug:
-        print(f"Fibonacci indices for which the ends are 1-9 pandigital = {pan_digital_enders}")
-
-    return 1, 1
+    return max_gap, pan_digital_enders
 
 
 def main():
