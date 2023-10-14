@@ -31,7 +31,7 @@ def get_answer() -> (int, BigNum):
             last_nine = str(fib_a.value)[-9:]
         counter += 1
 
-        if (counter % 1567 == 66 or counter % 2323 == 123) and debug:
+        if counter % 6000 == 0 and debug:
             print(f"Fib({counter}): {first_nine}...{last_nine}")
 
         if set(first_nine) == set(last_nine) == set('123456789'):
