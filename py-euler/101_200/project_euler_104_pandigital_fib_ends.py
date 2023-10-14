@@ -14,6 +14,7 @@
 """
 import sys
 import time
+from typing import List
 
 from utilities.bignum import *
 
@@ -87,6 +88,32 @@ def get_first_n_fib_values(n):
     return fib_values
 
 
+def inspect_candidate_fib_values_for_first_pan_digital_validity(fib_lookup: List, pan_digital_enders: List) -> (int, int):
+    # let's start with the biggest a we have in the fib_lookup
+    a = len(fib_lookup) - 1
+    fib_a = fib_lookup[a]
+    fib_a_minus_1 = fib_lookup[a-1]
+
+    counter = 0
+
+    for b in pan_digital_enders:
+        gap = b - a
+        fib_b_minus_1 = fib_lookup[gap-1] * fib_a_minus_1 + fib_lookup[gap] * fib_a
+        fib_b = fib_lookup[gap] * fib_a_minus_1 + fib_lookup[gap+1] * fib_a
+        fib_a_minus_1 = fib_b_minus_1
+        fib_a = fib_b
+        a = b
+        if debug and counter % 10 == 0:
+            fib_string = str(fib_a)[:20] + '...' + str(fib_a)[-20:]
+            print(f'a = {a}, F(a) = {fib_string}')
+        if set(str(fib_a)[:9]) == '123456789':
+            return a, fib_a
+        counter += 1
+
+    # did not find
+    return 0, 0
+
+
 def get_answer_using_fib_skip_algorithm() -> (int, int):
     """
         This uses the knowledge that if we know F(a-1) and F(a) and wish to know F(b-1) and F(b) where b > a
@@ -100,17 +127,19 @@ def get_answer_using_fib_skip_algorithm() -> (int, int):
 
         We can skip across finding any Fibonacci values we want, without needing to process intermediate Fib values
     """
-    sys.set_int_max_str_digits(90000)
+    sys.set_int_max_str_digits(900000)
 
     max_gap, pan_digital_enders = get_pan_digital_enders()
 
     fib_lookup = get_first_n_fib_values(max_gap + 2)
 
+    index, fib_value = inspect_candidate_fib_values_for_first_pan_digital_validity(fib_lookup, pan_digital_enders)
+
     if debug:
         print(f"Fibonacci indices for which the ends are 1-9 pandigital = {pan_digital_enders}")
         print(f"First 12 Fibonacci values: {fib_lookup[1:13]}")
 
-    return 1, 1
+    return index, fib_value
 
 
 def get_pan_digital_enders():
@@ -118,7 +147,7 @@ def get_pan_digital_enders():
     pan_digital_enders = []
     counter = 3
     max_gap = 0
-    while counter < 10 ** 6:
+    while counter < 10 ** 8:
         c = a + b % 10 ** 9
         b = a
         a = c
