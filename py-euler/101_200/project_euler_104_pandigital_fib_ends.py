@@ -93,6 +93,20 @@ def get_answer_using_fib_skip_algorithm() -> (int, int):
     """
     sys.set_int_max_str_digits(90000)
 
+    a, b, c = 1, 1, 1
+    pan_digital_enders = []
+    counter = 3
+    while counter < 10**6:
+        c = a + b % 10**9
+        b = a
+        a = c
+        if counter > 500 and set(str(a)[-9:]) == set('123456789'):
+            pan_digital_enders += [counter]
+        counter += 1
+
+    if debug:
+        print(f"Fibonacci indices for which the ends are 1-9 pandigital = {pan_digital_enders}")
+
     return 1, 1
 
 
