@@ -54,7 +54,7 @@ def get_high_card(hand):
     elif 'T' in values:
         return 'T'
     else:
-        return max([int(val) for val in values])
+        return str(max([int(val) for val in values]))
 
 
 def get_hand_kindness(hand):
@@ -99,11 +99,16 @@ def get_winner(p1_hand, p2_hand):
 
     ranks = {'royal_flush': 10, 'straight_flush': 9, 'four_of_a_kind': 8, 'full_house': 7, 'flush': 6,
              'straight': 5, 'three_of_a_kind': 4, 'two_pairs': 3, 'one_pair': 2, 'high_card': 1}
+    card_ranks = {'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10, '9': 9, '8': 8, '7': 7, '6': 6, '5': 5, '4': 4, '3': 3,
+                  '2': 2}
 
     if ranks[p1_rank] > ranks[p2_rank]:
         return 'player1'
     else:
-        return 'player2'
+        if card_ranks[get_high_card(p1_hand)] > card_ranks[get_high_card(p2_hand)]:
+            return 'player1'
+        else:
+            return 'player2'
 
 
 def get_player1_win_count(hands):
