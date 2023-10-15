@@ -81,15 +81,52 @@ def debug_and_investigation():
 
 
 def get_first_n_fib_values(n):
+
     fib_values = [0] * (n + 1)
     fib_values[1] = fib_values[2] = 1
-    for i in range(3, n + 1):
-        fib_values[i] = fib_values[i - 1] + fib_values[i - 2]
+
+    stored_count = 0
+    file_name = 'data/project_euler_104_b.txt'
+    try:
+        file = open(file_name)
+        lines = file.readlines()
+        if len(lines) < 1:
+            raise ValueError('No fibonacci data in file')
+        stored_count = len(lines)
+        fib_values = [int(line.strip('\n')) for line in lines]
+        if stored_count < n + 1:
+            fib_values += [0] * (n + 1 - stored_count)
+            for i in range(stored_count, n + 1):
+                fib_values[i] = fib_values[i - 1] + fib_values[i - 2]
+    except FileNotFoundError or ValueError:
+        for i in range(3, n + 1):
+            fib_values[i] = fib_values[i - 1] + fib_values[i - 2]
+
+    if stored_count < n:
+        file = open(file_name, 'w')
+        file.writelines([str(val) + '\n' for val in fib_values])
+        file.close()
+
     return fib_values
 
 
 def inspect_candidate_fib_values_for_first_pan_digital_validity(fib_lookup: List, pan_digital_enders: List) -> (int, int):
-    # let's start with the biggest a we have in the fib_lookup
+
+    if debug:
+        some_testing_fib_indices = [3, 6, 9, 13, 18]
+        a = 1
+        fib_a = fib_lookup[a]
+        fib_a_minus_1 = fib_lookup[a-1]
+        for b in some_testing_fib_indices:
+            gap = b - a
+            fib_b_minus_1 = fib_lookup[gap - 1] * fib_a_minus_1 + fib_lookup[gap] * fib_a
+            fib_b = fib_lookup[gap] * fib_a_minus_1 + fib_lookup[gap + 1] * fib_a
+            fib_a_minus_1 = fib_b_minus_1
+            fib_a = fib_b
+            a = b
+            print(f'a = {a}, F(a) = {str(fib_a)}')
+
+    # let's start with the biggest 'a' we have in the fib_lookup
     a = len(fib_lookup) - 1
     fib_a = fib_lookup[a]
     fib_a_minus_1 = fib_lookup[a-1]
@@ -104,9 +141,8 @@ def inspect_candidate_fib_values_for_first_pan_digital_validity(fib_lookup: List
         fib_a = fib_b
         a = b
         if debug and counter % 10 == 0:
-            fib_string = str(fib_a)[:20] + '...' + str(fib_a)[-20:]
-            print(f'a = {a}, F(a) = {fib_string}')
-        if set(str(fib_a)[:9]) == '123456789':
+            print(f'a = {a}, F(a) = {str(fib_a)[:20] + "..." + str(fib_a)[-20:]}')
+        if set(str(fib_a)[:9]) == set('123456789'):
             return a, fib_a
         counter += 1
 
@@ -128,6 +164,9 @@ def get_answer_using_fib_skip_algorithm() -> (int, int):
         We can skip across finding any Fibonacci values we want, without needing to process intermediate Fib values
     """
     sys.set_int_max_str_digits(900000)
+
+    if debug:
+        get_first_n_fib_values(15000)
 
     max_gap, pan_digital_enders = get_pan_digital_enders()
 
