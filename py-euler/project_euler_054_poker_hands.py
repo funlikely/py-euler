@@ -34,7 +34,7 @@ def is_flush(hand):
 
 def is_straight(hand):
     values = get_values_string(hand)
-    return values in ('23456', '34567', '45678', '56789', '106789', '10789J', '1089JQ', '109JKQ', '10AJKQ')
+    return values in ('23456', '34567', '45678', '56789', '6789T', '789TJ', '89TJQ', '9TJKQ', 'TAJKQ')
 
 
 def get_values_string(hand):
@@ -51,8 +51,8 @@ def get_high_card(hand):
         return 'Q'
     elif 'J' in values:
         return 'J'
-    elif '0' in values:
-        return '10'
+    elif 'T' in values:
+        return 'T'
     else:
         return max([int(val) for val in values])
 
@@ -60,18 +60,17 @@ def get_high_card(hand):
 def get_hand_kindness(hand):
     kindness = 'unknown'
     values = get_values_string(hand)
-    values = values.replace('1', '') # just to prevent a pair of 10s to show up as a 'two_pair'
-    four_test = [values[i] == values[i+3] for i in range(len(values)-3)]
+    four_test = [values[i] == values[i + 3] for i in range(len(values) - 3)]
     if True in four_test:
         return 'four_of_a_kind'
-    three_test = [values[i] == values[i+2] for i in range(len(values)-3)]
+    three_test = [values[i] == values[i + 2] for i in range(len(values) - 3)]
     if True in three_test:
-        full_house_test = sorted([values[i] == values[i+1] for i in range(len(values)-3)])
+        full_house_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 3)])
         if full_house_test[-3:][0]:
             return 'full_house'
         else:
             return 'three_of_a_kind'
-    two_pair_test = sorted([values[i] == values[i+1] for i in range(len(values)-3)])
+    two_pair_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 3)])
     if two_pair_test[-2:][0]:
         return 'two_pairs'
     if two_pair_test[-1:][0]:
@@ -98,9 +97,13 @@ def get_winner(p1_hand, p2_hand):
     p1_rank = get_hand_rank(p1_hand)
     p2_rank = get_hand_rank(p2_hand)
 
-    winner = ''
+    ranks = {'royal_flush': 10, 'straight_flush': 9, 'four_of_a_kind': 8, 'full_house': 7, 'flush': 6,
+             'straight': 5, 'three_of_a_kind': 4, 'two_pairs': 3, 'one_pair': 2, 'high_card': 1}
 
-    return winner
+    if ranks[p1_rank] > ranks[p2_rank]:
+        return 'player1'
+    else:
+        return 'player2'
 
 
 def get_player1_win_count(hands):
@@ -117,38 +120,37 @@ def get_hands_from_file():
     file = open('data/project_euler_054.txt')
     lines = file.readlines()
     cards = [line.strip('\n').split(' ') for line in lines]
-    player1_hands = [row[:5] for row in cards]
-    player2_hands = [row[5:] for row in cards]
-    return player1_hands, player2_hands
+    hands = [[row[:5], row[5:]] for row in cards]
+    return hands
 
 
 def run_some_tests(hands):
     for hand in hands[:20]:
         p1_hand = hand[0]
-        print(f'hand [{p1_hand}], rank = {get_hand_rank(p1_hand)}, high card = {get_high_card(p1_hand)}, values string = {get_values_string(p1_hand)}')
+        print_hand_state(p1_hand)
     for hand in hands[:20]:
         p2_hand = hand[1]
-        p2_hand[0] = '10'
+        p2_hand[0] = 'T'
         print_hand_state(p2_hand)
     print_hand_state(['3S', '3D', '3C', 'JH', 'JS'])
     print_hand_state(['3S', '4S', '6S', '5S', '7S'])
-    print_hand_state(['KS', 'QS', 'JS', 'AS', '10S'])
-
+    print_hand_state(['KS', 'QS', 'JS', 'AS', 'TS'])
 
 
 def print_hand_state(hand):
-    print(f'hand [{hand}], rank = {get_hand_rank(hand)}, high card = {get_high_card(hand)}, values string = {get_values_string(hand)}')
+    print(
+        f'hand [{hand}], rank = {get_hand_rank(hand)}, high card = {get_high_card(hand)}, values string = {get_values_string(hand)}')
 
 
 def main():
-    player1_hands, player2_hands = get_hands_from_file()
+    hands = get_hands_from_file()
 
     if debug:
-        print(f'first ten player 1 hands: {player1_hands[:10]}')
-        print(f'first ten player 2 hands: {player2_hands[:10]}')
-        run_some_tests([player1_hands, player2_hands])
+        print(f'first ten player 1 hands: {[hand[0] for hand in hands[:10]]}')
+        print(f'first ten player 2 hands: {[hand[1] for hand in hands[:10]]}')
+        run_some_tests(hands)
 
-    answer = get_player1_win_count([player1_hands, player2_hands])
+    answer = get_player1_win_count(hands)
     print(f"The Answer to Project Euler 054 is {answer}")
 
     # The Answer to Project Euler 054 
