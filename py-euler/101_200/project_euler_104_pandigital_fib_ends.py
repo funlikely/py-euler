@@ -126,8 +126,7 @@ def inspect_candidate_fib_values_for_first_pan_digital_validity(fib_lookup: List
             a = b
             print(f'a = {a}, F(a) = {str(fib_a)}')
 
-    # let's start with the biggest 'a' we have in the fib_lookup
-    a = len(fib_lookup) - 1
+    a = 5
     fib_a = fib_lookup[a]
     fib_a_minus_1 = fib_lookup[a-1]
 
@@ -163,7 +162,7 @@ def get_answer_using_fib_skip_algorithm() -> (int, int):
 
         We can skip across finding any Fibonacci values we want, without needing to process intermediate Fib values
     """
-    sys.set_int_max_str_digits(900000)
+    sys.set_int_max_str_digits(9000000)
 
     if debug:
         get_first_n_fib_values(15000)
@@ -216,7 +215,7 @@ def main():
     if debug:
         print(f"The fibonacci number starts with {fib_number_string[:30]} and is {len(fib_number_string)} digits long.")
 
-    # The Answer to Project Euler 104 is __
+    # The Answer to Project Euler 104 is 329468
 
 
 def initialize_fib_numbers_with_data_file_if_possible_without_bignum() -> (int, int, int):
