@@ -151,9 +151,13 @@ def run_some_tests(hands):
     print_hand_state(['KS', 'QS', 'JS', 'AS', 'TS'])
 
 
+def get_suits(hand):
+    return ''.join(sorted([card[1] for card in hand]))
+
+
 def print_hand_state(hand):
     print(
-        f'hand {hand}, rank = {get_hand_rank(hand)}, high card = {get_high_card(hand)}, values string = {get_values_string(hand)}')
+        f'hand {hand}, rank = {get_hand_rank(hand)}, high card = {get_high_card(hand)}, values string = {get_values_string(hand)}, suits = {get_suits(hand)}')
 
 
 def main():
