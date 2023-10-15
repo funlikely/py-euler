@@ -34,7 +34,7 @@ def is_flush(hand):
 
 def is_straight(hand):
     values = get_values_string(hand)
-    return values in ('23456', '34567', '45678', '56789', '6789T', '789TJ', '89TJQ', '9TJKQ', 'TAJKQ')
+    return values in ('23456', '34567', '45678', '56789', '6789T', '789JT', '89JQT', '9JKQT', 'AJKQT')
 
 
 def get_values_string(hand):
@@ -63,14 +63,14 @@ def get_hand_kindness(hand):
     four_test = [values[i] == values[i + 3] for i in range(len(values) - 3)]
     if True in four_test:
         return 'four_of_a_kind'
-    three_test = [values[i] == values[i + 2] for i in range(len(values) - 3)]
+    three_test = [values[i] == values[i + 2] for i in range(len(values) - 2)]
     if True in three_test:
-        full_house_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 3)])
+        full_house_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 1)])
         if full_house_test[-3:][0]:
             return 'full_house'
         else:
             return 'three_of_a_kind'
-    two_pair_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 3)])
+    two_pair_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 1)])
     if two_pair_test[-2:][0]:
         return 'two_pairs'
     if two_pair_test[-1:][0]:
@@ -89,6 +89,10 @@ def get_hand_rank(hand):
                 return 'royal_flush'
             else:
                 return 'straight_flush'
+        else:
+            return 'flush'
+    if is_straight(hand):
+        return 'straight'
 
     return 'high_card'
 
@@ -135,16 +139,21 @@ def run_some_tests(hands):
         print_hand_state(p1_hand)
     for hand in hands[:20]:
         p2_hand = hand[1]
-        p2_hand[0] = 'T'
+        p2_hand[0] = 'T' + p2_hand[0][-1:]
         print_hand_state(p2_hand)
+    print_hand_state(['TS', '9D', 'JC', '7H', '8S'])
+    print_hand_state(['TS', 'TD', 'JC', '8H', '8S'])
+    print_hand_state(['TS', '8D', 'JC', '8H', '8S'])
+    print_hand_state(['2D', '3D', '7D', 'JD', 'AD'])
     print_hand_state(['3S', '3D', '3C', 'JH', 'JS'])
+    print_hand_state(['TD', '9D', 'TC', 'TH', 'TS'])
     print_hand_state(['3S', '4S', '6S', '5S', '7S'])
     print_hand_state(['KS', 'QS', 'JS', 'AS', 'TS'])
 
 
 def print_hand_state(hand):
     print(
-        f'hand [{hand}], rank = {get_hand_rank(hand)}, high card = {get_high_card(hand)}, values string = {get_values_string(hand)}')
+        f'hand {hand}, rank = {get_hand_rank(hand)}, high card = {get_high_card(hand)}, values string = {get_values_string(hand)}')
 
 
 def main():
