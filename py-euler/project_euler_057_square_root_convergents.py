@@ -19,6 +19,19 @@ debug = True
 
 
 def get_answer():
+    """
+    The series is c = 3/2, 7/5, 17/12, 41/29, 99/70, 239/169, 577/408, 1393/985, ...
+    If we let
+        c(n) = a(n)/b(n),
+    then
+        c(n+1) = a(n+1)/b(n+1)
+    where
+        a(n+1) = a(n) + 2*b(n)
+        b(n+1) = a(n) + b(n)
+
+    So the answer will just be a matter of calculating a(i) and b(i) for 1 <= i <= 1000, and comparing the number
+    of digits
+    """
     return 1
 
 
