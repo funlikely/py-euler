@@ -168,7 +168,9 @@ def get_winner(p1_hand, p2_hand):
         for i in range(1, len(p1_rank)):
             if card_ranks[p1_rank[i]] > card_ranks[p2_rank[i]]:
                 return 'player1'
-        return 'player2'
+            elif card_ranks[p1_rank[i]] < card_ranks[p2_rank[i]]:
+                return 'player2'
+    return 'player2'
 
 
 def get_player1_win_count(hands):
@@ -212,6 +214,7 @@ def run_some_tests(hands):
     print_hand_state(['TD', '9D', 'TC', 'TH', 'TS'])
     print_hand_state(['3S', '4S', '6S', '5S', '7S'])
     print_hand_state(['KS', 'QS', 'JS', 'AS', 'TS'])
+    print('')
 
 
 def get_suits(hand):
@@ -234,7 +237,7 @@ def main():
     answer = get_player1_win_count(hands)
     print(f"The Answer to Project Euler 054 is {answer}")
 
-    # The Answer to Project Euler 054 
+    # The Answer to Project Euler 054 is 376
 
 
 if __name__ == "__main__":
