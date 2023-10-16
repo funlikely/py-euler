@@ -19,14 +19,19 @@
 from utilities.primes import PrimeProcessor
 
 
+debug = True
+
+
 def get_goldbach_counterexample():
     pp = PrimeProcessor()
-    prime_list = pp.primes_up_to(50000)
-    print(f"prime_list length = {len(prime_list)}, and last couple primes: {prime_list[-5:]}")
+    prime_list = pp.primes_up_to(5000000)
     square_list = [i*i for i in range(1, 5000)]
-    print(f"last couple squares: {square_list[-5:]}")
 
-    max_guess = 50000
+    if debug:
+        print(f"prime_list length = {len(prime_list)}, and last couple primes: {prime_list[-5:]}")
+        print(f"last couple squares: {square_list[-5:]}")
+
+    max_guess = 5000000
     test_num = 9
     goldbached = False
     while test_num < max_guess and not goldbached:
@@ -37,12 +42,12 @@ def get_goldbach_counterexample():
         for square in square_list:
             if square > test_num or goldbached:
                 break
-            for prime in prime_list:
-                if square + 2*prime > test_num or goldbached:
-                    break
-                if square + 2*prime == test_num:
-                    goldbached = True
-        test_num += 2
+            if (test_num - 2 * square) in prime_list:
+                goldbached = True
+                if debug:
+                    print(f'{test_num} = {(test_num - 2 * square)} + 2 * {square}')
+        while (test_num + 2) not in prime_list:
+            test_num += 2
 
     return 0
 
