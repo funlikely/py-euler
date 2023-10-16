@@ -25,6 +25,15 @@
     tie then the next highest cards are compared, and so on.
 """
 
+ranks = {'royal_flush': 10, 'straight_flush': 9, 'four_of_a_kind': 8, 'full_house': 7, 'flush': 6,
+         'straight': 5, 'three_of_a_kind': 4, 'two_pairs': 3, 'one_pair': 2, 'high_card': 1}
+card_ranks = {'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10, '9': 9, '8': 8, '7': 7, '6': 6, '5': 5, '4': 4, '3': 3,
+              '2': 2}
+
+def card_rank_sorted(cards):
+    return sorted(cards, key = lambda x : card_ranks[x])
+
+
 debug = True
 
 
@@ -57,68 +66,129 @@ def get_high_card(hand):
         return str(max([int(val) for val in values]))
 
 
-def get_hand_kindness(hand):
-    kindness = 'unknown'
+def is_hand_four_of_a_kind(hand):
     values = get_values_string(hand)
-    four_test = [values[i] == values[i + 3] for i in range(len(values) - 3)]
-    if True in four_test:
-        return 'four_of_a_kind'
-    three_test = [values[i] == values[i + 2] for i in range(len(values) - 2)]
-    if True in three_test:
-        full_house_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 1)])
-        if full_house_test[-3:][0]:
-            return 'full_house'
-        else:
-            return 'three_of_a_kind'
-    two_pair_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 1)])
-    if two_pair_test[-2:][0]:
-        return 'two_pairs'
-    if two_pair_test[-1:][0]:
-        return 'one_pair'
+    return True in [values[i] == values[i + 3] for i in range(len(values) - 3)]
 
-    return kindness
+
+def is_hand_full_house(hand):
+    values = get_values_string(hand)
+    return not is_hand_four_of_a_kind(hand) and \
+        True in [values[i] == values[i + 2] for i in range(len(values) - 2)] and \
+        sorted([values[i] == values[i + 1] for i in range(len(values) - 1)])[-3:][0]
+
+
+def is_hand_three_of_a_kind(hand):
+    values = get_values_string(hand)
+    return not is_hand_full_house(hand) and True in [values[i] == values[i + 2] for i in range(len(values) - 2)]
+
+
+def is_hand_two_pairs(hand):
+    values = get_values_string(hand)
+    two_pair_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 1)])
+    return not is_hand_three_of_a_kind(hand) and two_pair_test[-2:][0]
+
+
+def is_hand_one_pair(hand):
+    values = get_values_string(hand)
+    one_pair_test = sorted([values[i] == values[i + 1] for i in range(len(values) - 1)])
+    return not is_hand_two_pairs(hand) and one_pair_test[-1:][0]
 
 
 def get_hand_rank(hand):
-    hand_kindness = get_hand_kindness(hand)
-    if hand_kindness in ['four_of_a_kind', 'full_house', 'three_of_a_kind', 'two_pairs', 'one_pair']:
-        return hand_kindness
-    if is_flush(hand):
+    hand_rank = []
+    values = get_values_string(hand)
+
+    if is_hand_four_of_a_kind(hand):
+        hand_rank = ['four_of_a_kind', values[2]]
+    elif is_hand_full_house(hand):
+        hand_rank = ['full_house', values[2], values[1] if values[3] == values[2] else values[3]]
+    elif is_hand_three_of_a_kind(hand):
+        hand_rank = ['three_of_a_kind', values[2]] + [a for a in card_rank_sorted(values.replace(values[2], ''))]
+    elif is_hand_two_pairs(hand):
+        hand_rank = ['two_pairs'] + ['TODO complete the two pair ranking']
+    elif is_hand_one_pair(hand):
+        hand_rank = ['one_pair'] + ['TODO']
+    elif is_flush(hand):
         if is_straight(hand):
             if get_high_card(hand) == 'A':
-                return 'royal_flush'
+                hand_rank = ['royal_flush']
             else:
-                return 'straight_flush'
+                hand_rank = ['straight_flush']
         else:
-            return 'flush'
-    if is_straight(hand):
-        return 'straight'
+            hand_rank = ['flush']
+    elif is_straight(hand):
+        hand_rank = ['straight']
+    else:
+        hand_rank = ['high_card']
 
-    return 'high_card'
+    return hand_rank
+
+
+def identify_pair_card(hand):
+    values = get_values_string(hand)
+    pair_card = [values[i] for i in range(len(values) - 1) if values[i + 1] == values[i]]
+    return pair_card
+
+
+def get_winner_by_high_card_only(p1_hand, p2_hand):
+    if card_ranks[get_high_card(p1_hand)] > card_ranks[get_high_card(p2_hand)]:
+        return 'player1'
+    else:
+        return 'player2'
 
 
 def get_winner(p1_hand, p2_hand):
     p1_rank = get_hand_rank(p1_hand)
     p2_rank = get_hand_rank(p2_hand)
 
-    ranks = {'royal_flush': 10, 'straight_flush': 9, 'four_of_a_kind': 8, 'full_house': 7, 'flush': 6,
-             'straight': 5, 'three_of_a_kind': 4, 'two_pairs': 3, 'one_pair': 2, 'high_card': 1}
-    card_ranks = {'A': 14, 'K': 13, 'Q': 12, 'J': 11, 'T': 10, '9': 9, '8': 8, '7': 7, '6': 6, '5': 5, '4': 4, '3': 3,
-                  '2': 2}
-
-    if ranks[p1_rank] > ranks[p2_rank]:
+    if ranks[p1_rank[0]] > ranks[p2_rank[0]]:
         return 'player1'
+    elif ranks[p1_rank[0]] < ranks[p2_rank[0]]:
+        return 'player2'
     else:
-        if card_ranks[get_high_card(p1_hand)] > card_ranks[get_high_card(p2_hand)]:
-            return 'player1'
+        # Different hands have different rules about what breaks the tie
+        if ranks[p1_rank[0]] == 'high_card':
+            if card_ranks[get_high_card(p1_hand)] > card_ranks[get_high_card(p2_hand)]:
+                return 'player1'
+            else:
+                return 'player2'
+        elif ranks[p1_rank[0]] == 'one_pair':
+            if card_ranks[identify_pair_card(p1_hand)] > card_ranks[identify_pair_card(p2_hand)]:
+                return 'player1'
+            elif card_ranks[identify_pair_card(p1_hand)] < card_ranks[identify_pair_card(p2_hand)]:
+                return 'player2'
+            else:
+                return get_winner_by_high_card_only(p1_hand, p2_hand)
+        elif ranks[p1_rank[0]] == 'two_pairs':
+            return 'None'
+        elif ranks[p1_rank[0]] == 'three_of_a_kind':
+            return 'None'
+        elif ranks[p1_rank[0]] == 'straight':
+            return 'None'
+        elif ranks[p1_rank[0]] == 'flush':
+            return 'None'
+        elif ranks[p1_rank[0]] == 'full_house':
+            return 'None'
+        elif ranks[p1_rank[0]] == 'four_of_a_kind':
+            return 'None'
+        elif ranks[p1_rank[0]] == 'straight_flush':
+            return 'None'
         else:
-            return 'player2'
+            return 'player1'
 
 
 def get_player1_win_count(hands):
     count = 0
 
     for hand in hands:
+        if debug:
+            print_hand_state(hand[0])
+            print_hand_state(hand[1])
+            if get_winner(hand[0], hand[1]) == 'player1':
+                print('First hand wins')
+            else:
+                print('Second hand wins')
         if get_winner(hand[0], hand[1]) == 'player1':
             count += 1
 
@@ -139,7 +209,6 @@ def run_some_tests(hands):
         print_hand_state(p1_hand)
     for hand in hands[:20]:
         p2_hand = hand[1]
-        p2_hand[0] = 'T' + p2_hand[0][-1:]
         print_hand_state(p2_hand)
     print_hand_state(['TS', '9D', 'JC', '7H', '8S'])
     print_hand_state(['TS', 'TD', 'JC', '8H', '8S'])
