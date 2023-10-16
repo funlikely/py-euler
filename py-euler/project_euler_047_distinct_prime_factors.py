@@ -18,15 +18,19 @@
     numbers?
 """
 import math
+from typing import List
+
 import utilities.primes as pr
 
 debug = True
 
+MAX_NUM = 10 ** 6
+
 pp = pr.PrimeProcessor()
-prime_list = pp.primes_up_to(100000)
+prime_list = pp.primes_up_to(MAX_NUM)
 
 
-def get_prime_factor_list(n):
+def get_distinct_prime_factors(n):
     prime_list_iter = 0
     prime_factor_list = []
     while prime_list_iter < len(prime_list) and n > 1:
@@ -39,9 +43,38 @@ def get_prime_factor_list(n):
     # return [prime_list[:len(prime_factor_list)], prime_factor_list]
 
 
-def get_special_distinct_primes_answer() -> int:
+def get_single_factor_nums():
+    return [i for i in range(2, 1000) if len(get_distinct_prime_factors(i)) == 1]
 
-    prime_factors = [get_prime_factor_list(i) for i in range(100000)]
+
+def get_double_factor_nums():
+    return [i for i in range(2, 1000) if len(get_distinct_prime_factors(i)) == 2]
+
+
+def reduce_candidates(candidates_helper: List[bool], sieve_nums: List[int]) -> List[bool]:
+    for sieve in sieve_nums:
+        multiple = 1
+        while sieve * multiple < len(candidates_helper):
+            candidates_helper[sieve * multiple] = False
+            multiple += 1
+    return candidates_helper
+
+
+def get_special_distinct_primes_answer() -> int:
+    candidates_helper = [True] * MAX_NUM
+
+    single_factor_nums = get_single_factor_nums()
+    double_factor_nums = get_double_factor_nums()
+
+    candidates_helper = reduce_candidates(candidates_helper, single_factor_nums + double_factor_nums)
+
+    prime_factors = [i for i in len(candidates_helper) if candidates_helper[i] and len(get_distinct_prime_factors(i)) == 4]
+
+    candidates = [i for i in range(len(prime_factors)) if
+                  prime_factors[i] and prime_factors[i + 1] and prime_factors[i + 2] and prime_factors[
+                      i + 3]]
+
+    answers = [i for i in candidates if ]
 
     if debug:
         print(f'last few primes: {prime_list[-5:]}')
@@ -51,11 +84,11 @@ def get_special_distinct_primes_answer() -> int:
     answer_found = False
     while not answer_found:
         s1 = prime_factors[test_num]
-        s2 = prime_factors[test_num+1]
-        s3 = prime_factors[test_num+2]
-        s4 = prime_factors[test_num+3]
+        s2 = prime_factors[test_num + 1]
+        s3 = prime_factors[test_num + 2]
+        s4 = prime_factors[test_num + 3]
         if debug and test_num % 1000 == 0:
-            print(f'{test_num}: {s1}, {test_num + 1}: {s2}, {test_num+2}: {s3}, {test_num + 3}: {s4}')
+            print(f'{test_num}: {s1}, {test_num + 1}: {s2}, {test_num + 2}: {s3}, {test_num + 3}: {s4}')
         if len(set(s1)) == len(set(s2)) == len(set(s3)) == len(set(s4)) == 4:
             return test_num
         test_num += 1
@@ -67,7 +100,7 @@ debug = True
 
 
 def investigate_and_debug():
-    lim = 10**6
+    lim = 10 ** 6
     pp = pr.PrimeProcessor(5000)
     prime_divisor_count_list = [0] * lim
     for i in range(2, lim):
