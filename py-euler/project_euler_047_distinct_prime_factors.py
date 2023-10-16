@@ -23,7 +23,7 @@ import utilities.primes as pr
 debug = True
 
 pp = pr.PrimeProcessor()
-prime_list = pp.primes_up_to(500000)
+prime_list = pp.primes_up_to(50000)
 
 
 def get_prime_factor_list(n):
@@ -39,9 +39,19 @@ def get_prime_factor_list(n):
     # return [prime_list[:len(prime_factor_list)], prime_factor_list]
 
 
+def have_distinct_prime_factors(s1, s2, s3, s4):
+    total_set_count = len(set(s1 + s2 + s3 + s4))
+    if len(set(s1)) + len(set(s2 + s3 + s4)) > total_set_count:
+        if len(set(s2)) + len(set(s1 + s3 + s4)) > total_set_count:
+            if len(set(s3)) + len(set(s1 + s2 + s4)) > total_set_count:
+                if len(set(s4)) + len(set(s1 + s2 + s3)) > total_set_count:
+                    return True
+    return False
+
+
 def get_special_distinct_primes_answer() -> int:
 
-    prime_factors = [get_prime_factor_list(i) for i in range(100000)]
+    prime_factors = [get_prime_factor_list(i) for i in range(50000)]
 
     if debug:
         print(f'last few primes: {prime_list[-5:]}')
@@ -54,7 +64,9 @@ def get_special_distinct_primes_answer() -> int:
         s2 = prime_factors[test_num+1]
         s3 = prime_factors[test_num+2]
         s4 = prime_factors[test_num+3]
-        if len(set(s1+s2+s3+s4)) == len(set(s1))+len(set(s2))+len(set(s3))+len(set(s4)):
+        if debug and test_num % 1000 == 0:
+            print(f'{test_num}: {s1}, {test_num + 1}: {s2}, {test_num+2}: {s3}, {test_num + 3}: {s4}')
+        if have_distinct_prime_factors(s1, s2, s3, s4):
             return test_num
         test_num += 1
 
