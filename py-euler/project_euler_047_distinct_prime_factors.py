@@ -19,10 +19,45 @@
 """
 import math
 import utilities.primes as pr
-import utilities.divisors as div
+
+debug = True
+
+pp = pr.PrimeProcessor()
+prime_list = pp.primes_up_to(500000)
+
+
+def get_prime_factor_list(n):
+    prime_list_iter = 0
+    prime_factor_list = []
+    while prime_list_iter < len(prime_list) and n > 1:
+        prime_factor_list.append(0)
+        while n % prime_list[prime_list_iter] == 0:
+            n /= prime_list[prime_list_iter]
+            prime_factor_list[prime_list_iter] += 1
+        prime_list_iter += 1
+    return [prime_list[i] for i in range(len(prime_factor_list)) if prime_factor_list[i] > 0]
+    # return [prime_list[:len(prime_factor_list)], prime_factor_list]
 
 
 def get_special_distinct_primes_answer() -> int:
+
+    prime_factors = [get_prime_factor_list(i) for i in range(100000)]
+
+    if debug:
+        print(f'last few primes: {prime_list[-5:]}')
+        print(f'last few prime factors: {prime_factors[-5:]}')
+
+    test_num = 644
+    answer_found = False
+    while not answer_found:
+        s1 = prime_factors[test_num]
+        s2 = prime_factors[test_num+1]
+        s3 = prime_factors[test_num+2]
+        s4 = prime_factors[test_num+3]
+        if len(set(s1+s2+s3+s4)) == len(set(s1))+len(set(s2))+len(set(s3))+len(set(s4)):
+            return test_num
+        test_num += 1
+
     return 0
 
 
