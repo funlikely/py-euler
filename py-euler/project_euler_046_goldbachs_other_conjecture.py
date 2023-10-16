@@ -35,7 +35,7 @@ def get_goldbach_counterexample():
     while test_num < max_guess:
         has_goldbach_combination = False
         i = 1
-        while i ** i < test_num and not has_goldbach_combination and test_num not in prime_list:
+        while i * i < test_num and not has_goldbach_combination and test_num not in prime_list:
             if (test_num - 2 * i * i) in prime_list:
                 if debug and counter % 100 == 0:
                     print(f'{test_num} = {(test_num - 2 * i * i)} + 2 * {i} ^ 2')
@@ -54,7 +54,7 @@ def main():
     answer = get_goldbach_counterexample()
     print(f"The Answer to Project Euler 046 is {answer}")
 
-    # The Answer to Project Euler 046
+    # The Answer to Project Euler 046 is 5777
 
 
 if __name__ == "__main__":
