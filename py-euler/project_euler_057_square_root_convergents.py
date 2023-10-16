@@ -32,7 +32,19 @@ def get_answer():
     So the answer will just be a matter of calculating a(i) and b(i) for 1 <= i <= 1000, and comparing the number
     of digits
     """
-    return 1
+
+    counter = 0
+    a = 3
+    b = 2
+    for i in range(1000):
+        if len(str(a)) > len(str(b)):
+            counter += 1
+        a_next = a + 2 * b
+        b_next = a + b
+        a = a_next
+        b = b_next
+
+    return counter
 
 
 def main():
@@ -40,7 +52,7 @@ def main():
     answer = get_answer()
     print(f"The Answer to Project Euler 057 is {answer}")
 
-    # The Answer to Project Euler 057
+    # The Answer to Project Euler 057 is 153
 
 
 if __name__ == "__main__":
