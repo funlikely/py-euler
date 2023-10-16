@@ -24,7 +24,7 @@ import utilities.primes as pr
 
 debug = True
 
-MAX_NUM = 10 ** 7
+MAX_NUM = 2* 10 ** 5
 
 pp = pr.PrimeProcessor()
 prime_list = pp.primes_up_to(MAX_NUM)
@@ -58,11 +58,16 @@ def get_double_factor_nums():
 
 
 def reduce_candidates(candidates_helper: List[bool], sieve_nums: List[int]) -> List[bool]:
-    for sieve in sieve_nums:
-        multiple = 1
+    for j in range(len(sieve_nums)): # sieve in sieve_nums:
+        sieve = sieve_nums[j]
+        if debug and j % 100 == 0:
+            print(f'taking out primes*sieve where sieve={sieve}')
+        i = 1
+        multiple = prime_list[i]
         while sieve * multiple < len(candidates_helper):
             candidates_helper[sieve * multiple] = False
-            multiple += 1
+            i += 1
+            multiple = prime_list[i]
     return candidates_helper
 
 
@@ -72,13 +77,14 @@ def get_special_distinct_primes_answer() -> int:
     single_factor_nums = get_single_factor_nums()
     double_factor_nums = get_double_factor_nums()
 
-    candidates_helper = reduce_candidates(candidates_helper, single_factor_nums + double_factor_nums)
-
     if debug:
+        print(f'prime_list = {prime_list[:10]}...{prime_list[-10:]}, count = {len(prime_list)}')
         print(
             f'single factor nums = {single_factor_nums[:10]}...{single_factor_nums[-10:]}, count = {len(single_factor_nums)}')
         print(
             f'double factor nums = {double_factor_nums[:10]}...{double_factor_nums[-10:]}, count = {len(double_factor_nums)}')
+
+    candidates_helper = reduce_candidates(candidates_helper, single_factor_nums + double_factor_nums)
 
     prime_factors = [i for i in range(len(candidates_helper)) if
                      candidates_helper[i] and len(get_distinct_prime_factors(i)) == 4]
@@ -87,7 +93,7 @@ def get_special_distinct_primes_answer() -> int:
         print(
             f'possible four-prime-factor numbers: {prime_factors[:10]}...{prime_factors[:-3]}, count = {len(prime_factors)}')
 
-    candidates = [i for i in range(len(prime_factors)) if
+    candidates = [i for i in range(len(prime_factors)-3) if
                   prime_factors[i] and prime_factors[i + 1] and prime_factors[i + 2] and prime_factors[
                       i + 3]]
 
@@ -109,6 +115,8 @@ def get_special_distinct_primes_answer() -> int:
         s4 = prime_factors[test_num + 3]
         if debug and test_num % 1000 == 0:
             print(f'{test_num}: {s1}, {test_num + 1}: {s2}, {test_num + 2}: {s3}, {test_num + 3}: {s4}')
+        if debug and len(set(s1)) == len(set(s2)) == len(set(s3)) == 4:
+            print(f'{test_num}, {test_num+1}, {test_num+2} have four factors')
         if len(set(s1)) == len(set(s2)) == len(set(s3)) == len(set(s4)) == 4:
             return test_num
         test_num += 1
