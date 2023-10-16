@@ -24,30 +24,28 @@ debug = True
 
 def get_goldbach_counterexample():
     pp = PrimeProcessor()
-    prime_list = pp.primes_up_to(5000000)
-    square_list = [i*i for i in range(1, 5000)]
+    prime_list = pp.primes_up_to(500000)
 
     if debug:
         print(f"prime_list length = {len(prime_list)}, and last couple primes: {prime_list[-5:]}")
-        print(f"last couple squares: {square_list[-5:]}")
 
+    counter = 0
     max_guess = 5000000
     test_num = 9
-    goldbached = False
-    while test_num < max_guess and not goldbached:
-        total = 0
-        if False and test_num % 1001 == 0:
-            print(f"testing {test_num}")
-        goldbached = False
-        for square in square_list:
-            if square > test_num or goldbached:
-                break
-            if (test_num - 2 * square) in prime_list:
-                goldbached = True
-                if debug:
-                    print(f'{test_num} = {(test_num - 2 * square)} + 2 * {square}')
-        while (test_num + 2) not in prime_list:
-            test_num += 2
+    while test_num < max_guess:
+        has_goldbach_combination = False
+        i = 1
+        while i ** i < test_num and not has_goldbach_combination and test_num not in prime_list:
+            if (test_num - 2 * i * i) in prime_list:
+                if debug and counter % 100 == 0:
+                    print(f'{test_num} = {(test_num - 2 * i * i)} + 2 * {i} ^ 2')
+                counter += 1
+                has_goldbach_combination = True
+            i += 1
+
+        if not has_goldbach_combination and test_num not in prime_list:
+            return test_num
+        test_num += 2
 
     return 0
 
