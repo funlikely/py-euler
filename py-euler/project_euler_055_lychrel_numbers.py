@@ -27,16 +27,34 @@
 debug = True
 
 
+def is_lychrel(n):
+    tries = 50
+    while tries > 0:
+        n = n + int(str(n)[::-1])
+        if str(n) == str(n)[::-1]:
+            return False
+        tries -= 1
+    return True
+
+
+def is_lychrel_using_accumulator(n):
+    return len([n := n + int(str(n)[::-1]) for i in range(50) if str(n := n + int(str(n)[::-1])) == str(n)[::-1]]) == 0
+
+
 def get_answer():
-    return 1
+    return sum([1 for i in range(10000) if is_lychrel(i)])
+
+
+def get_answer_using_accumulator():
+    return sum([1 for i in range(10000) if is_lychrel_using_accumulator(i)])
 
 
 def main():
 
-    answer = get_answer()
+    answer = get_answer_using_accumulator()
     print(f"The Answer to Project Euler 055 is {answer}")
 
-    # The Answer to Project Euler 055
+    # The Answer to Project Euler 055 is 249
 
 
 if __name__ == "__main__":
