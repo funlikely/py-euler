@@ -31,8 +31,10 @@ def get_answer():
             prime_list2.append(prime)
 
     # try with the '3', and three other primes from one of prime_list1 or prime_list2
-    test_counter = 1
+    test1_counter = 1
+    test2_counter = 1
     for i in range(min(len(prime_list1), len(prime_list2))):
+        prime1_bad = prime2_bad = False
         test_primes1 = [3, prime_list1[i]]
         test_values1 = [int(str(test_primes1[a]) + str(test_primes1[b]))
                         for a in range(2)
@@ -40,7 +42,7 @@ def get_answer():
                         if a != b]
         test_values_primeness1 = [num in prime_list for num in test_values1]
         if False in test_values_primeness1:
-            continue
+            prime1_bad = True
         test_primes2 = [3, prime_list2[i]]
         test_values2 = [int(str(test_primes2[a]) + str(test_primes2[b]))
                         for a in range(2)
@@ -48,65 +50,73 @@ def get_answer():
                         if a != b]
         test_values_primeness2 = [num in prime_list for num in test_values2]
         if False in test_values_primeness2:
-            continue
+            prime2_bad = True
         for j in range(i):
-            test_primes1 = [3, prime_list1[i], prime_list1[j]]
-            test_values1 = [int(str(test_primes1[a]) + str(test_primes1[b]))
-                            for a in range(3)
-                            for b in range(3)
-                            if a != b]
-            test_values_primeness1 = [num in prime_list for num in test_values1]
-            if False in test_values_primeness1:
-                continue
-            test_primes2 = [3, prime_list2[i], prime_list2[j]]
-            test_values2 = [int(str(test_primes2[a]) + str(test_primes2[b]))
-                            for a in range(3)
-                            for b in range(3)
-                            if a != b]
-            test_values_primeness2 = [num in prime_list for num in test_values2]
-            if False in test_values_primeness2:
-                continue
-            for k in range(j):
-                test_primes1 = [3, prime_list1[i], prime_list1[j], prime_list1[k]]
+            if not prime1_bad:
+                test_primes1 = [3, prime_list1[i], prime_list1[j]]
                 test_values1 = [int(str(test_primes1[a]) + str(test_primes1[b]))
-                                for a in range(4)
-                                for b in range(4)
+                                for a in range(3)
+                                for b in range(3)
                                 if a != b]
                 test_values_primeness1 = [num in prime_list for num in test_values1]
                 if False in test_values_primeness1:
-                    continue
-                test_primes2 = [3, prime_list2[i], prime_list2[j], prime_list2[k]]
+                    prime1_bad = True
+            if not prime2_bad:
+                test_primes2 = [3, prime_list2[i], prime_list2[j]]
                 test_values2 = [int(str(test_primes2[a]) + str(test_primes2[b]))
-                                for a in range(4)
-                                for b in range(4)
+                                for a in range(3)
+                                for b in range(3)
                                 if a != b]
                 test_values_primeness2 = [num in prime_list for num in test_values2]
                 if False in test_values_primeness2:
-                    continue
-                for m in range(k):
-                    test_primes1 = [3, prime_list1[i], prime_list1[j], prime_list1[k], prime_list1[m]]
+                    prime2_bad = True
+            for k in range(j):
+                if not prime1_bad:
+                    test_primes1 = [3, prime_list1[i], prime_list1[j], prime_list1[k]]
                     test_values1 = [int(str(test_primes1[a]) + str(test_primes1[b]))
                                     for a in range(4)
                                     for b in range(4)
                                     if a != b]
                     test_values_primeness1 = [num in prime_list for num in test_values1]
-                    if False not in test_values_primeness1:
-                        return test_primes1
-                    test_counter += 1
-                    test_primes2 = [3, prime_list2[i], prime_list2[j], prime_list2[k], prime_list2[m]]
+                    if False in test_values_primeness1:
+                        prime1_bad = True
+                if not prime2_bad:
+                    test_primes2 = [3, prime_list2[i], prime_list2[j], prime_list2[k]]
                     test_values2 = [int(str(test_primes2[a]) + str(test_primes2[b]))
-                                    for a in range(5)
-                                    for b in range(5)
+                                    for a in range(4)
+                                    for b in range(4)
                                     if a != b]
                     test_values_primeness2 = [num in prime_list for num in test_values2]
-                    if False not in test_values_primeness2:
-                        return test_primes2
-                    test_counter += 1
-                    if debug and test_counter % 100 < 2:
-                        print(f'Test #{test_counter}. Tested {test_primes1}, and {test_primes2}')
+                    if False in test_values_primeness2:
+                        prime2_bad = True
+                for m in range(k):
+                    if not prime1_bad:
+                        test_primes1 = [3, prime_list1[i], prime_list1[j], prime_list1[k], prime_list1[m]]
+                        test_values1 = [int(str(test_primes1[a]) + str(test_primes1[b]))
+                                        for a in range(4)
+                                        for b in range(4)
+                                        if a != b]
+                        test_values_primeness1 = [num in prime_list for num in test_values1]
+                        if False not in test_values_primeness1:
+                            return test_primes1
+                        test1_counter += 1
+                    if not prime2_bad:
+                        test_primes2 = [3, prime_list2[i], prime_list2[j], prime_list2[k], prime_list2[m]]
+                        test_values2 = [int(str(test_primes2[a]) + str(test_primes2[b]))
+                                        for a in range(5)
+                                        for b in range(5)
+                                        if a != b]
+                        test_values_primeness2 = [num in prime_list for num in test_values2]
+                        if False not in test_values_primeness2:
+                            return test_primes2
+                        test2_counter += 1
+                    if debug and not prime1_bad and test1_counter % 100 < 2:
+                        print(f'Test1 #{test1_counter}. Tested {test_primes1}')
                         true_count1 = len([x for x in test_values_primeness1 if x])
                         if true_count1 > 9:
                             print(f'almost there! pairs that worked: {true_count1}')
+                    if debug and not prime2_bad and test2_counter % 100 < 2:
+                        print(f'Test2 #{test2_counter}. Tested {test_primes2}')
                         true_count2 = len([x for x in test_values_primeness2 if x])
                         if true_count2 > 9:
                             print(f'almost there! pairs that worked: {true_count2}')
