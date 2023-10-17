@@ -16,19 +16,58 @@ debug = True
 MAX_NUM = 1 * 10 ** 7
 
 pp = pr.PrimeProcessor()
-prime_list = pp.primes_up_to(MAX_NUM)
+
+
+def load_prime_list():
+    try:
+        file = open('data/project_euler_060.txt')
+        int_list = [int(line.strip('\n')) for line in file.readlines()]
+        if len(int_list) == 0:
+            raise ValueError('no primes found')
+        if int_list[-1:][0] > MAX_NUM:
+            if debug:
+                print(f'Loaded primes from file')
+            return [i for i in int_list if i <= MAX_NUM]
+    except:
+        print(f'file not found')
+    if debug:
+        print(f'calculating primes using PrimeProcessor')
+    return pp.primes_up_to(MAX_NUM)
+
+
+def save_prime_list(prime_list):
+    readfile = open('data/project_euler_060.txt', 'r')
+    lines = readfile.readlines()
+    if len(lines) < len(prime_list):
+        file = open('data/project_euler_060.txt', 'w')
+        file.writelines([str(p) + '\n' for p in prime_list])
+        file.close()
+        if debug:
+            print(f'Primes saved')
+    else:
+        print(f'Primes didn''t need to be saved')
 
 
 def get_answer():
+    print(f'calculating / loading prime list up to {MAX_NUM}')
+    prime_list = load_prime_list()
+    print(f'done calculating prime list')
+
+    save_prime_list(prime_list)
+
     # primes that are 1 mod 3, or 2 mod 3
     prime_list1 = []
     prime_list2 = []
 
+    counter = 1
     for prime in [p for p in prime_list if p < 10000]:
-        if prime % 3 == 1:
+        if prime % 3 == 1 and int('3' + str(prime)) in prime_list and int(str(prime) + '3') in prime_list:
             prime_list1.append(prime)
-        elif prime % 3 == 2 and prime != 2 and prime != 5:
+        elif prime % 3 == 2 and int('3' + str(prime)) in prime_list and int(str(prime) + '3') in prime_list:
             prime_list2.append(prime)
+        if counter % 1000 == 0:
+            print(f'counter = {counter}. Generating prime_list1 and prime_list2')
+        counter += 1
 
     # try with the '3', and three other primes from one of prime_list1 or prime_list2
     test1_counter = 1
