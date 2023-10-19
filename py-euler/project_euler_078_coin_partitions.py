@@ -58,13 +58,14 @@ debug = True
 def p(n, m):
     if cache[n][m] != 0:
         return cache[n][m]
-    if m == 0:
+    if m == 0 or n < 2:
         cache[n][m] = 1
         return 1
     result = 1
-    for i in range(1, n+1):
-        for j in range(math.floor(n/i)):
-            result += p(n-j*i, min(n-j*i, j*i-1))
+    for i in range(n-1):
+        k = n - i
+        for j in range(1, math.floor(n/k) + 1):
+            result += p(n-j*k, min(i, k-1))
     cache[n][m] = result
     return result
 
@@ -74,11 +75,11 @@ def get_number_of_partitions(n):
     cache = [[0 for j in range(n)] for i in range(n)]
 
     if debug:
-        test_val = p(2,2)
+        test_val = p(5,5)
         for row in cache:
             print(f'{row}')
 
-    return 1
+    return test_val
 
 
 def get_answer():
