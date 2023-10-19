@@ -27,7 +27,7 @@
     P(n,0) = 1
     P(n,1) = 1
 
-    P(n,m) = sum(P(i, min(i, n-i))) for i from 1 to n
+    P(n,m) = sum(sum(P(n-i, min(i, n-i)), for j from __ to __),  for i from n down to 0)
 
     p(7) = P(7,7)
     =  P(0,0)
@@ -67,9 +67,12 @@ def p(n, m):
     result = 1
     for i in range(n-1):
         k = n - i
-        for j in range(1, math.floor(n/k) + 1):
+        cycles = math.floor(n/k) + 1
+        for j in range(1, cycles):
             indent += "  "
-            result += p(n-j*k, min(i, k-1))
+            reduction = n-j*k
+            pile_limit = min(i, k - 1)
+            result += p(reduction, pile_limit)
             indent = indent[:-2]
     cache[n][m] = result
     return result
