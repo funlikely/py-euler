@@ -53,9 +53,12 @@ import math
 
 
 debug = True
+indent = ""
 
 
 def p(n, m):
+    global indent
+    print(f'{indent}p({n}, {m})')
     if cache[n][m] != 0:
         return cache[n][m]
     if m == 0 or n < 2:
@@ -65,7 +68,9 @@ def p(n, m):
     for i in range(n-1):
         k = n - i
         for j in range(1, math.floor(n/k) + 1):
+            indent += "  "
             result += p(n-j*k, min(i, k-1))
+            indent = indent[:-2]
     cache[n][m] = result
     return result
 
