@@ -49,10 +49,40 @@
     =  xx xx x, xx x x x, x x x x x
     = P(1,1) + P(3,1) + P(1,1)
 """
+import math
+
+
+debug = True
+
+
+def p(n, m):
+    if cache[n][m] != 0:
+        return cache[n][m]
+    if m == 0:
+        cache[n][m] = 1
+        return 1
+    result = 1
+    for i in range(1, n+1):
+        for j in range(math.floor(n/i)):
+            result += p(n-j*i, min(n-j*i, j*i-1))
+    cache[n][m] = result
+    return result
+
+
+def get_number_of_partitions(n):
+    global cache
+    cache = [[0 for j in range(n)] for i in range(n)]
+
+    if debug:
+        test_val = p(2,2)
+        for row in cache:
+            print(f'{row}')
+
+    return 1
 
 
 def get_answer():
-    return 1
+    return get_number_of_partitions(10)
 
 
 def main():
