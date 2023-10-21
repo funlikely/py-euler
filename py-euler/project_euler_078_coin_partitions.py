@@ -54,10 +54,13 @@ import math
 
 debug = True
 indent = ""
+cache = []
+partitions_cache = []
 
 
 def p_deprecated(n, m):
     global indent
+    global cache
     print(f'{indent}p({n}, {m})')
     if cache[n][m] != 0:
         return cache[n][m]
@@ -83,6 +86,7 @@ def p_deprecated(n, m):
 
 
 def p(n, k):
+    global cache
     """New version, using a combinatorics textbook, since my-y-y-y-y version was failing pretty hard"""
     if n < 0 or k < 0:
         return 0
@@ -97,36 +101,48 @@ def p(n, k):
     result = 0
     result += p(n-1, k-1)
     result += p(max(0, n-k), k)
+    cache[n][k] = result
 
     return result
 
 
 def partitions(n):
+    global partitions_cache
     result = 0
     for k in range(1, n+1):
-        result += p(n, k)
-    return result
-
-
-def get_number_of_partitions(n):
-    global cache
-    max_size = 46
-    cache = [[0 for j in range(max_size)] for i in range(max_size)]
-
-    if debug:
-        for i in range(44):
-            print(f'(p({i}) = {partitions(i)}')
-        test_val = p_deprecated(5, 5)
-    if debug:
-        for row in cache:
-            print(f'{row}')
-
-    result = partitions(n)
+        if partitions_cache[n][k] == 0:
+            partitions_cache[n][k] = p(n, k) % 10000000
+        result += partitions_cache[n][k]
+        result = result % 10000000
+    partitions_cache[n][n] = result
     return result
 
 
 def get_answer():
-    return get_number_of_partitions(7)
+    global cache
+    global partitions_cache
+    max_size = 10000
+    cache = [[0 for j in range(max_size)] for i in range(max_size)]
+    partitions_cache = [[0 for j in range(max_size)] for i in range(max_size)]
+
+    for i in range(max_size - 2):
+        result = partitions(i)
+        print(f'p({i}) = {result}')
+
+        if i > 20 and result % 1000000 == 0:
+            return i
+        if debug and i > 20 and result % 100000 == 0:
+            print(f'p({i}) = {result}, divisible by 10^5')
+        elif debug and i > 20 and result % 10000 == 0:
+            print(f'p({i}) = {result}, divisible by 10^4')
+
+    if False and debug:
+        for row in cache:
+            print(f'{row}')
+        for row in partitions_cache:
+            print(f'{row}')
+
+    return i
 
 
 def main():
