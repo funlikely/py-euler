@@ -51,7 +51,6 @@ def get_test_datum(grid):
         option_count += 1
 
 
-
 def solve_grid_with_test_data(test_data, grid):
     return 0
 
