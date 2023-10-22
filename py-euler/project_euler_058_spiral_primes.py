@@ -21,33 +21,14 @@
     both diagonals first falls below 10%?
 
 """
-import utilities.primes as pr
+import math
+import time
 
 debug = True
 
 # max_num = 3 * 10 ** 9
 # gotta go higher than 3 billion I suppose
-max_num = 1000
-
-# pp = pr.PrimeProcessor(max_num)
-# sieve = [True] * max_num
-# sieve[0] = sieve[1] = False
-# list1 = []
-# primes_found = 0
-# sieve_counter = 2
-# while sieve_counter < len(sieve):
-#     if sieve[sieve_counter]:
-#         primes_found = primes_found + 1
-#         list1.append(sieve_counter)
-#         sieve_action_counter = sieve_counter * 2
-#         while sieve_action_counter < len(sieve):
-#             sieve[sieve_action_counter] = False
-#             sieve_action_counter += sieve_counter
-#     sieve_counter += 1
-# for sieve_counter in range(sieve_counter, len(sieve)):
-#     sieve[sieve_counter] = False
-# pp.prime_sieve = sieve
-# prime_list = [x for x in range(len(pp.prime_sieve)) if pp.prime_sieve[x]]
+max_num = 10 ** 11
 
 
 def get_diagonal_numbers(n):
@@ -59,13 +40,26 @@ def get_diagonal_numbers(n):
         i += 2
 
     if debug:
-        print(f'diagonal numbers up to {n}: {d_nums[:5]}..{d_nums[-5:]}')
+        print(f'diagonal numbers up to {n}: (count={len(d_nums)}), {d_nums[:12]}..{d_nums[-12:]}')
 
     return d_nums
 
 
 def get_diagonal_prime_candidates(n):
-    p_cand = get_diagonal_numbers(n)
+    p_cand = get_diagonal_numbers(n)[1:]
+
+    start = time.time()
+    time_counter = 1
+    max_possible_prime = int(math.sqrt(p_cand[-1:][0]))
+    for i in range(3, max_possible_prime):
+        # i is the sieve variable
+        p_cand = [a for a in p_cand if a == i or a % i != 0]
+        if debug and time.time() - start - time_counter > 0:
+            print(f'processing primes, {i} out of {max_possible_prime}')
+            time_counter += 8
+
+    if debug:
+        print(f'prime diagonal numbers up to {n}: (count={len(p_cand)}), {p_cand[:12]}..{p_cand[-12:]}')
 
     return p_cand
 
