@@ -46,14 +46,16 @@ def get_diagonal_numbers(n):
 
 
 def get_diagonal_prime_candidates(n):
-    p_cand = get_diagonal_numbers(n)[1:]
+    diag_num = get_diagonal_numbers(n)[1:]
+    p_cand = []
 
     start = time.time()
     time_counter = 1
-    max_possible_prime = int(math.sqrt(p_cand[-1:][0]))
+    max_possible_prime = int(math.sqrt(diag_num[-1:][0]))
     for i in range(3, max_possible_prime):
         # i is the sieve variable
-        p_cand = [a for a in p_cand if a == i or a % i != 0]
+        diag_num = [a for a in diag_num if a % i != 0]
+        p_cand += [i]
         if debug and time.time() - start - time_counter > 0:
             print(f'processing primes, {i} out of {max_possible_prime}')
             time_counter += 8
@@ -67,7 +69,19 @@ def get_diagonal_prime_candidates(n):
 def get_answer_efficient():
     p_cand = get_diagonal_prime_candidates(max_num)
 
-    return 1
+    if debug:
+        if len(p_cand) % 4 != 0:
+            print(f'Error: primary candidates list should be of size that is multiple of 4')
+
+    i = 3
+
+    p = 1
+    n = 1
+    # find the square side length 'i' such that the ratio p/n drops below 10% where
+    # p is the number of primes, and n is the number of diagonal numbers
+
+
+    return i
 
 
 def get_answer_inefficient():
