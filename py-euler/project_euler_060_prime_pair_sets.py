@@ -14,49 +14,71 @@ import utilities.primes as pr
 
 debug = True
 
-MAX_NUM = 1 * 10 ** 6
+MAX_NUM = 1 * 10 ** 5
 
 pp = pr.PrimeProcessor()
 
 
 def get_answer():
     print(f'calculating / loading prime list up to {MAX_NUM}')
-    prime_list = pp.primes_up_to(MAX_NUM)[3:]
+    prime_list = [3] + pp.primes_up_to(MAX_NUM)[3:]
     print(f'done calculating prime list')
 
     test_counter = 1
     for i in range(len(prime_list)):
-        test_primes1 = [3, prime_list[i]]
-        test_values_primeness1 = [isprime(num) for num in (get_test_values(test_primes1))]
-        test1_bad = not all(test_values_primeness1)
-        for j in range(len(prime_list)):
-            if test1_bad:
-                break
-            if not test1_bad:
-                test_primes1 = [3, prime_list[i], prime_list[j]]
-                test_values_primeness1 = [isprime(num) for num in (get_test_values(test_primes1))]
-                test1_bad = False in test_values_primeness1
-            for k in range(len(prime_list)):
-                if test1_bad:
-                    break
-                if not test1_bad:
-                    test_primes1 = [3, prime_list[i], prime_list[j], prime_list[k]]
-                    test_values_primeness1 = [isprime(num) for num in (get_test_values(test_primes1))]
-                    test1_bad = False in test_values_primeness1
-                for m in range(len(prime_list)):
-                    if test1_bad:
-                        break
-                    if not test1_bad:
-                        test_primes1 = [3, prime_list[i], prime_list[j], prime_list[k], prime_list[m]]
-                        test_values_primeness1 = [isprime(num) for num in (get_test_values(test_primes1))]
-                        if False not in test_values_primeness1:
-                            return test_primes1
+        for j in range(i+1, len(prime_list)):
+            test_vals = [prime_list[i], prime_list[j]]
+            if any([not isprime(num) for num in (get_test_values(test_vals))]) or prime_list[j] > 1000:
+                continue
+            for k in range(j+1, len(prime_list)):
+                test_vals = [prime_list[i], prime_list[j], prime_list[k]]
+                if any([not isprime(num) for num in (get_test_values(test_vals))]) or prime_list[k] > 1000:
+                    continue
+                for m in range(k+1, len(prime_list)):
+                    test_vals = [prime_list[i], prime_list[j], prime_list[k], prime_list[m]]
+                    if any([not isprime(num) for num in (get_test_values(test_vals))]):
+                        continue
+                    for n in range(m+1, len(prime_list)):
+                        test_vals = [prime_list[i], prime_list[j], prime_list[k], prime_list[m], prime_list[n]]
+                        if all([isprime(num) for num in (get_test_values(test_vals))]):
+                            return test_vals
                         test_counter += 1
-                    if debug and not test1_bad and test_counter % 100 < 2:
-                        print(f'Test1 #{test_counter}. Tested {test_primes1}')
-                        true_count1 = len([x for x in test_values_primeness1 if x])
-                        if true_count1 > 9:
-                            print(f'almost there! pairs that worked: {true_count1}')
+                        if debug and test_counter % 1000 == 0:
+                            print(f'test #{test_counter}; testing candidates for {test_vals}')
+
+    # test_counter = 1
+    # for i in range(len(prime_list)):
+    #     test_primes1 = [7, prime_list[i]]
+    #     test_values_primeness1 = [isprime(num) for num in (get_test_values(test_primes1))]
+    #     test1_bad = not all(test_values_primeness1)
+    #     for j in range(len(prime_list)):
+    #         if test1_bad:
+    #             break
+    #         if not test1_bad:
+    #             test_primes1 = [7, prime_list[i], prime_list[j]]
+    #             test_values_primeness1 = [isprime(num) for num in (get_test_values(test_primes1))]
+    #             test1_bad = not all(test_values_primeness1)
+    #         for k in range(len(prime_list)):
+    #             if test1_bad:
+    #                 break
+    #             if not test1_bad:
+    #                 test_primes1 = [7, prime_list[i], prime_list[j], prime_list[k]]
+    #                 test_values_primeness1 = [isprime(num) for num in (get_test_values(test_primes1))]
+    #                 test1_bad = not all(test_values_primeness1)
+    #             for m in range(len(prime_list)):
+    #                 if test1_bad:
+    #                     break
+    #                 if not test1_bad:
+    #                     test_primes1 = [7, prime_list[i], prime_list[j], prime_list[k], prime_list[m]]
+    #                     test_values_primeness1 = [isprime(num) for num in (get_test_values(test_primes1))]
+    #                     if False not in test_values_primeness1:
+    #                         return test_primes1
+    #                     test_counter += 1
+    #                 if debug and not test1_bad and test_counter % 100 < 2:
+    #                     print(f'Test1 #{test_counter}. Tested {test_primes1}')
+    #                     true_count1 = len([x for x in test_values_primeness1 if x])
+    #                     if true_count1 > 9:
+    #                         print(f'almost there! pairs that worked: {true_count1}')
     print(f'Answer not found')
     return None
 
