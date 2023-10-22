@@ -23,12 +23,12 @@
 """
 import math
 import time
+from sympy import isprime  # this is very fast, I wonder what optimizations are in there
 
 debug = True
 
-# max_num = 3 * 10 ** 9
-# gotta go higher than 3 billion I suppose
-max_num = 10 ** 10
+max_num = 7 * 10 ** 8
+#max_num = 7 * 10 ** 6
 
 
 def get_diagonal_numbers(n):
@@ -36,13 +36,47 @@ def get_diagonal_numbers(n):
 
     i = 2
     while d_nums[-1:][0] < n:
-        d_nums += [d_nums[-1:][0] + i * j for j in range(1,5)]
+        d_nums += [d_nums[-1:][0] + i * j for j in range(1, 5)]
         i += 2
 
     if debug:
         print(f'diagonal numbers up to {n}: (count={len(d_nums)}), {d_nums[:12]}..{d_nums[-12:]}')
 
     return d_nums
+
+
+def is_prime(a):
+    if a % 2 == 0:
+        return False
+
+    for i in range(3, int(math.sqrt(a))+1, 2):
+        if a % i == 0:
+            return False
+    return True
+
+
+def get_diagonal_prime_candidates_efficient(n):
+    diag_num = get_diagonal_numbers(n)[1:]
+    p_cand = []
+    start = time.time()
+    time_counter = 1
+    for i in range(len(diag_num)):
+        if is_prime(diag_num[i]):
+            p_cand.append(diag_num[i])
+        if debug and time.time() - start - time_counter > 0:
+            print(f'processing candidates, {i} out of {len(diag_num)}')
+            time_counter += 8
+    # p_cand = [a for a in diag_num if is_prime(a)]
+
+    if debug:
+        print(f'good values from other algorithm:')
+        print('prime diagonal numbers up to 700000000: (count=5292), [3, 5, 7, 13, 17, 31, 37, 43, 73, 101, 157, '
+              '197]..[696986401, 697144813, 697567333, 697805057, 698571331, 698729923, 699073601, 699205807, '
+              '699470257, 699840571, 699946393, 700078681]')
+        print('values from this algorithm:')
+        print(f'prime diagonal numbers up to {n}: (count={len(p_cand)}), {p_cand[:12]}..{p_cand[-12:]}')
+
+    return p_cand
 
 
 def get_diagonal_prime_candidates(n):
@@ -61,14 +95,15 @@ def get_diagonal_prime_candidates(n):
             print(f'processing primes, {i} out of {max_possible_sieve}')
             time_counter += 8
 
+    result = p_cand + diag_num
     if debug:
-        print(f'prime diagonal numbers up to {n}: (count={len(p_cand)}), {p_cand[:12]}..{p_cand[-12:]}')
+        print(f'prime diagonal numbers up to {n}: (count={len(result)}), {result[:12]}..{result[-12:]}')
 
-    return p_cand + diag_num
+    return result
 
 
 def get_answer_efficient():
-    p_cand = get_diagonal_prime_candidates(max_num)
+    p_cand = get_diagonal_prime_candidates_efficient(max_num)
 
     i = 3
 
@@ -84,14 +119,16 @@ def get_answer_efficient():
         p = len([a for a in p_cand if a < i * i])
         n = 2 * i - 1
 
-        if float(p)/float(n) < 0.1:
+        if float(p) / float(n) < 0.1:
             return i
 
-        if debug and i % 100 == 1:
-            print(f'processing ratio, {i} out of {max_estimator}, current ratio: {p}/{n}={round(float(p) / float(n), 4)}')
+        if debug and i % 6000 == 1:
+            print(
+                f'processing ratio, {i} out of {max_estimator}, current ratio: {p}/{n}={round(float(p) / float(n), 4)}')
         if debug and time.time() - start - time_counter > 0:
-            print(f'processing ratio, {i} out of {max_estimator}, current ratio: {p}/{n}={round(float(p)/float(n), 4)}')
-            time_counter += 1
+            print(
+                f'processing ratio, {i} out of {max_estimator}, current ratio: {p}/{n}={round(float(p) / float(n), 4)}')
+            time_counter += 8
 
         i += 2
 
@@ -114,7 +151,7 @@ def get_answer_inefficient():
     # 13,17,21,25
     # 31,37,43,49
     while ratio > 0.10:
-        nums_to_append = [diag_nums[-1:][0] + i * j for j in range(1,5)]
+        nums_to_append = [diag_nums[-1:][0] + i * j for j in range(1, 5)]
 
         if nums_to_append[3] > local_prime_cut_off:
             local_prime_index += 5000
@@ -144,13 +181,14 @@ def get_answer_inefficient():
         
         15142 - 2 = 15140
     """
-    return i-1
+    return i - 1
 
 
 def main():
+    start = time.time()
     answer = get_answer_efficient()
-    print(f"The Answer to Project Euler 058 is {answer}")
-
+    print(f"The Answer to Project Euler 058 is {answer}.")
+    print(f"The process took {time.time()-start} seconds.")
     # The Answer to Project Euler 058 is 26241
 
 
