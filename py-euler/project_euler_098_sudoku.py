@@ -52,7 +52,7 @@ def get_test_datum(grid):
 
 
 def solve_grid_with_test_data(test_data, grid):
-
+    return 0
 
 
 def solve_grid(grid):
