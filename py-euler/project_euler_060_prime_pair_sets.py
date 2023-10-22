@@ -14,7 +14,7 @@ import utilities.primes as pr
 
 debug = True
 
-MAX_NUM = 1 * 10 ** 5
+MAX_NUM = 8 * 10 ** 4
 
 pp = pr.PrimeProcessor()
 
@@ -28,18 +28,20 @@ def get_answer():
     for i in range(len(prime_list)):
         for j in range(i+1, len(prime_list)):
             test_vals = [prime_list[i], prime_list[j]]
-            if any([not isprime(num) for num in (get_test_values(test_vals))]) or prime_list[j] > 1000:
+            if any([not isprime(num) for num in (get_test_values(test_vals))]) or sum(test_vals) > 76721:
                 continue
             for k in range(j+1, len(prime_list)):
                 test_vals = [prime_list[i], prime_list[j], prime_list[k]]
-                if any([not isprime(num) for num in (get_test_values(test_vals))]) or prime_list[k] > 1000:
+                if any([not isprime(num) for num in (get_test_values(test_vals))]) or sum(test_vals) > 76721:
                     continue
                 for m in range(k+1, len(prime_list)):
                     test_vals = [prime_list[i], prime_list[j], prime_list[k], prime_list[m]]
-                    if any([not isprime(num) for num in (get_test_values(test_vals))]):
+                    if any([not isprime(num) for num in (get_test_values(test_vals))]) or sum(test_vals) > 76721:
                         continue
                     for n in range(m+1, len(prime_list)):
                         test_vals = [prime_list[i], prime_list[j], prime_list[k], prime_list[m], prime_list[n]]
+                        if sum(test_vals) > 76721:
+                            continue
                         if all([isprime(num) for num in (get_test_values(test_vals))]):
                             return test_vals
                         test_counter += 1
@@ -96,8 +98,9 @@ def get_answer_using_four_known_values(param):
 
 def main():
     answer = get_answer()
-    # answer = get_answer_using_7()
-    # answer = get_answer_using_four_known_values([3, 7, 109, 673])
+    # [733, 883, 991, 18493, 55621] is a prime pair set.
+    # However, sum([733, 883, 991, 18493, 55621]) = 76721 fails to be the answer. Search harder for an answer!
+    # Use 76721 as a guide, perhaps
     print(f"The Answer to Project Euler 060 is {answer}")
 
     # The Answer to Project Euler 060 is
