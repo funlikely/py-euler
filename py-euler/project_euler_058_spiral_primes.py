@@ -28,7 +28,7 @@ debug = True
 
 # max_num = 3 * 10 ** 9
 # gotta go higher than 3 billion I suppose
-max_num = 10 ** 11
+max_num = 10 ** 10
 
 
 def get_diagonal_numbers(n):
@@ -51,27 +51,24 @@ def get_diagonal_prime_candidates(n):
 
     start = time.time()
     time_counter = 1
-    max_possible_prime = int(math.sqrt(diag_num[-1:][0]))
-    for i in range(3, max_possible_prime):
+    max_possible_sieve = int(math.sqrt(diag_num[-1:][0]))
+    for i in range(3, max_possible_sieve):
         # i is the sieve variable
+        if diag_num[0] == i:
+            p_cand += [i]
         diag_num = [a for a in diag_num if a % i != 0]
-        p_cand += [i]
         if debug and time.time() - start - time_counter > 0:
-            print(f'processing primes, {i} out of {max_possible_prime}')
+            print(f'processing primes, {i} out of {max_possible_sieve}')
             time_counter += 8
 
     if debug:
         print(f'prime diagonal numbers up to {n}: (count={len(p_cand)}), {p_cand[:12]}..{p_cand[-12:]}')
 
-    return p_cand
+    return p_cand + diag_num
 
 
 def get_answer_efficient():
     p_cand = get_diagonal_prime_candidates(max_num)
-
-    if debug:
-        if len(p_cand) % 4 != 0:
-            print(f'Error: primary candidates list should be of size that is multiple of 4')
 
     i = 3
 
@@ -80,6 +77,23 @@ def get_answer_efficient():
     # find the square side length 'i' such that the ratio p/n drops below 10% where
     # p is the number of primes, and n is the number of diagonal numbers
 
+    start = time.time()
+    time_counter = 1
+    max_estimator = int(math.sqrt(p_cand[-1:][0]))
+    while i * i < p_cand[-1:][0]:
+        p = len([a for a in p_cand if a < i * i])
+        n = 2 * i - 1
+
+        if float(p)/float(n) < 0.1:
+            return i
+
+        if debug and i % 100 == 1:
+            print(f'processing ratio, {i} out of {max_estimator}, current ratio: {p}/{n}={round(float(p) / float(n), 4)}')
+        if debug and time.time() - start - time_counter > 0:
+            print(f'processing ratio, {i} out of {max_estimator}, current ratio: {p}/{n}={round(float(p)/float(n), 4)}')
+            time_counter += 1
+
+        i += 2
 
     return i
 
@@ -137,7 +151,7 @@ def main():
     answer = get_answer_efficient()
     print(f"The Answer to Project Euler 058 is {answer}")
 
-    # The Answer to Project Euler 058 is __
+    # The Answer to Project Euler 058 is 26241
 
 
 if __name__ == "__main__":
