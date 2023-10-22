@@ -25,12 +25,58 @@ import utilities.primes as pr
 
 debug = True
 
-max_num = 2 * 10 ** 8
-pp = pr.PrimeProcessor(max_num)
-prime_list = pp.primes_up_to(max_num)
+# max_num = 3 * 10 ** 9
+# gotta go higher than 3 billion I suppose
+max_num = 1000
+
+# pp = pr.PrimeProcessor(max_num)
+# sieve = [True] * max_num
+# sieve[0] = sieve[1] = False
+# list1 = []
+# primes_found = 0
+# sieve_counter = 2
+# while sieve_counter < len(sieve):
+#     if sieve[sieve_counter]:
+#         primes_found = primes_found + 1
+#         list1.append(sieve_counter)
+#         sieve_action_counter = sieve_counter * 2
+#         while sieve_action_counter < len(sieve):
+#             sieve[sieve_action_counter] = False
+#             sieve_action_counter += sieve_counter
+#     sieve_counter += 1
+# for sieve_counter in range(sieve_counter, len(sieve)):
+#     sieve[sieve_counter] = False
+# pp.prime_sieve = sieve
+# prime_list = [x for x in range(len(pp.prime_sieve)) if pp.prime_sieve[x]]
 
 
-def get_answer():
+def get_diagonal_numbers(n):
+    d_nums = [1]
+
+    i = 2
+    while d_nums[-1:][0] < n:
+        d_nums += [d_nums[-1:][0] + i * j for j in range(1,5)]
+        i += 2
+
+    if debug:
+        print(f'diagonal numbers up to {n}: {d_nums[:5]}..{d_nums[-5:]}')
+
+    return d_nums
+
+
+def get_diagonal_prime_candidates(n):
+    p_cand = get_diagonal_numbers(n)
+
+    return p_cand
+
+
+def get_answer_efficient():
+    p_cand = get_diagonal_prime_candidates(max_num)
+
+    return 1
+
+
+def get_answer_inefficient():
     global prime_list
 
     local_prime_index = 0
@@ -63,12 +109,24 @@ def get_answer():
 
         if debug and i % 100 == 0:
             print(f'{int(prime_count)}/{int(num_count)} = {ratio}, max diagonal num considered: {nums_to_append[3]}')
+            if nums_to_append[3] > max_num:
+                print(f'Ran out of primes!! Max prime = {prime_list[-1:][0]}')
 
-    return i
+    """
+        3028/29397 = 0.1030037078613464, max diagonal num considered: 216060601
+        3028/29597 = 0.10230766631753219, max diagonal num considered: 219010401
+        3028/29797 = 0.10162096855388127, max diagonal num considered: 221980201
+        3028/29997 = 0.10094342767610094, max diagonal num considered: 224970001
+        3028/30197 = 0.10027486174123257, max diagonal num considered: 227979801
+        The Answer to Project Euler 058 is 15142
+        
+        15142 - 2 = 15140
+    """
+    return i-1
 
 
 def main():
-    answer = get_answer()
+    answer = get_answer_efficient()
     print(f"The Answer to Project Euler 058 is {answer}")
 
     # The Answer to Project Euler 058 is __
