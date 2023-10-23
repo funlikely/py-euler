@@ -9,15 +9,11 @@
 import math
 
 
-def get_answer():
-    pass
-
-
 def main():
-    answer = get_answer()
+    answer = sum([10 - math.ceil(math.pow(10 ** (n-1), 1.0 / n)) for n in range(1, 22)])
     print(f"The Answer to Project Euler 063 is {answer}")
 
-    # The Answer to Project Euler 063 is ___
+    # The Answer to Project Euler 063 is 49
 
 
 if __name__ == "__main__":
