@@ -22,8 +22,9 @@ pp = pr.PrimeProcessor()
 
 
 def get_answer():
-    print(f'calculating / loading prime list up to {MAX_NUM}')
-    prime_list = [3] + pp.primes_up_to(MAX_NUM)[3:]
+    MAX_PRIME=10000
+    print(f'calculating / loading prime list up to {MAX_PRIME}')
+    prime_list = [3] + pp.primes_up_to(MAX_PRIME)[3:]
     print(f'done calculating prime list')
 
     start = time.time()
@@ -58,7 +59,7 @@ def get_answer():
                             print(f'test #{test_counter}; testing candidates for {test_vals}')
 
     print(f'Answer not found')
-    return None
+    return min([sum(p) for p in possible_answers])
 
 
 def get_test_values(test_primes):
@@ -73,7 +74,9 @@ def get_answer_using_four_known_values(param):
 
 
 def main():
+    start_time = time.time()
     answer = get_answer()
+    print(f'Time taken: {time.time() - start_time} seconds')
     # [733, 883, 991, 18493, 55621] is a prime pair set.
     # However, sum([733, 883, 991, 18493, 55621]) = 76721 fails to be the answer. Search harder for an answer!
     # Use 76721 as a guide, perhaps
