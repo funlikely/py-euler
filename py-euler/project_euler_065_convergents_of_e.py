@@ -16,6 +16,17 @@ debug = True
 
 
 def get_answer():
+    e_cf = [2] + [1 if i % 3 != 1 else int(2*(i+2)/3) for i in range(100)]
+    n = 1
+    d = 1
+    for i in range(99, -1, -1):
+        print(f'e_cf[{i}]: {e_cf[i]}, convergent: {n}/{d}')
+        n_new = int(e_cf[i] * d + e_cf[i])
+        d_new = int(n)
+        c = math.gcd(n_new, d_new)
+        n = n_new / c
+        d = d_new / d
+
     return 1
 
 
