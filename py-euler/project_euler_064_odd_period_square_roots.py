@@ -29,9 +29,49 @@ import math
 debug = True
 
 
+def get_period(cf):
+    if cf[-1] != 2 * cf[0]:
+        return None
+    for i in range(1, int(len(cf)/2)):
+        if cf[-i:(len(cf))] == cf[(-2*i):(-i)]:
+            return i
+    return None
+
+
+def get_continued_fraction_for_sqrt(n):
+    a = math.floor(math.sqrt(n))
+    b = a
+    d = 1
+    cf = []
+    # let's process d / (sqrt(n) - b)
+    # d / (sqrt(n) - b) = (sqrt(n) + b) / d'                    where d' = (n - b^2) / d
+    #                   = a' + (sqrt(n) + b - a' * d') / d'     where a' = floor((sqrt(n) + b) / d')
+    #                   = a' + (sqrt(n) - b') / d'              where b' = a' * d' - b
+    # and then you can process d' / (sqrt(n) - b') to get the next values for a, b, d
+
+    for i in range(1000):
+        print(f'a={a},b={b},d={d}')
+        cf.append(a)
+
+        period = get_period(cf)
+        if period is not None:
+            return cf[:-period]
+
+        d = (n - b * b) / d
+        a = math.floor((math.sqrt(n) + b) / d)
+        b = a * d - b
+    return None
+
+
 def get_answer():
     results = []
+    cf_list = []
     for i in range(2, 100):
+        if math.sqrt(i) ** 2 == i:
+            cf_list.append([i])
+        else:
+            cf = get_continued_fraction_for_sqrt(i)
+            cf_list.append(cf)
         fraction = []
         r = math.sqrt(i)
         fraction += [math.floor(r)]
@@ -40,7 +80,7 @@ def get_answer():
 
 
 def investigate():
-    n = 30
+    n = 23
     a = math.floor(math.sqrt(n))
     b = a
     d = 1
@@ -52,9 +92,9 @@ def investigate():
     # and then you can process d' / (sqrt(n) - b') to get the next values for a, b, d
 
     for i in range(10):
-        print(f'a,b,d')
+        print(f'a={a},b={b},d={d}')
         cf.append(a)
-        d = n - b * b
+        d = (n - b * b) / d
         a = math.floor((math.sqrt(n) + b) / d)
         b = a * d - b
 
