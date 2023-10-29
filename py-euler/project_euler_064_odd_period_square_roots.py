@@ -32,7 +32,7 @@ debug = True
 def get_period(cf):
     if cf[-1] != 2 * cf[0]:
         return None
-    for i in range(1, int(len(cf)/2)):
+    for i in range(1, int(len(cf)/2)+1):
         if cf[-i:(len(cf))] == cf[(-2*i):(-i)]:
             return i
     return None
@@ -65,14 +65,20 @@ def get_continued_fraction_for_sqrt(n):
 
 def get_answer():
     results = []
-    cf_list = []
-    for i in range(2, 100):
-        if math.sqrt(i) ** 2 == i:
-            cf_list.append([i])
+    cf_dict = {}
+    for i in range(2, 10001):
+        if int(math.sqrt(i)) ** 2 == i:
+            continue
         else:
             cf = get_continued_fraction_for_sqrt(i)
-            cf_list.append(cf)
-    return cf_list
+            cf_dict[i] = cf
+    counter = 0
+    for i in cf_dict:
+        if len(cf_dict[i]) % 2 == 0:
+            counter += 1
+    for i in cf_dict:
+        print(f'{i}: {cf_dict[i]}')
+    return counter
 
 
 def investigate():
@@ -95,15 +101,14 @@ def investigate():
         b = a * d - b
 
 
-
 def main():
-    if debug:
-        investigate()
+    # if debug:
+    #     investigate()
 
     answer = get_answer()
     print(f"The Answer to Project Euler 064 is {answer}")
 
-    # The Answer to Project Euler 064
+    # The Answer to Project Euler 064 is 1322
 
 
 if __name__ == "__main__":
