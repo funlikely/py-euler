@@ -17,15 +17,15 @@ debug = True
 
 def investigate():
     e_cf = [3] + [6 for i in range(100)]
-    n = 1
+    n = 0
     d = 1
-    for i in range(99, -1, -1):
-        print(f'e_cf[{i}]: {e_cf[i]}, convergent: {n}/{d} = {round(n/d, 4)}')
-        n_new = int(e_cf[i] * d + n)
-        d_new = int(n)
+    for i in range(5, 0, -1):
+        n_new = int(d)
+        d_new = int(e_cf[i] * d + n)
         c = math.gcd(n_new, d_new)
         n = int(n_new / c)
         d = int(d_new / c)
+        print(f'e_cf[{i}]: {e_cf[i]}, convergent: {n}/{d} = {round(n/d, 4)}')
 
     return sum([int(c) for c in str(n)])
 
@@ -35,9 +35,9 @@ def get_answer():
     n = 1
     d = 1
     for i in range(99, -1, -1):
-        print(f'e_cf[{i}]: {e_cf[i]}, convergent: {n}/{d}')
-        n_new = int(e_cf[i] * d + n)
-        d_new = int(n)
+        print(f'e_cf[{i}]: {e_cf[i]}, convergent: {n}/{d} = {round(n/d, 4)}')
+        n_new = int(d)
+        d_new = int(e_cf[i] * d + n)
         c = math.gcd(n_new, d_new)
         n = int(n_new / c)
         d = int(d_new / c)
