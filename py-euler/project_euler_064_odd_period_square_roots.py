@@ -72,11 +72,7 @@ def get_answer():
         else:
             cf = get_continued_fraction_for_sqrt(i)
             cf_list.append(cf)
-        fraction = []
-        r = math.sqrt(i)
-        fraction += [math.floor(r)]
-        results.append(i)
-    return results
+    return cf_list
 
 
 def investigate():
