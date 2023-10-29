@@ -26,11 +26,44 @@
 import math
 
 
+debug = True
+
+
 def get_answer():
-    pass
+    results = []
+    for i in range(2, 100):
+        fraction = []
+        r = math.sqrt(i)
+        fraction += [math.floor(r)]
+        results.append(i)
+    return results
+
+
+def investigate():
+    n = 30
+    a = math.floor(math.sqrt(n))
+    b = a
+    d = 1
+    cf = []
+    # let's process d / (sqrt(n) - b)
+    # d / (sqrt(n) - b) = (sqrt(n) + b) / d'                    where d' = (n - b^2) / d
+    #                   = a' + (sqrt(n) + b - a' * d') / d'     where a' = floor((sqrt(n) + b) / d')
+    #                   = a' + (sqrt(n) - b') / d'              where b' = a' * d' - b
+    # and then you can process d' / (sqrt(n) - b') to get the next values for a, b, d
+
+    for i in range(10):
+        print(f'a,b,d')
+        cf.append(a)
+        d = n - b * b
+        a = math.floor((math.sqrt(n) + b) / d)
+        b = a * d - b
+
 
 
 def main():
+    if debug:
+        investigate()
+
     answer = get_answer()
     print(f"The Answer to Project Euler 064 is {answer}")
 
