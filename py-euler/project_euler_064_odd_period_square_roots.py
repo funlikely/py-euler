@@ -26,7 +26,7 @@
 import math
 
 
-debug = True
+debug = False
 
 
 def get_period(cf):
@@ -50,7 +50,8 @@ def get_continued_fraction_for_sqrt(n):
     # and then you can process d' / (sqrt(n) - b') to get the next values for a, b, d
 
     for i in range(1000):
-        print(f'a={a},b={b},d={d}')
+        if debug:
+            print(f'a={a},b={b},d={d}')
         cf.append(a)
 
         period = get_period(cf)
@@ -64,7 +65,6 @@ def get_continued_fraction_for_sqrt(n):
 
 
 def get_answer():
-    results = []
     cf_dict = {}
     for i in range(2, 10001):
         if int(math.sqrt(i)) ** 2 == i:
@@ -76,8 +76,9 @@ def get_answer():
     for i in cf_dict:
         if len(cf_dict[i]) % 2 == 0:
             counter += 1
-    for i in cf_dict:
-        print(f'{i}: {cf_dict[i]}')
+    if debug:
+        for i in cf_dict:
+            print(f'{i}: {cf_dict[i]}')
     return counter
 
 
@@ -102,8 +103,8 @@ def investigate():
 
 
 def main():
-    # if debug:
-    #     investigate()
+    if debug:
+        investigate()
 
     answer = get_answer()
     print(f"The Answer to Project Euler 064 is {answer}")
