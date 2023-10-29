@@ -21,13 +21,13 @@ def get_answer():
     d = 1
     for i in range(99, -1, -1):
         print(f'e_cf[{i}]: {e_cf[i]}, convergent: {n}/{d}')
-        n_new = int(e_cf[i] * d + e_cf[i])
+        n_new = int(e_cf[i] * d + n)
         d_new = int(n)
         c = math.gcd(n_new, d_new)
-        n = n_new / c
-        d = d_new / d
+        n = int(n_new / c)
+        d = int(d_new / c)
 
-    return 1
+    return sum([int(c) for c in str(n)])
 
 
 def investigate():
