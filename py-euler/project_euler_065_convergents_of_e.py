@@ -73,7 +73,7 @@ def get_answer():
     return sum([int(c) for c in str(n)])
 
 
-def get_convergent_using_formula(cf, limit):
+def get_convergent_using_formula(cf, n):
     """
     Hardy number theory textbook Theorem 149
 
@@ -87,19 +87,25 @@ def get_convergent_using_formula(cf, limit):
     :param limit:
     :return:
     """
-    return 1,1
+    p = [cf[0], cf[0] * cf[1] + 1]
+    q = [1, cf[1]]
+    for i in range(2, n):
+        p.append(cf[i] * p[i-1] + p[i-2])
+        q.append(cf[i] * q[i-1] + q[i-2])
+
+    return p, q
 
 
 def get_answer_a_different_way():
     e_cf = [2] + [1 if i % 3 != 1 else int(2*(i+2)/3) for i in range(101)]
-    for i in range(1, 101):
-        p, q = get_convergent_using_formula(e_cf, i)
+    p, q = get_convergent_using_formula(e_cf, 101)
 
-        if debug:
-            print(f'#{i}: Using number {e_cf[i-1]}, convergent: {n}/{d} = {round(n/d, 8)}, sum of digits in numerator: '
-                  f'{sum([int(c) for c in str(n)])}')
+    if debug:
+        for i in range(0, 101):
+            print(f'#{i+1}: convergent: {p[i]}/{q[i]} = {round(p[i]/q[i], 8)}, sum of digits in numerator: '
+                  f'{sum([int(c) for c in str(p[i])])}')
 
-    return sum([int(c) for c in str(p)])
+    return sum([int(c) for c in str(p[99])])
 
 
 def main():
