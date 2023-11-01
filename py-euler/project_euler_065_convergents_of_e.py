@@ -12,7 +12,7 @@
 import math
 from typing import List
 
-debug = True
+debug = False
 
 
 def investigate():
@@ -115,10 +115,7 @@ def main():
     answer = get_answer_a_different_way()
     print(f"The Answer to Project Euler 065 is {answer}")
 
-    # The Answer to Project Euler 065 is ___
-
-    # This is troubling. The answer looks like it is 70.  I should not really look up the answer though.
-    # I'll find the issue at some point. The Project Euler website can't be wrong can it?¿
+    # The Answer to Project Euler 065 is 272
 
 
 if __name__ == "__main__":
