@@ -29,38 +29,49 @@ def get_best_5gon_string():
     print(f'example {example} is valid: {is_valid(example)}')
 
     counter = 0
+    results = [1]
     for a in range(1, 11):
         for b in range(1, 11):
             if a == b:
-                break
+                continue
             for c in range(1, 11):
                 if a == c or b == c:
-                    break
+                    continue
                 for d in range(1, 11):
                     if a == d or b == d or c == d:
-                        break
+                        continue
                     for e in range(1, 11):
                         if a == e or b == e or c == e or d == e:
-                            break
+                            continue
                         for f in range(1, 11):
                             if a == f or b == f or c == f or d == f or e == f:
-                                break
+                                continue
                             for g in range(1, 11):
                                 if a == g or b == g or c == g or d == g or e == g or f == g:
-                                    break
+                                    continue
                                 for h in range(1, 11):
+                                    if a == h or b == h or c == h or d == h or e == h or f == h or g == h:
+                                        continue
                                     for i in range(1, 11):
+                                        if a == i or b == i or c == i or d == i or e == i or f == i or g == i or h == i:
+                                            continue
                                         for j in range(1, 11):
+                                            if a == j or b == j or c == j or d == j or e == j or f == j or g == j or h == j or i == j:
+                                                continue
                                             gon = [a, b, c, d, c, e, f, e, g, h, g, i, j, i, b]
                                             counter += 1
-                                            if counter % 1000000 == 0:
+                                            if counter % 400000 == 0:
                                                 print(f'testing {gon}')
                                             if not is_valid(gon):
                                                 continue
                                             if is_magic(gon):
                                                 print(f'{gon} is magic')
+                                                gon_chain = int(''.join([str(s) for s in gon]))
+                                                results.append(gon_chain)
+                                                if gon_chain == max([r for r in results if r < 10**16]):
+                                                    print(f'{gon_chain} is the new current maximum')
 
-    return 1
+    return max([r for r in results if r < 10**16])
 
 
 def main():
