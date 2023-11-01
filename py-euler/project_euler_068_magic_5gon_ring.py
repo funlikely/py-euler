@@ -19,7 +19,8 @@ def is_magic(gon):
 def is_valid(gon):
     if gon[2] == gon[4] and gon[5] == gon[7] and gon[8] == gon[10] and gon[11] == gon[13] and gon[14] == gon[1]:
         if set(gon) == {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}:
-            return True
+            if gon[0] == min([gon[0], gon[3], gon[6], gon[9], gon[12]]):
+                return True
     return False
 
 
@@ -29,7 +30,7 @@ def get_best_5gon_string():
     print(f'example {example} is valid: {is_valid(example)}')
 
     counter = 0
-    results = [1]
+    results = [1000000000000000]
     for a in range(1, 11):
         for b in range(1, 11):
             if a == b:
@@ -68,17 +69,17 @@ def get_best_5gon_string():
                                                 print(f'{gon} is magic')
                                                 gon_chain = int(''.join([str(s) for s in gon]))
                                                 results.append(gon_chain)
-                                                if gon_chain == max([r for r in results if r < 10**16]):
+                                                if gon_chain == max([r for r in results if len(str(r)) == 16]):
                                                     print(f'{gon_chain} is the new current maximum')
 
-    return max([r for r in results if r < 10**16])
+    return max([r for r in results if len(str(r)) == 16])
 
 
 def main():
     answer = get_best_5gon_string()
     print(f"The Answer to Project Euler 068 is {answer}")
 
-    # The Answer to Project Euler 068 is
+    # The Answer to Project Euler 068 is 6531031914842725
 
 
 if __name__ == "__main__":
