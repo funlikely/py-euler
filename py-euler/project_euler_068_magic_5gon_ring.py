@@ -10,7 +10,41 @@ import math
 from typing import List
 
 
+def is_magic(gon):
+    if sum(gon[0:3])\
+            == sum(gon[3:6])\
+            == sum(gon[6:9])\
+            == sum(gon[9:12])\
+            == sum(gon[12:15]):
+        return True
+    return False
+
+
+def is_valid(gon):
+    if gon[2] == gon[4] and gon[5] == gon[7] and gon[8] == gon[10] and gon[11] == gon[13] and gon[14] == gon[1]:
+        if set(gon) == {1,2,3,4,5,6,7,8,9,10}:
+            return True
+    return False
+
+
 def get_best_5gon_string():
+    example = [1, 2, 3, 4, 3, 5, 6, 5, 7, 8, 7, 9, 10, 9, 2]
+    print(f'example {example} is magic: {is_magic(example)}')
+    print(f'example {example} is valid: {is_valid(example)}')
+
+    for a in range(1,11):
+        for b in range(1,11):
+            for c in range(1,11):
+                for d in range(1,11):
+                    for e in range(1,11):
+                        for f in range(1,11):
+                            for g in range(1,11):
+                                for h in range(1,11):
+                                    for i in range(1,11):
+                                        gon = [a, b, c, d, c, e, f, e, g, h, g, i, b]
+                                        if is_magic(gon):
+                                            print(f'{gon} is magic')
+
     return 1
 
 
