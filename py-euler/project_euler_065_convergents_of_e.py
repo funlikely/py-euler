@@ -49,13 +49,13 @@ def get_convergent(cf: List[int], limit: int):
 
 
 def get_answer():
-    e_cf = [2] + [1 if i % 3 != 1 else int(2*(i+2)/3) for i in range(100)]
+    e_cf = [2] + [1 if i % 3 != 1 else int(2*(i+2)/3) for i in range(101)]
     n = 0
     d = 1
     if debug:
         print(f"continued fraction for e: {e_cf}")
 
-    for i in range(1, 101):
+    for i in range(1, 102):
         n, d = get_convergent(e_cf, i)
         if debug:
             print(f'#{i}: Using number {e_cf[i-1]}, convergent: {n}/{d} = {round(n/d, 8)}, sum of digits in numerator: '
@@ -73,11 +73,27 @@ def get_answer():
     return sum([int(c) for c in str(n)])
 
 
+def get_convergent_using_formula(cf, limit):
+    return 1,1
+
+
+def get_answer_a_different_way():
+    e_cf = [2] + [1 if i % 3 != 1 else int(2*(i+2)/3) for i in range(101)]
+    for i in range(1, 101):
+        p, q = get_convergent_using_formula(e_cf, i)
+
+        if debug:
+            print(f'#{i}: Using number {e_cf[i-1]}, convergent: {n}/{d} = {round(n/d, 8)}, sum of digits in numerator: '
+                  f'{sum([int(c) for c in str(n)])}')
+
+    return sum([int(c) for c in str(p)])
+
+
 def main():
     # if debug:
     #     investigate()
 
-    answer = get_answer()
+    answer = get_answer_a_different_way()
     print(f"The Answer to Project Euler 065 is {answer}")
 
     # The Answer to Project Euler 065 is ___
