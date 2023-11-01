@@ -74,6 +74,19 @@ def get_answer():
 
 
 def get_convergent_using_formula(cf, limit):
+    """
+    Hardy number theory textbook Theorem 149
+
+    If p(n) and q(n) are defined by
+    p(0) = a(0), p(1) - a(1)*a(0) + 1, p(n) = a(n)*p(n-1) + p(n-2)
+    q(0) = 1, q(1) = a(1), q(n) = a(n)*q(n-1)+q(n-2)
+    then
+    [a(0), a(1), ..., a(n)] = p(n)/q(n)
+
+    :param cf:
+    :param limit:
+    :return:
+    """
     return 1,1
 
 
