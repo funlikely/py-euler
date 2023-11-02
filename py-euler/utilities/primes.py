@@ -45,8 +45,8 @@ class PrimeProcessor:
         self.prime_list = self.get_primes_up_to(limit)
 
     def get_prime_sieve_up_to(self, n):
-        """Return a list of booleans representing the primes up to n, inclusive."""
-        if self.prime_sieve.count(True) >= n:
+        """Return a list of booleans representing the primes up to n-1."""
+        if sum([1 for x in self.prime_sieve if x]) >= n:
             f = lambda acc, x: acc + 1 if x else acc
             accumulator = 0
             acc_list = [accumulator := f(accumulator, self.prime_sieve[x]) for x in range(len(self.prime_sieve))]
