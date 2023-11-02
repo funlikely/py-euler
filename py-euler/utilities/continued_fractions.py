@@ -35,6 +35,8 @@ def get_period(cf):
 
 
 def get_continued_fraction_for_sqrt(n):
+    if n < 2 or math.sqrt(n) % 1 == 0:
+        return [n]
     debug = False
 
     a = math.floor(math.sqrt(n))

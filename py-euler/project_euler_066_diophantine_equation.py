@@ -31,7 +31,7 @@ debug = True
 def get_minimal_x_value_in_diophantine_equation_solutions(d):
     x = 2
     while x < 10**9:
-        if math.sqrt((x*x - 1)/d) % 1 == 0.0:
+        if is_square((x*x - 1)/d):
             return x
         x += 1
     if debug:
@@ -58,6 +58,10 @@ def get_answer():
         print(f'collection of exes: {exes}')
 
     return max([i for i in range(len(exes)) if exes[i] == max(exes)])
+
+
+def is_square(i):
+    return math.sqrt(i) % 1 == 0
 
 
 def investigate():
@@ -95,19 +99,27 @@ def investigate():
                 small values of D like 2,3,5,6
     """
 
-    cfs = [get_continued_fraction_for_sqrt(i) if i > 1 and (math.sqrt(i) % 1 != 0) else 0 for i in range(20)]
+    count = 200
 
-    convergents = [0 for i in range(20)]
+    cfs = [get_continued_fraction_for_sqrt(i) for i in range(count)]
 
-    for i in range(2, 20):
-        if i in [4, 9, 16]:
+    convergents = [0 for i in range(count)]
+
+    for i in range(2, count):
+        if is_square(i):
             continue
         print(f'cf for root({i}) = {cfs[i]}')
         if len(cfs[i][1:]) % 2 != 0:
-            cfs[i] = cfs[i] + cfs[1:]
-        p, q = get_convergent_using_formula(cfs[i], len(cfs[i]))
+            solution_cf = cfs[i][:-1] + cfs[i][:-1]
+        else:
+            solution_cf = cfs[i][:-1]
+        p, q = get_convergent_using_formula(solution_cf, len(solution_cf))
         convergents[i] = (p, q)
+        print(f'continued fraction that will give the solution to the diophantine equation: {solution_cf}')
         print(f'convergents for root({i}): {convergents[i]}')
+        x = convergents[i][0][-1]
+        y = convergents[i][1][-1]
+        print(f'({x})**2 - {i}*({y})**2 = {x**2-i*y**2}')
 
     return 0
 
