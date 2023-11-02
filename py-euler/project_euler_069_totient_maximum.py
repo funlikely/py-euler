@@ -25,16 +25,18 @@ primes = pp.get_primes_up_to(MAX_NUMBER)
 
 
 def get_prime_divisors(n):
-    results = [p for p in primes if p <= math.sqrt(n) and n % p == 0]
+    results = [p for p in primes if n % p == 0]
     return results
 
 
-def totient(n):
-    prime_factors = get_prime_divisors(n)
-    prod = 1
+def totient(x):
+    prime_factors = get_prime_divisors(x)
+    n = 1
+    d = 1
     for p in prime_factors:
-        prod *= (1-1/p)
-    return n * prod
+        n *= (p-1)
+        d *= p
+    return int(x * n / d)
 
 
 def get_maximum_totient_ratio():
