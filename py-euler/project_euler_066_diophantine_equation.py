@@ -21,13 +21,41 @@
     Find the value of D <= 1000 in minimal solutions of x for which the largest value of x is obtained
 """
 import math
+import time
+
+debug = True
 
 
-debug = False
+def get_minimal_x_value_in_diophantine_equation_solutions(d):
+    x = 2
+    while x < 10**9:
+        if math.sqrt((x*x - 1)/d) % 1 == 0.0:
+            return x
+        x += 1
+    if debug:
+        print(f'X Finder Failed on d={d}')
+    return -1
 
 
 def get_answer():
-    return 0
+    exes = [0 for i in range(1001)]
+
+    squares = [i*i for i in range(32)]
+
+    start_time = time.time()
+
+    for i in range(1001):
+        if i in squares:
+            continue
+        exes[i] = get_minimal_x_value_in_diophantine_equation_solutions(i)
+        if time.time() - start_time > 3 and debug:
+            print(f'last exes computed: exes[{i-3}] - exes[{i}] = {exes[(i-3):i+1]}')
+            start_time = time.time()
+
+    if debug:
+        print(f'collection of exes: {exes}')
+
+    return max([i for i in range(len(exes)) if exes[i] == max(exes)])
 
 
 def investigate():
