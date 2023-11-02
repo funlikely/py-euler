@@ -22,6 +22,8 @@
 """
 import math
 import time
+from utilities.continued_fractions import get_convergent_using_formula, get_continued_fraction_for_sqrt
+
 
 debug = True
 
@@ -59,6 +61,40 @@ def get_answer():
 
 
 def investigate():
+    """
+    Some notes:
+
+        Collection of exes from previous run, contained in data/project_euler_data_066.txt
+        X Finder Failed on d=463
+        X Finder Failed on d=617
+        X Finder Failed on d=691
+        X Finder Failed on d=778
+        X Finder Failed on d=797
+        X Finder Failed on d=835
+        X Finder Failed on d=857
+        X Finder Failed on d=883
+        X Finder Failed on d=921
+        X Finder Failed on d=949
+        X Finder Failed on d=967
+        X Finder Failed on d=971
+        The Answer to Project Euler 066 is 796
+        but that's only because it was so close to 10**9 without going over (x = 994933333)
+
+        The current plan is to use a Pell's Equation solving algorithm, and then probably just
+        validate that some of the values are the same as the ones from data/project_euler_data_066.txt
+
+        The Pell's Equation solving algorithm should be able to run quickly.
+
+        Algorithm overview:
+            1. Generate continued fraction for each sqrt(D) for 2 < D <= 1000 (D not square)
+            2. If the CF has an even period, use the convergent up to the first period
+               If the CF has an odd period, use the convergent up to the second period
+            3. Observe/test that the convergent p/q can be used as a solution to the Pell's equation
+               I don't remember if it was x = p+sqrt(D)*q or if it was x=p and y=q
+               But we can probably find that pretty easily, either checking online or testing for
+                small values of D like 2,3,5,6
+    """
+
     return 0
 
 
