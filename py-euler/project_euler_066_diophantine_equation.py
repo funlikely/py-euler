@@ -25,7 +25,7 @@ import time
 from utilities.continued_fractions import get_convergent_using_formula, get_continued_fraction_for_sqrt
 
 
-debug = True
+debug = False
 
 
 def get_minimal_x_value_in_diophantine_equation_solutions(d):
@@ -39,7 +39,7 @@ def get_minimal_x_value_in_diophantine_equation_solutions(d):
     return -1
 
 
-def get_answer():
+def get_answer_doesnt_work():
     exes = [0 for i in range(1001)]
 
     squares = [i*i for i in range(32)]
@@ -64,7 +64,7 @@ def is_square(i):
     return math.sqrt(i) % 1 == 0
 
 
-def investigate():
+def get_max_x_for_diophantine_equation():
     """
     Some notes:
 
@@ -99,39 +99,48 @@ def investigate():
                 small values of D like 2,3,5,6
     """
 
-    count = 200
+    count = 1000
 
     cfs = [get_continued_fraction_for_sqrt(i) for i in range(count)]
 
     convergents = [0 for i in range(count)]
 
+    max_ex = 1
+    max_d = 1
+
     for i in range(2, count):
         if is_square(i):
             continue
-        print(f'cf for root({i}) = {cfs[i]}')
+        if debug:
+            print(f'cf for root({i}) = {cfs[i]}')
         if len(cfs[i][1:]) % 2 != 0:
-            solution_cf = cfs[i][:-1] + cfs[i][:-1]
+            solution_cf = cfs[i] + cfs[i][1:-1]
         else:
             solution_cf = cfs[i][:-1]
         p, q = get_convergent_using_formula(solution_cf, len(solution_cf))
         convergents[i] = (p, q)
-        print(f'continued fraction that will give the solution to the diophantine equation: {solution_cf}')
-        print(f'convergents for root({i}): {convergents[i]}')
+        if debug:
+            print(f'continued fraction that will give the solution to the diophantine equation: {solution_cf}')
+            print(f'convergents for root({i}): {convergents[i]}')
         x = convergents[i][0][-1]
         y = convergents[i][1][-1]
-        print(f'({x})**2 - {i}*({y})**2 = {x**2-i*y**2}')
+        if debug:
+            print(f'({x})**2 - {i}*({y})**2 = {x**2-i*y**2}')
+        if x > max_ex:
+            max_ex = x
+            max_d = i
 
-    return 0
+    if debug:
+        print(f'max D: {max_d}, max x: {max_ex}')
+    return max_d
 
 
 def main():
-    if debug:
-        investigate()
 
-    answer = get_answer()
+    answer = get_max_x_for_diophantine_equation()
     print(f"The Answer to Project Euler 066 is {answer}")
 
-    # The Answer to Project Euler 066 is
+    # The Answer to Project Euler 066 is 661
 
 
 if __name__ == "__main__":
