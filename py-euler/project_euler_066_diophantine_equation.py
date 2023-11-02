@@ -95,6 +95,20 @@ def investigate():
                 small values of D like 2,3,5,6
     """
 
+    cfs = [get_continued_fraction_for_sqrt(i) if i > 1 and (math.sqrt(i) % 1 != 0) else 0 for i in range(20)]
+
+    convergents = [0 for i in range(20)]
+
+    for i in range(2, 20):
+        if i in [4, 9, 16]:
+            continue
+        print(f'cf for root({i}) = {cfs[i]}')
+        if len(cfs[i][1:]) % 2 != 0:
+            cfs[i] = cfs[i] + cfs[1:]
+        p, q = get_convergent_using_formula(cfs[i], len(cfs[i]))
+        convergents[i] = (p, q)
+        print(f'convergents for root({i}): {convergents[i]}')
+
     return 0
 
 
