@@ -12,31 +12,36 @@
     NOTE: phi(n) = n * prod(1 - 1/p) for all p primes dividing n
     E.g., phi(26) = 26 * 1/2 * 12/13 = 12
 """
+import math
+
 from utilities.primes import PrimeProcessor
 import utilities.divisors as div
 
-pp = PrimeProcessor(1000000)
-primes = pp.get_primes_up_to(1000000)
+
+debug = True
+MAX_NUMBER = 10 ** 6
+pp = PrimeProcessor(MAX_NUMBER)
+primes = pp.get_primes_up_to(MAX_NUMBER)
 
 
 def get_prime_divisors(n):
-    prime_factors = div.prime_factors(n)  # this method is failing because it's not going high enough.  test 5086121 for example
-    return [p for i, p in enumerate(prime_factors[0]) if prime_factors[1][i] > 0]
+    results = [p for p in primes if p <= math.sqrt(n) and n % p == 0]
+    return results
 
 
 def totient(n):
     prime_factors = get_prime_divisors(n)
     prod = 1
-    for p in prime_factors[0]:
+    for p in prime_factors:
         prod *= (1-1/p)
     return n * prod
 
 
-def get_totient_kind_of_maximum():
-    int_max = 1000000
+def get_maximum_totient_ratio():
+
     answer = 1
     tot_qot_max = 1
-    for n in range(2, int_max):
+    for n in range(2, MAX_NUMBER):
         if n / totient(n) > tot_qot_max:
             tot_qot_max = n / totient(n)
             answer = n
@@ -44,8 +49,19 @@ def get_totient_kind_of_maximum():
     return answer
 
 
+def investigate():
+    print(f'some primes: {primes[0:12]}')
+    print(f'some primes: {primes[-5:]}')
+    print(f'some totients:')
+    for i in range(2, 25):
+        print(f'phi({i}) = {totient(i)}')
+
+
 def main():
-    answer = get_totient_kind_of_maximum()
+    if debug:
+        investigate()
+
+    answer = get_maximum_totient_ratio()
     print(f"The Answer to Project Euler 069 is {answer}")
 
     # The Answer to Project Euler 069
