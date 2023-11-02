@@ -30,11 +30,16 @@ primes = pp.get_primes_up_to(MAX_NUM)
 
 def get_answer():
     max_d = 10**6+1
-    n_d_sieve = [[True for i in range(max_d)] for j in range(max_d)]
+    max_d = 12
+    n_d_sieve = [[True if i >= j else False for i in range(max_d)] for j in range(max_d)]
     for i in range(2, max_d):
-        for j in range(j, max_d, j):
-            n_d_sieve = False
+        for j in range(i, max_d, i):
+            n_d_sieve[i][j] = False
+
+    for i in range(1, max_d):
+        print(f'{[1 if x else 0 for x in n_d_sieve[i][1:]]}')
     return 1
+
 
 def main():
     answer = get_answer()
