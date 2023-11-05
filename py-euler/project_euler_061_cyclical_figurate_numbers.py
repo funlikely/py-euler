@@ -171,8 +171,43 @@ def get_special_sum():
     return 0
 
 
+def add_to_numbers_dict(numbers, k, v):
+    if k in numbers.keys():
+        numbers[k] = numbers[k] + [v]
+    else:
+        numbers[k] = [v]
+    return numbers
+
+
+def get_special_sum_a_different_way():
+    tri = [tr(n) for n in range(1, 200) if 1000 <= tr(n) <= 9999 and str(tr(n))[2] != '0']
+    square = [sq(n) for n in range(1, 100) if 1000 <= n * n <= 9999 and str(sq(n))[2] != '0']
+    pent = [pe(n) for n in range(1, 100) if 1000 <= int(n * (3 * n - 1) / 2) <= 9999 and str(pe(n))[2] != '0']
+    hex = [hx(n) for n in range(1, 100) if 1000 <= n * (2 * n - 1) <= 9999 and str(hx(n))[2] != '0']
+    hept = [he(n) for n in range(1, 100) if 1000 <= int(n * (5 * n - 3) / 2) <= 9999 and str(he(n))[2] != '0']
+    oct = [oc(n) for n in range(1, 100) if 1000 <= n * (3 * n - 2) <= 9999 and str(oc(n))[2] != '0']
+
+    numbers = {}
+    for t in tri:
+        numbers = add_to_numbers_dict(numbers, t, 3)
+    for s in square:
+        numbers = add_to_numbers_dict(numbers, s, 4)
+    for p in pent:
+        numbers = add_to_numbers_dict(numbers, p, 5)
+    for h in hex:
+        numbers = add_to_numbers_dict(numbers, h, 6)
+    for h in hept:
+        numbers = add_to_numbers_dict(numbers, h, 7)
+    for o in oct:
+        numbers = add_to_numbers_dict(numbers, o, 8)
+
+
+
+    return 1
+
+
 def main():
-    answer = get_special_sum()
+    answer = get_special_sum_a_different_way()
     print(f"The Answer to Project Euler 061 is {answer}")
 
     # WIP candidates ... [[1045, 2512, 1225, 4510, 1225, 1225], [1045, 2512, 1225, 4510, 5625, 2556]]
