@@ -85,7 +85,7 @@ def is_fittable_in_6cycle(nums):
             for b in range(4):
                 if a == b:
                     continue
-                if can_join_strings([str(num) for i, num in enumerate(nums) if a == i or b == i])\
+                if can_join_strings([str(num) for i, num in enumerate(nums) if a == i or b == i]) \
                         and can_join_strings([str(num) for i, num in enumerate(nums) if a != i and b != i]):
                     return True
         return False
@@ -100,8 +100,8 @@ def is_fittable_in_6cycle(nums):
                         s = [str(nums[i]), str(nums[j]), str(nums[k]), str(nums[m]), str(nums[n])]
                         char_pairs = [num[i:i + 2] for num in s for i, a in enumerate(num) if
                                       i % 2 == 0 and i < (len(num) - 1)]
-                        if char_pairs[1] == char_pairs[2] and char_pairs[3] == char_pairs[4]\
-                                and char_pairs[5] == char_pairs[6] and char_pairs[7] == char_pairs[8]\
+                        if char_pairs[1] == char_pairs[2] and char_pairs[3] == char_pairs[4] \
+                                and char_pairs[5] == char_pairs[6] and char_pairs[7] == char_pairs[8] \
                                 and char_pairs[9] == char_pairs[0]:
                             return True
 
@@ -172,11 +172,30 @@ def get_special_sum():
 
 
 def add_to_numbers_dict(numbers, k, v):
-    if k in numbers.keys():
-        numbers[k] = numbers[k] + [v]
-    else:
-        numbers[k] = [v]
+    numbers[k] = (numbers[k] if k in numbers.keys() else []) + [v]
     return numbers
+
+
+def flatten(xs):
+    return [item for sublist in xs for item in sublist]
+
+
+def is_fully_different_figurate_cycle(numbers, a):
+    figurate_numbers = [int(a[i:i + 4]) for i in range(0, 10, 2)] + [int(a[10:] + a[:2])]
+    if len(set(figurate_numbers)) < 6:
+        return False
+    figurate_types_list = [numbers[i] for i in figurate_numbers]
+    if any([True for i in range(len(figurate_types_list)) for j in range(len(figurate_types_list))
+            if figurate_types_list[i] == figurate_types_list[j]
+               and i != j
+               and len(figurate_types_list[i]) == len(figurate_types_list[j])
+               and len(figurate_types_list[i]) in [1, 2]]):
+        return False
+    figurate_types_set = set(flatten(figurate_types_list))
+    if figurate_types_set == {3, 4, 5, 6, 7, 8}:
+        print(f'Checking figurate cycle {a}, it has figurate types {[numbers[i] for i in figurate_numbers]}')
+        return True
+    return False
 
 
 def get_special_sum_a_different_way():
@@ -201,18 +220,24 @@ def get_special_sum_a_different_way():
     for o in oct:
         numbers = add_to_numbers_dict(numbers, o, 8)
 
+    figurate_chains = [str(a) + str(b) + str(c) for a in numbers.keys() for b in numbers.keys() for c in numbers.keys()
+                       if a != b and b != c and a != c]
+    figurate_cycles = [a for a in figurate_chains if
+                       int(a[2:6]) in numbers.keys() and int(a[6:10]) in numbers.keys() and int(
+                           a[10:] + a[:2]) in numbers.keys()]
+    print(f'figurate cycles: {figurate_cycles}')
+    fully_different_figurate_cycles = [a for a in figurate_cycles if is_fully_different_figurate_cycle(numbers, a)]
+    print(f'fully different figurate cycles: {fully_different_figurate_cycles}')
 
-
-    return 1
+    a_cycle = fully_different_figurate_cycles[0]
+    return sum([int(a_cycle[i:i + 4]) for i in range(0, 10, 2)] + [int(a_cycle[10:] + a_cycle[:2])])
 
 
 def main():
     answer = get_special_sum_a_different_way()
     print(f"The Answer to Project Euler 061 is {answer}")
 
-    # WIP candidates ... [[1045, 2512, 1225, 4510, 1225, 1225], [1045, 2512, 1225, 4510, 5625, 2556]]
-    # there are disjoint cycles, though. these aren't solutions.  The (1045, 4510) cycle is in both.
-    # The Answer to Project Euler 061 is
+    # The Answer to Project Euler 061 is 28684
 
 
 if __name__ == "__main__":
