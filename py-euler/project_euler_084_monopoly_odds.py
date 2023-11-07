@@ -48,23 +48,70 @@
 
     If, instead of using two 6-sided dice, two 4-sided dice are used, find the six-digit modal string.
 """
+import random
+from typing import List
 import time
 
-
+"""
+    Notes:
+    
+    Two four-sided dice.
+    Rolls and their probabilities:
+    { 2: 1/16, 3: 1/8, 4: 3/16, 5: 1/4: 6: 3/16, 7: 1/8, 8: 1/16}
+    
+    Possible strategy:
+        1. Encode the rules with G2J, CH, and CC.
+        2. Simulate a few thousand games of a hundred moves
+        
+    Notes on encoding the rules:
+        1. Before each game, shuffle the CC and CH cards. Order is preserved, and the decks are cycled without
+           shuffling.
+        2. Start each game at GO, and run some number of moves, N.  A value for N may make a difference. It may be
+           something worth adjusting to see if it changes the answer.  E.g., if N is low enough, then the chance
+           of getting to the fourth board row may be low or zero.  If N is low then the chance of landing in the first
+           board row is higher because that's where the first moves are.
+"""
 
 debug = True
 
 
-def get_answer():
-    return 1
+def get_shuffled_cc_deck() -> List[int]:
+    cc = ['X' for i in range(14)] + ['00', '10']
+    random.shuffle(cc)
+    return cc
 
+
+def get_shuffled_ch_deck() -> List[int]:
+    ch = ['X' for i in range(6)] + ['00', '10', '11', '24', '39', '05', 'R', 'R', 'U', '-3']
+    return ch
+
+
+def get_roll():
+    chance = random.randint(0, 15)
+    rolls = {0: 2, 1: 3, 2: 3, 3: 4, 4: 4, 5: 4, 6: 5, 7: 5, 8: 5, 9: 5, 10: 6, 11: 6, 12: 6, 13: 7, 14: 7, 15: 8}
+    return rolls[chance]
+
+
+def generate_next_position(position, cc, ch) -> (int, List[int], List[int]):
+    roll = get_roll()
+    return position, cc, ch
+
+
+def best_chance_string_for_monopoly():
+    max_turns = 100
+    position = 0
+    cc = get_shuffled_cc_deck()
+    ch = get_shuffled_ch_deck()
+    for i in range(max_turns):
+        position = generate_next_position(position, cc, ch)
+    return 1
 
 
 def main():
     start = time.time()
-    answer = get_answer()
+    answer = best_chance_string_for_monopoly()
     end = time.time()
-    print(f"time taken: {end-start}")
+    print(f"time taken: {end - start}")
     print(f"The Answer to Project Euler 084 is {answer}")
 
     # The Answer to Project Euler 084 is
