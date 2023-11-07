@@ -17,10 +17,20 @@ import math
 from typing import List
 
 
-def get_root_digits(i) -> int:
-    root_digits = int(math.sqrt(i * 10 ** 200))
-
+def get_root_digits(n) -> int:
+    root_digits = int(math.sqrt(n * 10e200))
+    root_digits = root_digits - int(root_digits % 10e88)
     # this is only accurate out to fifteen digits or so, so we need an algorithm to refine this
+    i = 10
+    while i < 100:
+        s = str(root_digits)
+        candidates = [int(s[:i] + str(d) + s[(i+1):]) for d in range(10)]
+        diff = 10e100
+        for c in candidates:
+            if 0 < n * 10e200 - c ** 2 < diff:
+                root_digits = c
+                diff = n * 10e200 - c ** 2
+        i += 1
 
     return root_digits
 
