@@ -83,6 +83,7 @@ def get_shuffled_cc_deck() -> List[int]:
 
 def get_shuffled_ch_deck() -> List[int]:
     ch = ['X' for i in range(6)] + ['00', '10', '11', '24', '39', '05', 'R', 'R', 'U', '-3']
+    random.shuffle(ch)
     return ch
 
 
