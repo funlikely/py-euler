@@ -13,11 +13,29 @@
     digits for all the irrational square roots.
 
 """
+import math
 from typing import List
 
 
+def get_root_digits(i) -> int:
+    root_digits = int(math.sqrt(i * 10 ** 200))
+
+    # this is only accurate out to fifteen digits or so, so we need an algorithm to refine this
+
+    return root_digits
+
+
 def get_answer():
-    return 0
+    total = 0
+    for i in range(1, 101):
+        if i in [1, 4, 9, 16, 25, 36, 49, 64, 81]:
+            continue
+        root_digits = get_root_digits(i)
+        root_digit_sum = sum([int(s) for s in str(root_digits)])
+        print(f'root({i}): {root_digits}, sum of digits: {root_digit_sum}')
+        total += root_digit_sum
+
+    return total
 
 
 def main():
