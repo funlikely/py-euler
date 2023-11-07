@@ -94,17 +94,56 @@ def get_roll():
 
 
 def generate_next_position(position, cc, ch) -> (int, List[int], List[int]):
+    if random.randint(1, 64) == 1:
+        # 1/64 chance of rolling 'doubles' three times in a row
+        # let's just simulate that with a flat probability
+        position = 10
+        return position, cc, ch
     roll = get_roll()
+    position = (position + roll) % 40
+    if position in [7, 22, 36]:
+        # chance
+        ch_card = ch[0]
+        ch = ch[1:] + [ch[0]]
+        if ch_card in ['00', '10', '11', '24', '39', '05']:
+            position = int(ch_card)
+        elif ch_card == 'R':
+            position = (position % 10) + 5
+        elif ch_card == 'U':
+            position = 28 if position == 22 else 12
+        elif ch_card == '-3':
+            position -= 3
+    if position in [2, 17, 33]:
+        # community chest
+        cc_card = cc[0]
+        cc = cc[1:] + [cc[0]]
+        if cc_card in ['00', '10']:
+            position = int(cc_card)
+
     return position, cc, ch
 
 
 def best_chance_string_for_monopoly():
-    max_turns = 100
+    max_turns = 30000
     position = 0
     cc = get_shuffled_cc_deck()
     ch = get_shuffled_ch_deck()
-    for i in range(max_turns):
-        position = generate_next_position(position, cc, ch)
+
+    turn_count = 0
+    position_count = [0 for i in range(40)]
+
+    for g in range(1, 301):
+        for i in range(max_turns):
+            position, cc, ch = generate_next_position(position, cc, ch)
+            position_count[position] += 1
+            turn_count += 1
+        if g % 10 == 0:
+            # print(f'Game {g}, position count: {position_count}')
+            position_count_dict = {i: round(e / turn_count, 5) for i, e in enumerate(position_count) if e / turn_count > 0.03}
+            print(f'Position count dict: {position_count_dict}')
+
+    position_count_dict = {i: e/turn_count for i, e in enumerate(position_count) if e/turn_count > 0.03}
+    print(f'Position count dict: {position_count_dict}')
     return 1
 
 
