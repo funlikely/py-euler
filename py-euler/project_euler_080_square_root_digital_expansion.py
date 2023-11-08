@@ -17,8 +17,12 @@ import math
 from typing import List
 
 
+def newton_rooter(n, a):
+    return int(int(n) / int(2 * a)) + int(a / 2)
+
+
 def get_root_digits(n) -> int:
-    root_digits = int(math.sqrt(n * 10e200))
+    root_digits = int(math.sqrt(n * 10e501))
     root_digits = root_digits - int(root_digits % 10e88)
     # this is only accurate out to fifteen digits or so, so we need an algorithm to refine this
     i = 10
