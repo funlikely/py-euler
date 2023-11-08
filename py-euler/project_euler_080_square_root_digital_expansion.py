@@ -16,9 +16,15 @@
 import math
 from typing import List
 
+from utilities.bignum import BigNum
+
 
 def newton_rooter(n, a):
     return int(int(n) / int(2 * a)) + int(a / 2)
+
+
+def big_num_newton_rooter(n: int, a: BigNum) -> BigNum:
+    return BigNum('0')
 
 
 def get_root_digits(n) -> int:
@@ -28,7 +34,7 @@ def get_root_digits(n) -> int:
     i = 10
     while i < 100:
         s = str(root_digits)
-        candidates = [int(s[:i] + str(d) + s[(i+1):]) for d in range(10)]
+        candidates = [int(s[:i] + str(d) + s[(i + 1):]) for d in range(10)]
         diff = 10e100
         for c in candidates:
             if 0 < n * 10e200 - c ** 2 < diff:

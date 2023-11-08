@@ -1,5 +1,6 @@
 import math
 
+
 class BigNum:
 
     def __init__(self, value):
@@ -48,6 +49,30 @@ class BigNum:
             sub_product_list[i] = str(product_list[i]).rjust(width - i, '0').ljust(width, '0')
         result = BigNum(sub_product_list[0])
         for i in range(1, len(sub_product_list) - 1):
-            result = result.add(BigNum(sub_product_list[i])) # add_two_string_ints(result, sub_product_list[i])
+            result = result.add(BigNum(sub_product_list[i]))  # add_two_string_ints(result, sub_product_list[i])
 
         return BigNum(result.value.lstrip('0'))
+
+    def int_divide(self, n: int):
+        """
+        This is division of a BigNum by an int
+        :param n: divisor
+        :return: BigNum(self.value / n)
+
+        Oh I am going to need to be able to divide by a BigNum aren't I . . .
+        """
+
+        i = 0
+        r = 0
+        d = 1
+        while i < len(self.value):
+            if r > n:
+                d += int(r / n)
+                r = r % n
+
+            i += 1
+            d *= 10
+            r *= 10
+            r += int(self.value[i])
+
+        return BigNum('0')
